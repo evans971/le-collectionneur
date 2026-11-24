@@ -158,6 +158,22 @@ table.rank{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:18px}
 .lo{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:8px;width:min(300px,78vw);margin:4px auto}
 .lo button{aspect-ratio:1;border-radius:50%;border:2px solid #2b3c36;background:#111a17;cursor:pointer}
 .lo button.on{background:radial-gradient(circle at 40% 35%,#fff6cf,#e9c46a 45%,#9a7a25);box-shadow:0 0 18px rgba(233,196,106,.7);border-color:#e9c46a}
+.seqg{display:grid;grid-template-columns:repeat(var(--c),1fr);gap:8px;width:min(340px,84vw);margin:6px auto}
+.seqg button{min-height:56px;font:700 24px 'Barlow Condensed',sans-serif;border-radius:10px;border:1px solid var(--line);background:#16231f;color:var(--ink);cursor:pointer}
+.seqg button.on{background:#1f4a3a;color:var(--mint);border-color:var(--mint);opacity:1}
+.cal{display:flex;flex-direction:column;gap:14px;margin:10px 0 14px}
+.bar2{position:relative;height:32px;border-radius:16px;background:#111a17;border:2px solid var(--line);overflow:hidden;opacity:.5}
+.bar2.act{opacity:1;border-color:#7a8a84}.bar2.ok{opacity:1;border-color:var(--mint)}.bar2.err{border-color:var(--red)}
+.bar2 .z{position:absolute;top:0;bottom:0;background:rgba(121,217,177,.38)}
+.bar2 .c{position:absolute;top:3px;bottom:3px;width:6px;margin-left:-3px;border-radius:3px;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.swipe{margin:12px 0 4px}
+.track{position:relative;height:80px;border-radius:12px;background:linear-gradient(#0a1210,#16231f);border:1px solid var(--line);padding:8px}
+.card2{width:120px;height:62px;border-radius:8px;background:linear-gradient(135deg,#e9e2cf,#b9b19c);color:#2a241b;font:700 15px 'Barlow Condensed',sans-serif;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;box-shadow:0 4px 12px rgba(0,0,0,.5);user-select:none}
+.led{width:14px;height:14px;border-radius:50%;background:#333;margin:10px auto 0}.led.ok{background:var(--mint);box-shadow:0 0 12px var(--mint)}.led.err{background:var(--red);box-shadow:0 0 12px var(--red)}
+.eng{position:relative;height:90px;border-radius:12px;background:#0a1210;border:1px solid var(--line);margin:8px 0 12px;overflow:hidden;background-image:repeating-linear-gradient(90deg,transparent 0 9.5%,rgba(255,255,255,.05) 9.5% 10%)}
+.eng .tl{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--red);box-shadow:0 0 10px var(--red)}
+.eng .nd{position:absolute;top:14px;bottom:14px;width:10px;margin-left:-5px;border-radius:5px;background:var(--gold)}.eng .nd.ok{background:var(--mint);box-shadow:0 0 12px var(--mint)}
+.rng{width:100%;height:44px;accent-color:var(--mint);touch-action:auto}
 .tok{font-size:19px;margin-bottom:8px}.tok b{color:var(--gold);font-size:24px}
 .mal{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-bottom:12px}
 .mal button{position:relative;text-align:left;padding:7px 36px 7px 10px;border-radius:10px;border:1px solid var(--line);background:#121d1a;color:var(--ink);cursor:pointer;min-height:44px}
@@ -357,7 +373,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
       </div>
       <div>
         <h3>Saboter</h3>
-        <p>Chaque fragment rapporte 2 jetons. Dépense-les <kbd>R</kbd> pour retarder les autres : coupure de courant, portes verrouillées, gaz, traqueur…</p>
+        <p>Le premier jour, il n'y a qu'un traqueur et personne ne peut en envoyer d'autres. Ensuite, les traqueurs supplémentaires deviennent un malus.</p><p>Chaque fragment rapporte 2 jetons. Dépense-les <kbd>R</kbd> pour retarder les autres : coupure de courant, portes verrouillées, gaz, traqueur…</p>
         <p>Les autres font pareil avec toi. Un brouilleur bloque automatiquement le prochain malus.</p>
         <p>Les rivaux peuvent proposer une alliance au talkie-walkie. Elle peut être sincère.</p>
         <h3 class="only-pc">Touches (PC)</h3>
@@ -400,7 +416,7 @@ const cv=$('#cv'),ctx=cv.getContext('2d'),dark=document.createElement('canvas'),
 const TS=32,RW=12,RH=11,GC=4,GR=3,MW=GC*RW+1,MH=GR*RH+1;
 const T={FLOOR:0,WALL:1,DOOR:2,EXIT:3,LOW:5,TALL:6};
 const DIR4=[[1,0],[-1,0],[0,1],[0,-1]],DIR8=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
-const NEED=[3,3,4,4,5],NIGHT_AT=150,LIMIT=[420,450,480,510,600],HUNTERS=[1,1,1,1,1];
+const NEED=[3,4,5,6,7],NIGHT_AT=150,LIMIT=[420,480,540,600,660],HUNTERS=[1,1,1,1,1];
 
 // ---------- utils
 const rnd=(a,b)=>a+Math.random()*(b-a),ri=(a,b)=>Math.floor(rnd(a,b+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
@@ -425,7 +441,7 @@ const RIVALS=[
  {name:'Ilona',color:'#e76f51'},{name:'Sacha',color:'#9aa5b1',collector:true},{name:'Bastien',color:'#2a9d8f'},{name:'Yuki',color:'#f4a261'},
  {name:'Malik',color:'#8ab17d'},{name:'Inès',color:'#c77d93'},{name:'Ruben',color:'#6d9dc5'},{name:'Oriane',color:'#e9c46a'}];
 const CHEM=[{n:'Rouge',c:'#d8443a'},{n:'Bleu',c:'#4a8fe0'},{n:'Jaune',c:'#e9c84a'},{n:'Vert',c:'#5cc178'},{n:'Violet',c:'#a070dc'},{n:'Orange',c:'#ee8a3a'}];
-const PZNAME={simon:'Terminal acoustique',digicode:'Coffre à digicode',cables:'Boîtier électrique',chimie:'Paillasse chimique',lumieres:'Tableau des lampes'};
+const PZNAME={simon:'Terminal acoustique',digicode:'Coffre à digicode',cables:'Boîtier électrique',chimie:'Paillasse chimique',sequence:'Collecteurs à déverrouiller',calibre:'Calibreur de distribution',badge:'Lecteur de badge',moteur:'Alignement du moteur'};
 const STORY=[
  {title:"Fiche d'admission",text:"INSTITUT VALMONT — Admission n° 0417\nDate : 14 mars 2011\nPatiente : Clara V., 12 ans\nMotif : traitement expérimental, « protocole Lazare »\n\nHuit signatures au bas de la page.\nL'une d'elles ressemble beaucoup à la tienne."},
  {title:'Coupure de presse',text:"L'ÉCHO DU NORD — 3 novembre 2011\n\nIncendie dans l'aile Est de l'Institut Valmont. Une victime : une enfant de 12 ans.\nLes portes coupe-feu étaient verrouillées de l'extérieur.\nL'enquête est classée sans suite. Aucun témoin ne s'est présenté."},
@@ -504,7 +520,10 @@ function pzData(k,day){
  if(k==='digicode')return{code:String(ri(0,9999)).padStart(4,'0')};
  if(k==='cables')return{n:day<=2?4:5,stroop:day>=3};
  if(k==='chimie')return{order:shuffle([0,1,2,3,4,5]).slice(0,day>=4?5:4)};
- return{size:day<=2?3:4};
+ if(k==='sequence')return{n:day<=2?8:day<=4?10:12};
+ if(k==='calibre')return{dials:day<=2?2:3,speed:.75+day*.15,zone:.22-day*.02};
+ if(k==='badge')return{lo:.45+day*.05,hi:1.5-day*.1};
+ return{tol:.075-day*.007,drift:.5+day*.12};
 }
 
 const FURN={
@@ -568,7 +587,7 @@ function genMap(day){
  rooms.forEach(r=>FURN[r.type](r,put));
  m.furn.filter(f=>f.kind==='bed').forEach(f=>m.objs.push({t:'bed',x:(f.x+.5)*TS,y:(f.y+1)*TS,f,r:f.r}));
  // puzzles
- const kinds=shuffle(['simon','digicode','cables','chimie','lumieres']).slice(0,NEED[day-1]);
+ const kinds=shuffle(['simon','digicode','cables','chimie','sequence','calibre','badge','moteur']).slice(0,NEED[day-1]);
  const cand=shuffle(rooms.filter(r=>r!==start&&r!==exitR));let ci=0;
  for(const k of kinds){let f=null,r=null;while(!f&&ci<cand.length){r=cand[ci++];f=putWall(r,'terminal',T.LOW)}
   if(!f)for(const r2 of shuffle(rooms.filter(x=>x!==start))){f=putWall(r2,'terminal',T.LOW);if(f){r=r2;break}}
@@ -954,7 +973,7 @@ function drawMini(){
 
 // ---------- rivals & day flow
 const prog=r=>!D?0:r.done?1:r.human?clamp((r.frag||0)/(r.need||M.need),0,.98):clamp(D.t/r.finish,0,.99);
-function scheduleRivals(){G.rivals.forEach((r,i)=>{if(!r.alive)return;r.done=false;r.out=false;if(r.human){r.finish=Infinity;r.frag=0;r.need=M.need;r.t=0;return}const R=MP?mulberry(MP.seed+G.day*131+i*17):Math.random;const a=50+R()*34,b=20+R()*35;r.finish=(M.need*a+b)*r.skill*(G.day===5?1.12:1)+(r.pen||0);r.pen=0})}
+function scheduleRivals(){G.rivals.forEach((r,i)=>{if(!r.alive)return;r.done=false;r.out=false;if(r.human){r.finish=Infinity;r.frag=0;r.need=M.need;r.t=0;return}const R=MP?mulberry(MP.seed+G.day*131+i*17):Math.random;const a=40+R()*28,b=20+R()*35;r.finish=(M.need*a+b)*r.skill*(G.day===5?1.12:1)+(r.pen||0);r.pen=0})}
 function updateRivals(dt){
  const alive=G.rivals.filter(r=>r.alive);
  for(const r of alive)if(!r.human&&!r.done&&D.t>=r.finish){r.done=true;say(G.day===5?`${r.name} a franchi la porte.`:`${r.name} a quitté son aile.`,'rival');SFX.beep()}
@@ -991,7 +1010,7 @@ function receiveMalus(r,m){
  else if(m.id==='drone'){const a=rnd(0,6.28);DR.push({x:P.x+Math.cos(a)*520,y:P.y+Math.sin(a)*520,t:32,ping:2})}
 }
 function sabotage(r,s){
- if(state!=='play')return;if(G.tokens<s.cost||r.done||!r.alive){SFX.bad();return}
+ if(state!=='play')return;if(s.id==='traqueur'&&G.day<2){SFX.bad();say('Envoyer un traqueur est scellé le premier jour.','bad');return}if(G.tokens<s.cost||r.done||!r.alive){SFX.bad();return}
  if(MP&&r.human){if(r.out){SFX.bad();return}G.tokens-=s.cost;G.stats.sab++;G.stats.sabDay=(G.stats.sabDay||0)+1;mpSab({to:r.peer,k:{coupure:'blackout',verrou:'locks',faux:'invert',gaz:'gas',traqueur:'hunter'}[s.id]});say(`${s.name} envoyé à ${r.name}.`,'good');SFX.ok();return}
  G.tokens-=s.cost;G.stats.sab++;G.stats.sabDay=(G.stats.sabDay||0)+1;
  if(D.ally===r){D.ally=null;D.betrayAt=0;say(`Tu as trahi ${r.name}.`,'bad')}
@@ -1121,14 +1140,46 @@ PZ.chimie=(o,b,done)=>{
  b.querySelectorAll('.flask').forEach(f=>f.onclick=()=>{const i=+f.dataset.i;
   if(i===ord[k]){k++;lay.insertAdjacentHTML('beforeend',`<i style="background:${CHEM[i].c}"></i>`);tone(300+k*80,.15,'sine',.15);st.textContent=k+'/'+ord.length;if(k===ord.length){st.textContent='Mélange stable.';setTimeout(done,500)}}
   else{pzFail(o);noiseB(.5,.2,2500);k=0;lay.innerHTML='';st.textContent='Réaction ! Le mélange est perdu. 0/'+ord.length}})};
-PZ.lumieres=(o,b,done)=>{
- const n=o.data.size;const s=new Array(n*n).fill(1);const tog=(a,i)=>{const x=i%n,y=(i/n)|0;[[0,0],[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>{const p=x+dx,q=y+dy;if(p>=0&&q>=0&&p<n&&q<n)a[q*n+p]^=1})};
- do{s.fill(1);for(let k=0;k<2+G.day;k++)tog(s,ri(0,n*n-1))}while(s.every(v=>v));
- const init=s.slice();let mv=0;
- b.innerHTML=`<p class="hint">Allume toutes les lampes. Chaque interrupteur inverse aussi ses voisins directs.</p><div class="lo" style="--n:${n}">${s.map((v,i)=>`<button data-i="${i}" aria-label="Lampe ${i+1}"></button>`).join('')}</div><div class="pzs">Coups : 0</div><div style="text-align:center"><button class="btn sm" id="loR">Réinitialiser</button></div>`;
- const bs=[...b.querySelectorAll('.lo button')],st=b.querySelector('.pzs'),paint=()=>bs.forEach((x,i)=>x.classList.toggle('on',!!s[i]));paint();
- b.querySelector('#loR').onclick=()=>{init.forEach((v,i)=>s[i]=v);mv=0;st.textContent='Coups : 0';paint()};
- bs.forEach(x=>x.onclick=()=>{tog(s,+x.dataset.i);mv++;SFX.click();paint();st.textContent='Coups : '+mv;if(s.every(v=>v)){st.textContent='Circuit rétabli.';bs.forEach(y=>y.disabled=true);setTimeout(done,500)}else if(mv%25===0)pzFail(o)})};
+PZ.sequence=(o,b,done)=>{
+ const n=o.data.n,nums=shuffle(Array.from({length:n},(_,i)=>i+1));let next=1;
+ b.innerHTML=`<p class="hint">Appuie sur les numéros dans l'ordre, de 1 à ${n}. Une erreur remet tout à zéro.</p><div class="seqg" style="--c:${n===10?5:4}">${nums.map(v=>`<button data-v="${v}">${v}</button>`).join('')}</div><div class="pzs">Prochain : 1</div>`;
+ const bs=[...b.querySelectorAll('.seqg button')],st=b.querySelector('.pzs');
+ bs.forEach(x=>x.onclick=()=>{const v=+x.dataset.v;
+  if(v===next){x.classList.add('on');x.disabled=true;tone(400+next*40,.08,'triangle',.12);next++;if(next>n){st.textContent='Collecteurs déverrouillés.';setTimeout(done,400)}else st.textContent='Prochain : '+next}
+  else{pzFail(o);next=1;bs.forEach(y=>{y.classList.remove('on');y.disabled=false});st.textContent='Erreur. On recommence à 1.'}})};
+PZ.calibre=(o,b,done,alive)=>{
+ const P=o.data;let i=0;const dials=Array.from({length:P.dials},()=>({z:rnd(.08,.92-P.zone),x:Math.random(),dir:Math.random()<.5?1:-1}));
+ b.innerHTML=`<p class="hint">Arrête chaque curseur dans la zone verte avec « Arrêter » (ou Espace).</p><div class="cal">${dials.map(d=>`<div class="bar2"><i class="z" style="left:${d.z*100}%;width:${P.zone*100}%"></i><i class="c"></i></div>`).join('')}</div><div style="text-align:center"><button class="btn main" id="calB">Arrêter</button></div><div class="pzs">Curseur 1/${P.dials}</div>`;
+ const bars=[...b.querySelectorAll('.bar2')],st=b.querySelector('.pzs');let last=performance.now();
+ const frame=t=>{if(!alive())return;const dt=Math.min(.05,(t-last)/1000);last=t;
+  if(i<dials.length){const d=dials[i];d.x+=d.dir*dt*P.speed;if(d.x>1){d.x=1;d.dir=-1}if(d.x<0){d.x=0;d.dir=1}}
+  bars.forEach((el,k)=>{el.classList.toggle('act',k===i);el.querySelector('.c').style.left=(dials[k].x*100)+'%'});requestAnimationFrame(frame)};
+ requestAnimationFrame(frame);
+ const stop=()=>{if(i>=dials.length)return;const d=dials[i];
+  if(d.x>=d.z&&d.x<=d.z+P.zone){bars[i].classList.add('ok');tone(600+i*120,.12,'triangle',.15);i++;if(i>=dials.length){st.textContent='Distribution calibrée.';setTimeout(done,400)}else st.textContent=`Curseur ${i+1}/${P.dials}`}
+  else{pzFail(o);const el=bars[i];el.classList.add('err');setTimeout(()=>el.classList.remove('err'),350)}};
+ b.querySelector('#calB').onclick=stop;UI.keyHook=k=>{if(k===' '||k==='Enter')stop()}};
+PZ.badge=(o,b,done)=>{
+ const P=o.data;b.innerHTML=`<p class="hint">Glisse le badge d'un seul trait jusqu'au bout du lecteur, ni trop vite ni trop lentement.</p><div class="swipe"><div class="track"><div class="card2">BADGE 0417</div></div><div class="led"></div></div><div class="pzs">Glisse le badge vers la droite</div>`;
+ const tr=b.querySelector('.track'),cd=b.querySelector('.card2'),st=b.querySelector('.pzs'),led=b.querySelector('.led');let drag=null;
+ const maxX=()=>tr.clientWidth-16-cd.offsetWidth;
+ cd.addEventListener('pointerdown',e=>{drag={x0:e.clientX,t0:performance.now(),x:0};led.className='led';try{cd.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+ cd.addEventListener('pointermove',e=>{if(!drag)return;drag.x=clamp(e.clientX-drag.x0,0,maxX());cd.style.transform=`translateX(${drag.x}px)`});
+ const end=()=>{if(!drag)return;const dt=(performance.now()-drag.t0)/1000,full=drag.x>=maxX()-4,ts=dt.toFixed(1).replace('.',',')+' s';drag=null;cd.style.transform='';
+  if(!full){st.textContent='Lecture interrompue : va jusqu\'au bout.';led.className='led err';SFX.bad();return}
+  if(dt<P.lo){st.textContent=`Trop rapide (${ts}). Recommence.`;led.className='led err';pzFail(o);return}
+  if(dt>P.hi){st.textContent=`Trop lent (${ts}). Recommence.`;led.className='led err';pzFail(o);return}
+  led.className='led ok';st.textContent=`Badge accepté (${ts}).`;SFX.ok();setTimeout(done,450)};
+ cd.addEventListener('pointerup',end);cd.addEventListener('pointercancel',end)};
+PZ.moteur=(o,b,done,alive)=>{
+ const P=o.data;let ph=Math.random()*6,hold=0,fin=false;
+ b.innerHTML=`<p class="hint">Garde l'aiguille sur la ligne rouge pendant 2 secondes avec le curseur. La ligne bouge.</p><div class="eng"><i class="tl"></i><i class="nd"></i></div><input type="range" min="0" max="1000" value="0" class="rng" aria-label="Sortie du moteur"><div class="pzs">Alignement : 0 %</div>`;
+ const tl=b.querySelector('.tl'),nd=b.querySelector('.nd'),rg=b.querySelector('.rng'),st=b.querySelector('.pzs');let last=performance.now();
+ const frame=t=>{if(!alive()||fin)return;const dt=Math.min(.05,(t-last)/1000);last=t;ph+=dt*P.drift;
+  const tg=clamp(.5+Math.sin(ph)*.32+Math.sin(ph*2.3)*.08,.05,.95),v=rg.value/1000;tl.style.left=(tg*100)+'%';nd.style.left=(v*100)+'%';
+  const ok=Math.abs(v-tg)<P.tol;nd.classList.toggle('ok',ok);hold=ok?hold+dt:Math.max(0,hold-dt*1.5);st.textContent='Alignement : '+Math.round(Math.min(1,hold/2)*100)+' %';
+  if(hold>=2){fin=true;st.textContent='Moteur aligné.';SFX.ok();setTimeout(done,400);return}requestAnimationFrame(frame)};
+ requestAnimationFrame(frame)};
 function openPuzzle(o){openModal(PZNAME[o.kind],roomName(o.r),(b,alive)=>PZ[o.kind](o,b,()=>{if(alive())solve(o)},alive))}
 function openNote(o){
  const first=!o.read;o.read=true;if(!D.notes.includes(o))D.notes.push(o);
@@ -1143,7 +1194,7 @@ function openSab(){
  if(state!=='play'||!P)return;let sel=SAB[0];
  openModal('Saboter un rival','Le jeu continue pendant que tu choisis',(b,alive)=>{
   const draw=()=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));
-   b.innerHTML=`<div class="tok">Tu as <b>${G.tokens}</b> jeton${G.tokens>1?'s':''}.</div><div class="mal">${SAB.map(s=>`<button class="${s===sel?'sel':''}" data-m="${s.id}"><b>${s.name}</b><small>${s.desc} +${s.d[0]}–${s.d[1]} s</small><span class="cost">${s.cost}</span></button>`).join('')}</div>
+   b.innerHTML=`<div class="tok">Tu as <b>${G.tokens}</b> jeton${G.tokens>1?'s':''}.</div><div class="mal">${SAB.map(s=>{const lk=s.id==='traqueur'&&G.day<2;return`<button class="${s===sel?'sel':''}" data-m="${s.id}" ${lk?'disabled':''}><b>${s.name}</b><small>${lk?'Scellé le premier jour.':s.desc+' +'+s.d[0]+'–'+s.d[1]+' s'}</small><span class="cost">${s.cost}</span></button>`}).join('')}</div>
    <div class="tg">${al.map(r=>`<div class="trow"><i class="c" style="background:${r.color}"></i><span>${esc(r.name)}${D.ally===r?' (allié)':''}</span><div class="bar"><i style="width:${prog(r)*100}%"></i></div>${r.done?'<em>sorti</em>':`<button class="btn sm" data-r="${esc(r.name)}" ${G.tokens<sel.cost?'disabled':''}>Cibler</button>`}</div>`).join('')}</div>`;
    b.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>{sel=SAB.find(s=>s.id===x.dataset.m);SFX.click();draw()});
    b.querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>{const r=G.rivals.find(q=>q.name===x.dataset.r);sabotage(r,sel);draw()})};
@@ -1178,7 +1229,7 @@ let introTyping=null;
 function showIntro(){
  state='intro';$('#hud').classList.add('hide');showScreen('intro');$('#introDay').textContent='Jour '+G.day;
  const alive=G.rivals.filter(r=>r.alive).length;
- $('#introObj').innerHTML=`<li><b>${M.need} fragments</b> à trouver dans ${M.rooms.length} salles, puis la porte du sas.</li><li><b>1 traqueur</b> dans ton aile. La nuit tombe à ${fmt(NIGHT_AT)} : il fera noir.</li><li>${G.day<5?`<b>${alive} rivaux</b> en jeu : ne sois pas le dernier à sortir.`:`<b>${alive} rivaux</b> restants : sois le premier à franchir la porte.`}</li>${G.story.length?`<li>Dossiers retrouvés : ${G.story.length}/5.</li>`:''}`;
+ $('#introObj').innerHTML=`<li><b>${M.need} fragments</b> à trouver dans ${M.rooms.length} salles, puis la porte du sas.</li><li><b>1 traqueur</b> dans ton aile${G.day===1?'. Aujourd\'hui, personne ne peut en ajouter':'. Les rivaux peuvent en envoyer d\'autres'}. La nuit tombe à ${fmt(NIGHT_AT)}.</li><li>${G.day<5?`<b>${alive} rivaux</b> en jeu : ne sois pas le dernier à sortir.`:`<b>${alive} rivaux</b> restants : sois le premier à franchir la porte.`}</li>${G.story.length?`<li>Dossiers retrouvés : ${G.story.length}/5.</li>`:''}`;
  const txt=INTRO[G.day-1],el=$('#introTxt');el.textContent='';let i=0;clearInterval(introTyping);
  introTyping=setInterval(()=>{i+=2;el.textContent=txt.slice(0,i);if(i%8===0)SFX.voice&&tone(150+Math.random()*50,.04,'square',.015);if(i>=txt.length)clearInterval(introTyping)},22);
  const be=$('#bEnter');clearInterval(window.__iv);be.innerHTML='Entrer dans l\'aile <kbd>Entrée</kbd>';
@@ -1225,7 +1276,7 @@ addEventListener('keydown',e=>{
  if(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;
  const c=e.code;if(['Tab','Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c)&&state!=='title')e.preventDefault();
  audioInit();
- if(UI.modal){if(c==='Escape'){closeModal();return}if(UI.keyHook){UI.keyHook(e.key);return}if(c==='KeyR'||c==='Tab'||c==='KeyJ'){closeModal();return}}
+ if(UI.modal){if(c==='Escape'){closeModal();return}if(UI.keyHook){e.preventDefault();UI.keyHook(e.key);return}if(c==='KeyR'||c==='Tab'||c==='KeyJ'){closeModal();return}}
  if(e.repeat&&!c.startsWith('Key')&&!c.startsWith('Arrow'))return;
  K[c]=true;
  if(state==='intro'&&(c==='Enter'||c==='Space')){beginDay();return}
@@ -1453,6 +1504,7 @@ $('#jForm').addEventListener('submit',e=>{e.preventDefault();const c=$('#jIn').v
 $('#bFBack').onclick=()=>{buildTitle();showScreen('title')};
 $('#bLStart').onclick=()=>{if(LOBBY)hostStart(lobbyPeers())};
 $('#bLQuit').onclick=()=>{leaveLobby();buildTitle();showScreen('title')};
+
 }
 
 </script>
