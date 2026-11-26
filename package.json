@@ -1,7 +1,7 @@
 {
   "name": "le-collectionneur",
   "version": "1.0.0",
-  "description": "Le Collectionneur : escape game + battle royale, avec salons en ligne et classement.",
+  "description": "Valmont: Last Door Out : escape game + battle royale, avec salons en ligne et classement.",
   "main": "server.js",
   "scripts": { "start": "node server.js" },
   "engines": { "node": ">=18" },

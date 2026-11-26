@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Le Collectionneur</title>
+<title>Valmont: Last Door Out</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@700;900&family=Barlow+Condensed:wght@400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
@@ -198,7 +198,7 @@ body.mobile #mleg{font-size:11px;padding:2px 6px}
 .achl li b{display:block;font-size:19px}.achl li span{color:var(--dim);font-size:15px}
 .achl li.ok{opacity:1;border-color:var(--gold);background:#1b190c}.achl li.ok b{color:var(--gold)}
 #toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-140%);z-index:40;background:#1b190c;border:1px solid var(--gold);border-radius:12px;padding:8px 16px;min-width:240px;text-align:center;transition:transform .35s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.6)}
-#toast.on{transform:translate(-50%,0)}
+#toast{opacity:0;transition:transform .35s,opacity .35s}#toast.on{transform:translate(-50%,0);opacity:1}
 #toast small{display:block;color:var(--gold);font-size:13px}#toast b{display:block;font-size:22px}#toast span{color:var(--dim);font-size:15px}
 #specbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:12;display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 10px;max-width:calc(100vw - 20px);flex-wrap:wrap;justify-content:center}
 #spInfo{font-size:17px;padding:0 6px}#spInfo b{color:var(--mint)}
@@ -242,6 +242,7 @@ body.mpgame .solo-only{display:none}
 .aform input{font:600 19px 'Barlow Condensed',sans-serif;min-height:48px;padding:6px 14px;border-radius:10px;border:1px solid var(--line);background:#0b1311;color:var(--ink);user-select:text;-webkit-user-select:text;touch-action:manipulation}
 .aform input:focus{outline:2px solid var(--mint);outline-offset:1px}
 .hosted-only{display:none}body.hosted .hosted-only{display:inline}
+.logosub{font-family:'Big Shoulders Stencil Display',Impact,sans-serif;font-weight:700;font-size:clamp(22px,3.6vw,36px);line-height:1;margin:6px 0 0;color:var(--mint);letter-spacing:.12em;text-transform:uppercase}
 .tok{font-size:19px;margin-bottom:8px}.tok b{color:var(--gold);font-size:24px}
 .mal{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-bottom:12px}
 .mal button{position:relative;text-align:left;padding:7px 36px 7px 10px;border-radius:10px;border:1px solid var(--line);background:#121d1a;color:var(--ink);cursor:pointer;min-height:44px}
@@ -445,7 +446,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
 
 <section id="title" class="screen">
   <div class="panel">
-    <h1>Le Collec<wbr>tionneur<span>.</span></h1>
+    <h1>Valmont<span>.</span></h1><p class="logosub">Last Door Out</p>
     <p class="tag">Neuf prisonniers, neuf ailes, cinq jours. Trouve les fragments, cache-toi des traqueurs, sabote les autres. Une seule porte mène dehors.</p>
     <div class="chars" id="chars"></div>
     <div class="cdesc" id="cdesc"></div>

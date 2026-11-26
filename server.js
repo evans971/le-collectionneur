@@ -1,4 +1,4 @@
-// Le Collectionneur — serveur de jeu (salons en temps réel + classement)
+// Valmont: Last Door Out — serveur de jeu (salons en temps réel + classement)
 // Lancer : npm install puis npm start  →  http://localhost:3000
 'use strict';
 const http = require('http');
@@ -240,4 +240,4 @@ setInterval(() => {
   for (const ws of wss.clients) { if (!ws.alive) { ws.terminate(); continue; } ws.alive = false; try { ws.ping(); } catch (e) {} }
 }, 20000);
 
-server.listen(PORT, () => console.log(`Le Collectionneur : http://localhost:${PORT}  (stockage : ${store.kind})`));
+server.listen(PORT, () => console.log(`Valmont: Last Door Out : http://localhost:${PORT}  (stockage : ${store.kind})`));

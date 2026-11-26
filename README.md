@@ -1,4 +1,4 @@
-# Le Collectionneur — version en ligne
+# Valmont: Last Door Out — version en ligne
 
 Ce dossier contient le jeu complet et son serveur :
 
