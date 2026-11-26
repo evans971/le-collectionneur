@@ -637,7 +637,7 @@ function pzData(k,day){
  if(k==='calibre')return{dials:day<=2?2:3,speed:.75+day*.15,zone:.22-day*.02};
  if(k==='badge')return{lo:.45+day*.05,hi:1.5-day*.1};
  if(k==='filtre')return{n:5+day};
- if(k==='memoire')return{pairs:day<=2?6:8};
+ if(k==='memoire')return{pairs:day<=2?4:5};
  if(k==='tuyaux')return{n:day<=2?4:5};
  return{tol:.075-day*.007,drift:.5+day*.12};
 }
@@ -727,7 +727,7 @@ function genMap(day){
  for(let k=0;k<(day>=2?3:2);k++){const [ra,rb]=shuffle(rooms.slice());const a=floorSpot(ra),b=floorSpot(rb);if(!a||!b)continue;
   const va={t:'vent',x:(a[0]+.5)*TS,y:(a[1]+.5)*TS,r:ra},vb={t:'vent',x:(b[0]+.5)*TS,y:(b[1]+.5)*TS,r:rb};va.pair=vb;vb.pair=va;m.objs.push(va,vb)}
  // cameras
- for(const r of shuffle(rooms.filter(x=>x!==start)).slice(0,Math.min(5,1+day))){
+ for(const r of shuffle(rooms.filter(x=>x!==start&&!m.objs.some(o=>o.t==='puzzle'&&o.r===x))).slice(0,Math.min(5,1+day))){
   const c=pick([[r.x0*TS+7,r.y0*TS+7,Math.PI/4],[(r.x1+1)*TS-7,r.y0*TS+7,3*Math.PI/4],[r.x0*TS+7,(r.y1+1)*TS-7,-Math.PI/4],[(r.x1+1)*TS-7,(r.y1+1)*TS-7,-3*Math.PI/4]]);
   m.cams.push({x:c[0],y:c[1],base:c[2],a:c[2],sweep:.7,ph:rnd(0,6),det:0,cd:0,r,range:230,fov:.32})}
  m.wp=[];for(const r of rooms)for(let y=r.y0;y<=r.y1;y++)for(let x=r.x0;x<=r.x1;x++)if(!isSolidV(g[y][x]))m.wp.push([x,y]);
@@ -1577,7 +1577,7 @@ PZ.filtre=(o,b,done,alive)=>{
   requestAnimationFrame(fr)};requestAnimationFrame(fr)};
 PZ.memoire=(o,b,done)=>{
  const SY=['▲','●','■','◆','★','✚','☾','♣'],p=o.data.pairs,deck=shuffle(SY.slice(0,p).flatMap(s=>[s,s]));let open=[],found=0,miss=0,busy=false;
- b.innerHTML=`<p class="hint">Retourne les cartes deux par deux et retrouve les paires. Trop d'erreurs font du bruit.</p><div class="mem">${deck.map((s,i)=>`<button data-i="${i}" aria-label="Carte ${i+1}"><span>${s}</span></button>`).join('')}</div><div class="pzs">Paires : 0/${p}</div>`;
+ b.innerHTML=`<p class="hint">Retourne les cartes deux par deux et retrouve les paires. Trop d'erreurs font du bruit.</p><div class="mem" style="grid-template-columns:repeat(${p===5?5:4},1fr)">${deck.map((s,i)=>`<button data-i="${i}" aria-label="Carte ${i+1}"><span>${s}</span></button>`).join('')}</div><div class="pzs">Paires : 0/${p}</div>`;
  const bs=[...b.querySelectorAll('.mem button')],st=b.querySelector('.pzs');
  bs.forEach(x=>x.onclick=()=>{if(busy||x.classList.contains('up'))return;x.classList.add('up');SFX.click();open.push(x);if(open.length<2)return;const[a,c]=open;open=[];
   if(deck[+a.dataset.i]===deck[+c.dataset.i]){a.classList.add('ok');c.classList.add('ok');a.disabled=c.disabled=true;found++;tone(500+found*60,.12,'triangle',.14);st.textContent=`Paires : ${found}/${p}`;if(found===p){st.textContent='Mémoire restaurée.';setTimeout(done,400)}}
