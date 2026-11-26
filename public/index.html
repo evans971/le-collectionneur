@@ -96,6 +96,18 @@ table.rank{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:18px}
 #rivals .rv.done .bar i{background:var(--gold)}
 #rivals .rv.ally span::after{content:' ·allié';color:var(--mint);font-size:12px}
 #rivals.closed .rv{display:none}
+#tl,#tr{transition:opacity .25s}
+#tl{background:rgba(9,16,15,.66);backdrop-filter:blur(2px)}
+#rivals{background:rgba(9,16,15,.66)}
+#tl.fade,#tr.fade{opacity:.22}
+#tl .rgt{display:flex;align-items:center;gap:6px}
+.tgl{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#14221f;color:var(--ink);font:700 18px/1 'Barlow Condensed',sans-serif;cursor:pointer;padding:0}
+#tl.compact{width:auto;min-width:150px}
+#tl.compact .xr,#tl.compact .meter,#tl.compact .tlb{display:none}
+#mleg{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:12px;color:var(--dim);background:rgba(9,16,15,.66);border-radius:8px;padding:3px 8px}
+#mleg i{display:inline-block;width:9px;height:9px;margin-right:4px;vertical-align:middle}
+#mleg .lt{background:#79d9b1;border-radius:50%}#mleg .ls{background:#e0483d;outline:1px solid #fff}#mleg .lc{background:#b08a5a}#mleg .ln{background:#e9c46a}
+body.mobile #mleg{font-size:11px;padding:2px 6px}
 #feed{position:absolute;left:50%;top:10px;transform:translateX(-50%);width:min(500px,calc(100vw - 480px));display:flex;flex-direction:column;gap:4px;align-items:center}
 .msg{background:var(--panel);border-left:3px solid var(--dim);padding:4px 10px;border-radius:5px;font-size:16px;transition:opacity .6s;max-width:100%}
 .msg.bad{border-color:var(--red)}.msg.good{border-color:var(--mint)}.msg.rival{border-color:#6d9dc5}
@@ -266,16 +278,16 @@ body.mobile #tbtn button{height:62px;font-size:14px}
 
 <div id="hud" class="hide">
   <div id="tl">
-    <div class="row"><span id="hDay">Jour 1</span><span id="hPhase">Jour</span></div>
+    <div class="row"><span id="hDay">Jour 1</span><span class="rgt"><span id="hPhase">Jour</span><button class="pe tgl" id="bTgl" aria-label="Réduire le panneau" title="Réduire / agrandir (H)">–</button></span></div>
     <div class="row"><span id="hClock">0:00</span><span id="hNext">Nuit dans 2:30</span></div>
     <div class="row"><span>Fragments</span><b id="hFrag">0/3</b></div>
-    <div class="row"><span>Jetons</span><b id="hTok">2</b></div>
-    <div class="row"><span>Captures</span><b id="hStr">○○○</b></div>
+    <div class="row xr"><span>Jetons</span><b id="hTok">2</b></div>
+    <div class="row xr"><span>Captures</span><b id="hStr">○○○</b></div>
     <div class="meter"><span>Endurance</span><div class="bar"><i id="hSta"></i></div></div>
     <div class="meter"><span>Bruit</span><div class="bar"><i id="hNoise"></i></div></div>
     <div class="tlb"><button class="pe red" id="bSab">Saboter <kbd>R</kbd></button><button class="pe" id="bJour">Carnet <kbd>J</kbd></button><button class="pe" id="bPause" aria-label="Pause">II</button></div>
   </div>
-  <div id="tr"><canvas id="mini" width="424" height="292"></canvas><div id="rivals" class="pe"></div></div>
+  <div id="tr"><canvas id="mini" width="424" height="292"></canvas><div id="mleg"><span><i class="lt"></i>Terminal</span><span><i class="ls"></i>Sortie</span><span><i class="lc"></i>Caisse</span><span><i class="ln"></i>Note</span></div><div id="rivals" class="pe"></div></div>
   <div id="feed"></div>
   <div id="big"></div>
   <div id="fx"></div>
@@ -369,15 +381,15 @@ body.mobile #tbtn button{height:62px;font-size:14px}
         <p>Les traqueurs voient dans un cône devant eux et entendent tes pas. Marcher fait du bruit, courir beaucoup, s'accroupir presque pas.</p>
         <p>Cache-toi dans les casiers et sous les lits <kbd>E</kbd>, mais pas sous leurs yeux. Les conduits d'aération relient deux salles.</p>
         <p>La nuit, coupe ta lampe <kbd>F</kbd> pour être moins visible. Les caméras déclenchent l'alarme.</p>
-        <p>Attrapé ? Retour en cellule. Trois captures dans la journée et tu es éliminé.</p>
+        <p>Attrapé ? Retour en cellule, puis 5 s de protection à la sortie. Trois captures dans la journée et tu es éliminé.</p>
       </div>
       <div>
         <h3>Saboter</h3>
         <p>Le premier jour, il n'y a qu'un traqueur et personne ne peut en envoyer d'autres. Ensuite, les traqueurs supplémentaires deviennent un malus.</p><p>Chaque fragment rapporte 2 jetons. Dépense-les <kbd>R</kbd> pour retarder les autres : coupure de courant, portes verrouillées, gaz, traqueur…</p>
         <p>Les autres font pareil avec toi. Un brouilleur bloque automatiquement le prochain malus.</p>
-        <p>Les rivaux peuvent proposer une alliance au talkie-walkie. Elle peut être sincère.</p>
+        <p>Une fois vus, les terminaux et la porte de sortie restent marqués sur la carte en haut à droite.</p><p>Les rivaux peuvent proposer une alliance au talkie-walkie. Elle peut être sincère.</p>
         <h3 class="only-pc">Touches (PC)</h3>
-        <p class="only-pc"><kbd>ZQSD</kbd>/<kbd>WASD</kbd>/flèches bouger · <kbd>Maj</kbd> courir · <kbd>C</kbd> s'accroupir · <kbd>E</kbd> action · <kbd>Espace</kbd> capacité · <kbd>1</kbd> leurre · <kbd>2</kbd> fumigène · <kbd>F</kbd> lampe · <kbd>R</kbd> saboter · <kbd>J</kbd> carnet · <kbd>Échap</kbd> pause. La souris oriente la lampe.</p>
+        <p class="only-pc"><kbd>ZQSD</kbd>/<kbd>WASD</kbd>/flèches bouger · <kbd>Maj</kbd> courir · <kbd>C</kbd> s'accroupir · <kbd>E</kbd> action · <kbd>Espace</kbd> capacité · <kbd>1</kbd> leurre · <kbd>2</kbd> fumigène · <kbd>F</kbd> lampe · <kbd>R</kbd> saboter · <kbd>J</kbd> carnet · <kbd>H</kbd> réduire le panneau · <kbd>Échap</kbd> pause. La souris oriente la lampe.</p>
         <h3 class="only-mob">Contrôles (mobile)</h3>
         <p class="only-mob">Pose le pouce n'importe où sur la moitié gauche de l'écran : un joystick apparaît. Ta lampe suit ta direction. À droite : <b>Action</b> (fouiller, se cacher, énigmes, porte), <b>Courir</b> (maintenir), <b>Accroupi</b>, <b>Lampe</b>, <b>Capacité</b>, <b>Leurre</b>, <b>Fumigène</b>, <b>Saboter</b>. Le téléphone en mode paysage donne plus de vue.</p>
       </div>
@@ -742,14 +754,14 @@ function bfs(sx,sy,tx,ty){
 function setPath(h,x,y){const p=bfs(Math.floor(h.x/TS),Math.floor(h.y/TS),Math.floor(x/TS),Math.floor(y/TS));h.path=p||[]}
 
 // ---------- entities
-function newPlayer(){return{x:M.start.cx,y:M.start.cy,a:-Math.PI/2,stam:1,flash:true,crouch:false,running:false,moving:false,noise:0,hidden:null,vent:null,cell:0,act:null,ab:0,frag:0,walk:0,stepT:0,noiseT:0}}
+function newPlayer(){return{x:M.start.cx,y:M.start.cy,a:-Math.PI/2,stam:1,flash:true,crouch:false,running:false,moving:false,noise:0,hidden:null,vent:null,cell:0,act:null,ab:0,grace:0,frag:0,walk:0,stepT:0,noiseT:0}}
 function makeHunter(x,y,extra){return{x,y,a:Math.random()*6.28,state:'patrol',path:[],sus:0,stun:0,lost:0,searchT:0,repath:0,wait:rnd(0,1.5),last:null,walk:0,range:230,fov:.68,sawHide:false,rush:false,extra:!!extra,cone:null}}
 function spawnHunter(extra){
  for(let k=0;k<80;k++){const r=pick(M.rooms);if(r===M.start&&k<70)continue;const[x,y]=[ri(r.x0,r.x1),ri(r.y0,r.y1)];if(solidT(x,y))continue;
   const px=(x+.5)*TS,py=(y+.5)*TS;if(P&&dst(px,py,P.x,P.y)<TS*9&&k<70)continue;const h=makeHunter(px,py,extra);H.push(h);return h}
  return null}
 function hunterSees(h){
- if(!P||state!=='play'||P.hidden||P.vent||P.cell>0)return false;
+ if(!P||state!=='play'||P.hidden||P.vent||P.cell>0||P.grace>0)return false;
  if(inSmoke(P.x,P.y)||inSmoke(h.x,h.y))return false;
  const dx=P.x-h.x,dy=P.y-h.y,d=Math.hypot(dx,dy);
  let range=h.range*(isDark()?(P.flash?1:.55):1)*(P.crouch?.72:1);if(D&&D.night)range*=.9;
@@ -787,18 +799,18 @@ function updateHunters(dt){
   h.cone=poly(h.x,h.y,h.a-h.fov,h.a+h.fov,14,h.range*(isDark()?.85:1),false);
   if(play&&!P.vent&&P.cell<=0){
    if(P.hidden){if(h.sawHide&&h.state==='chase'&&dst(h.x,h.y,P.hidden.x,P.hidden.y)<40){capture("Il t'a vu te cacher et t'a tiré de là.");return}}
-   else if(dst(h.x,h.y,P.x,P.y)<21){capture('Un traqueur t\'a attrapé.');return}}
+   else if(!(P.grace>0)&&dst(h.x,h.y,P.x,P.y)<21){capture('Un traqueur t\'a attrapé.');return}}
  }}
 
 function updateCams(dt){
  for(const c of M.cams){c.a=c.base+Math.sin(TIME*.55+c.ph)*c.sweep;if(c.cd>0)c.cd-=dt;
   c.cone=poly(c.x,c.y,c.a-c.fov,c.a+c.fov,8,c.range,false);
-  if(state!=='play'||on('hack')||!P||P.hidden||P.vent||P.cell>0||inSmoke(P.x,P.y)){c.det=Math.max(0,c.det-dt);continue}
+  if(state!=='play'||on('hack')||!P||P.hidden||P.vent||P.cell>0||P.grace>0||inSmoke(P.x,P.y)){c.det=Math.max(0,c.det-dt);continue}
   const d=dst(c.x,c.y,P.x,P.y);const seen=d<c.range&&Math.abs(angDiff(c.a,Math.atan2(P.y-c.y,P.x-c.x)))<c.fov&&los(c.x,c.y,P.x,P.y);
   if(seen){c.det+=dt;if(c.det>.65&&c.cd<=0){c.cd=8;c.det=0;SFX.alarm();say('Une caméra t\'a repéré : les traqueurs arrivent.','bad');alarmAt(P.x,P.y,2);shake=.3}}else c.det=Math.max(0,c.det-dt*.5)}}
 function updateMisc(dt){
  for(const d of DR){d.t-=dt;const a=Math.atan2(P.y-d.y,P.x-d.x),dd=dst(d.x,d.y,P.x,P.y);if(dd>50){d.x+=Math.cos(a)*78*dt;d.y+=Math.sin(a)*78*dt}
-  if(dd<120&&!P.hidden&&!P.vent&&P.cell<=0){d.ping-=dt;if(d.ping<=0){d.ping=3;SFX.beep();alarmAt(P.x,P.y,1)}}}
+  if(dd<120&&!P.hidden&&!P.vent&&P.cell<=0&&!(P.grace>0)){d.ping-=dt;if(d.ping<=0){d.ping=3;SFX.beep();alarmAt(P.x,P.y,1)}}}
  DR=DR.filter(d=>d.t>0);
  for(const s of SM)s.t-=dt;SM=SM.filter(s=>s.t>0);
  for(const c of DC){c.t-=dt;c.ping-=dt;if(c.ping<=0){c.ping=.7;SFX.beep();makeNoise(c.x,c.y,420)}}DC=DC.filter(c=>c.t>0);
@@ -808,7 +820,8 @@ function updateMisc(dt){
 // ---------- player
 const K={};let joy={on:false,x:0,y:0},touchRun=false,mouse={x:0,y:0,act:false};
 function updatePlayer(dt){
- if(P.cell>0){P.cell-=dt;P.noise=0;if(P.cell<=0)big('');else big('CELLULE — '+Math.ceil(P.cell),'red');return}
+ if(P.cell>0){P.cell-=dt;P.noise=0;if(P.cell<=0){big('');P.grace=5;say('5 s de protection : les traqueurs ne peuvent pas t\'attraper.','good')}else big('CELLULE — '+Math.ceil(P.cell),'red');return}
+ if(P.grace>0)P.grace-=dt;
  if(P.vent){P.vent.t-=dt;P.noise=0;if(P.vent.t<=0){P.x=P.vent.to.x;P.y=P.vent.to.y;P.vent=null;SFX.vent();collide(P,10)}return}
  if(P.ab>0)P.ab-=dt;
  const blocked=!!UI.modal||!!P.hidden;
@@ -909,7 +922,7 @@ function render(){
  for(const s of SM){const a=Math.min(1,s.t/2);for(let i=0;i<7;i++){const ang=i*.9+t*.3;ctx.fillStyle=`rgba(170,180,176,${.26*a})`;circ(ctx,s.x+Math.cos(ang)*s.r*.4,s.y+Math.sin(ang)*s.r*.4,s.r*.55)}}
  for(const c of DC){ctx.fillStyle='#2a2f2e';circ(ctx,c.x,c.y,6);ctx.fillStyle='#e9c46a';circ(ctx,c.x,c.y,2.5);ctx.strokeStyle=`rgba(233,196,106,${(c.ping/.7)*.7})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(c.x,c.y,10+(1-c.ping/.7)*30,0,7);ctx.stroke()}
  // player
- if(P&&state!=='title'&&!P.hidden&&!P.vent){const ch=G.char;ctx.fillStyle='rgba(121,217,177,.18)';circ(ctx,P.x,P.y,17);drawPerson(ctx,P.x,P.y,P.a,ch,P.walk,P.crouch?.86:1)}
+ if(P&&state!=='title'&&!P.hidden&&!P.vent){const ch=G.char;ctx.fillStyle='rgba(121,217,177,.18)';circ(ctx,P.x,P.y,17);if(P.grace>0){ctx.strokeStyle=`rgba(121,217,177,${.5+.4*Math.sin(t*10)})`;ctx.lineWidth=3;ctx.beginPath();ctx.arc(P.x,P.y,22,0,7);ctx.stroke();if(Math.sin(t*18)>0)ctx.globalAlpha=.5}drawPerson(ctx,P.x,P.y,P.a,ch,P.walk,P.crouch?.86:1);ctx.globalAlpha=1}
  for(const h of H){h.vis=state==='title'||playerSees(h.x,h.y,isDark());if(h.vis)drawHunter(ctx,h,t)}
  // darkness
  dctx.setTransform(1,0,0,1,0,0);dctx.globalCompositeOperation='source-over';dctx.clearRect(0,0,W,Hh);
@@ -962,10 +975,16 @@ function drawMini(){
  const all=on('plan');
  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!all&&!M.explored[y*MW+x])continue;const v=M.g[y][x];
   mctx.fillStyle=v===T.WALL?'#55665f':v===T.DOOR?(locked.has(y*MW+x)?'#e0483d':'#a8bab2'):v===T.EXIT?(P.frag>=M.need?'#79d9b1':'#e0483d'):v===T.FLOOR?'#22302c':'#3a4a45';mctx.fillRect(x*TS,y*TS,TS+1,TS+1)}
- for(const o of M.objs){const ex=all||o.revealed||M.explored[Math.floor(o.y/TS)*MW+Math.floor(o.x/TS)];if(!ex)continue;
-  if(o.t==='puzzle'){mctx.fillStyle=o.solved?'#2c5a48':'#79d9b1';mctx.fillRect(o.x-40,o.y-40,80,80)}
+ for(const o of M.objs){const ex=all||o.revealed||o.seen||M.explored[Math.floor(o.y/TS)*MW+Math.floor(o.x/TS)];if(!ex)continue;o.seen=true;
+  if(o.t==='crate'&&!o.searched){mctx.fillStyle='#b08a5a';mctx.fillRect(o.x-30,o.y-30,60,60)}
   else if(o.t==='note'&&!o.read){mctx.fillStyle='#e9c46a';mctx.fillRect(o.x-28,o.y-28,56,56)}
   else if(o.t==='vent'){mctx.fillStyle='#8a9592';mctx.fillRect(o.x-24,o.y-24,48,48)}}
+ for(const o of M.objs){if(!o.seen&&!all&&!o.revealed)continue;
+  if(o.t==='puzzle'){mctx.fillStyle=o.solved?'#2c5a48':'#79d9b1';mctx.strokeStyle='#050908';mctx.lineWidth=18;mctx.beginPath();mctx.arc(o.x,o.y,o.solved?60:78,0,7);mctx.fill();mctx.stroke();
+   if(o.solved){mctx.strokeStyle='#cfeee0';mctx.lineWidth=22;mctx.beginPath();mctx.moveTo(o.x-30,o.y);mctx.lineTo(o.x-8,o.y+24);mctx.lineTo(o.x+34,o.y-26);mctx.stroke()}
+   else{const pr=78+30*(.5+.5*Math.sin(TIME*4));mctx.strokeStyle='rgba(121,217,177,.6)';mctx.lineWidth=12;mctx.beginPath();mctx.arc(o.x,o.y,pr,0,7);mctx.stroke()}}
+  else if(o.t==='exit'){const open=P.frag>=M.need;mctx.fillStyle=open?'#79d9b1':'#e0483d';mctx.strokeStyle='#fff';mctx.lineWidth=20;mctx.fillRect(o.x-95,o.y-95,190,190);mctx.strokeRect(o.x-95,o.y-95,190,190);
+   mctx.fillStyle='#050908';mctx.fillRect(o.x-30,o.y-60,60,120);if(open){const pr=110+40*(.5+.5*Math.sin(TIME*4));mctx.strokeStyle='rgba(121,217,177,.7)';mctx.lineWidth=14;mctx.strokeRect(o.x-pr,o.y-pr,pr*2,pr*2)}}}
  if(G.char.id==='nadia'||on('hack'))for(const c of M.cams){mctx.fillStyle=on('hack')?'#666':'#e9c46a';mctx.beginPath();mctx.arc(c.x,c.y,40,0,7);mctx.fill()}
  for(const h of H)if(on('hack')||h.vis){mctx.fillStyle='#ff3b30';mctx.beginPath();mctx.arc(h.x,h.y,46,0,7);mctx.fill()}
  for(const d of DR){mctx.fillStyle=Math.sin(TIME*10)>0?'#ff3b30':'#802020';mctx.fillRect(d.x-34,d.y-34,68,68)}
@@ -1078,6 +1097,7 @@ function hud(dt){
  document.querySelectorAll('#tbtn [data-a="crouch"]').forEach(b=>b.classList.toggle('on',P.crouch));document.querySelectorAll('#tbtn [data-a="flash"]').forEach(b=>b.classList.toggle('on',P.flash));
  const ab=document.querySelector('#tbtn [data-a="ab"]');if(ab)ab.textContent=P.ab>0?Math.ceil(P.ab)+' s':G.char.ab;
  const fxs=[];const lab={blackout:'Coupure',gas:'Gaz',invert:'Sens brouillés',hack:'Piratage',plan:'Plans',sprint:'Sprint'};
+ if(P.grace>0)fxs.push(`<span class="g">Protection ${Math.ceil(P.grace)} s</span>`);
  for(const k in lab)if(on(k))fxs.push(`<span class="${['hack','plan','sprint'].includes(k)?'g':''}">${lab[k]} ${Math.ceil(FX[k])} s</span>`);
  if(locked.size)fxs.push(`<span>Portes verrouillées ${Math.ceil(Math.max(...locked.values()))} s</span>`);if(DR.length)fxs.push('<span>Drone espion</span>');if(P.hidden)fxs.push('<span class="g">Caché</span>');
  const fxEl=hEl('fx'),html=fxs.join('');if(fxEl.innerHTML!==html)fxEl.innerHTML=html;
@@ -1086,6 +1106,7 @@ function hud(dt){
  if(P.act){pr.classList.remove('hide');pr.innerHTML=`${P.act.label}<span class="pb"><i style="width:${P.act.t/P.act.need*100}%"></i></span>`}
  else if(target&&!UI.modal){pr.classList.remove('hide');pr.innerHTML=`<kbd>E</kbd> ${esc(target.label)}`}else pr.classList.add('hide');
  miniT-=.1;if(miniT<=0){miniT=.2;drawMini()}
+ const sx=(P.x-CAM.vx)*ZOOM,sy=(P.y-CAM.vy)*ZOOM;for(const id of['tl','tr']){const el=hEl(id),r=el.getBoundingClientRect();el.classList.toggle('fade',sx>r.left-50&&sx<r.right+50&&sy>r.top-50&&sy<r.bottom+50)}
  rivT-=.1;if(rivT<=0){rivT=.5;drawRivals()}
  if(bigT>0){bigT-=.1;if(bigT<=0)bigEl.classList.remove('on')}}
 function drawRivals(){
@@ -1271,6 +1292,10 @@ function pauseGame(){if(state!=='play')return;closeModal();state='pause';$('#pau
 function resumeGame(){if(state!=='pause')return;hideScreens();state='play'}
 
 // ---------- input
+let hudMini=false;try{hudMini=localStorage.getItem('collectionneur_hudmini')==='1'}catch(_){}
+function applyHudMini(){$('#tl').classList.toggle('compact',hudMini);$('#bTgl').textContent=hudMini?'+':'–';$('#bTgl').setAttribute('aria-label',hudMini?'Agrandir le panneau':'Réduire le panneau')}
+function toggleHud(){hudMini=!hudMini;try{localStorage.setItem('collectionneur_hudmini',hudMini?'1':'0')}catch(_){}applyHudMini()}
+$('#bTgl').onclick=toggleHud;applyHudMini();
 const toggleFlash=()=>{if(!P||state!=='play')return;P.flash=!P.flash;SFX.click()},toggleCrouch=()=>{if(!P||state!=='play')return;P.crouch=!P.crouch;SFX.click()};
 addEventListener('keydown',e=>{
  if(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;
@@ -1284,7 +1309,7 @@ addEventListener('keydown',e=>{
  if(state!=='play'||e.repeat)return;
  if(D.allyOffer&&(c==='KeyO'||c==='KeyY')){allyAnswer(true);return}if(D.allyOffer&&c==='KeyN'){allyAnswer(false);return}
  if(c==='KeyE'||c==='Enter')act();else if(c==='Space')ability();else if(c==='KeyF')toggleFlash();else if(c==='KeyC'||c==='ControlLeft')toggleCrouch();
- else if(c==='Digit1'||c==='Numpad1')useItem(1);else if(c==='Digit2'||c==='Numpad2')useItem(2);else if(c==='KeyR'||c==='Tab')openSab();else if(c==='KeyJ')openJournal();else if(c==='Escape'||c==='KeyP')pauseGame();
+ else if(c==='Digit1'||c==='Numpad1')useItem(1);else if(c==='Digit2'||c==='Numpad2')useItem(2);else if(c==='KeyR'||c==='Tab')openSab();else if(c==='KeyJ')openJournal();else if(c==='KeyH')toggleHud();else if(c==='Escape'||c==='KeyP')pauseGame();
  else if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c)&&P&&P.hidden){/* stay hidden until E */}});
 addEventListener('keyup',e=>{K[e.code]=false});
 addEventListener('blur',()=>{for(const k in K)K[k]=false;touchRun=false;joy.on=false});
