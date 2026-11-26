@@ -238,6 +238,10 @@ body.mobile #mleg{font-size:11px;padding:2px 6px}
 .shi{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#0b1311;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
 .shi b{font-size:19px}.shi p{margin:0;color:#cfd6cf;font-size:15px}.shi small{color:var(--gold)}.shi button{flex:none}
 body.mpgame .solo-only{display:none}
+.aform{display:flex;flex-direction:column;gap:8px;margin:12px 0 4px;max-width:420px}
+.aform input{font:600 19px 'Barlow Condensed',sans-serif;min-height:48px;padding:6px 14px;border-radius:10px;border:1px solid var(--line);background:#0b1311;color:var(--ink);user-select:text;-webkit-user-select:text;touch-action:manipulation}
+.aform input:focus{outline:2px solid var(--mint);outline-offset:1px}
+.hosted-only{display:none}body.hosted .hosted-only{display:inline}
 .tok{font-size:19px;margin-bottom:8px}.tok b{color:var(--gold);font-size:24px}
 .mal{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-bottom:12px}
 .mal button{position:relative;text-align:left;padding:7px 36px 7px 10px;border-radius:10px;border:1px solid var(--line);background:#121d1a;color:var(--ink);cursor:pointer;min-height:44px}
@@ -348,7 +352,6 @@ body.mobile #tbtn button{height:62px;font-size:14px}
     <div class="slot pe" id="sl1"><kbd>1</kbd><b id="n1">1</b>Leurre</div>
     <div class="slot pe" id="sl2"><kbd>2</kbd><b id="n2">1</b>Fumigène</div>
     <div class="slot pe solo-only" id="sl4"><kbd>3</kbd><b id="n4">0</b>Pétard</div>
-    <div class="slot pe solo-only" id="sl5"><kbd>4</kbd><b id="n5">0</b>Radio</div>
     <div class="slot" id="sl3"><b id="n3">0</b>Brouilleur</div>
     <div class="slot pe" id="slF"><kbd>F</kbd><b id="nF">ON</b>Lampe</div>
     <div class="slot pe" id="slC"><kbd>C</kbd><b id="nC">—</b>Accroupi</div>
@@ -359,7 +362,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
     <div id="joy"><i></i></div>
     <div id="tbtn">
       <button data-a="i1">Leurre</button><button data-a="i2">Fumi.</button><button data-a="flash">Lampe</button>
-      <button data-a="i3" class="solo-only">Pétard</button><button data-a="i4" class="solo-only">Radio</button>
+      <button data-a="i3" class="solo-only">Pétard</button>
       <button data-a="crouch">Accroupi</button><button data-a="ab">Capacité</button><button data-a="run">Courir</button>
       <button data-a="sab">Saboter</button><button data-a="act" class="big" style="grid-column:span 2;border-radius:30px">Action</button>
     </div>
@@ -427,13 +430,26 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   <p class="hint">Chaque partie terminée rapporte des pièces : 100 pièces pour 1 000 points de score.</p>
   <button class="btn main" id="bShopBack">Retour</button></div></section>
 
+<section id="account" class="screen hide"><div class="panel narrow">
+  <h2>Ton compte</h2>
+  <div id="aOut">
+    <p class="tag">Avec un compte, tes pièces, tes personnages, tes leurres et tes succès sont gardés sur le serveur. Tu les retrouves sur n'importe quel appareil, même après avoir vidé ton navigateur.</p>
+    <div class="tabs"><button class="tab sel" id="aTabL" type="button">Se connecter</button><button class="tab" id="aTabR" type="button">Créer un compte</button></div>
+    <form id="aForm" class="aform"><input id="aName" placeholder="Pseudo" autocomplete="username" maxlength="16" autocapitalize="off" spellcheck="false" aria-label="Pseudo"><input id="aPass" type="password" placeholder="Mot de passe (6 caractères minimum)" autocomplete="current-password" maxlength="100" aria-label="Mot de passe"><input id="aPass2" class="hide" type="password" placeholder="Confirme le mot de passe" autocomplete="new-password" maxlength="100" aria-label="Confirme le mot de passe"><button class="btn main" id="aSubmit">Se connecter</button></form>
+    <p class="err" id="aErr"></p>
+    <p class="hint">À la création du compte, les pièces et achats déjà faits sur cet appareil y sont transférés (jusqu'à 3 000 pièces).</p>
+    <button class="lnk" id="aSkip" type="button">Jouer sans compte</button>
+  </div>
+  <div id="aIn" class="hide"><p class="tag" id="aInfo"></p><div class="actions"><button class="btn main" id="aBack">Retour</button><button class="btn" id="aLogout">Se déconnecter</button></div></div>
+</div></section>
+
 <section id="title" class="screen">
   <div class="panel">
     <h1>Le Collec<wbr>tionneur<span>.</span></h1>
     <p class="tag">Neuf prisonniers, neuf ailes, cinq jours. Trouve les fragments, cache-toi des traqueurs, sabote les autres. Une seule porte mène dehors.</p>
     <div class="chars" id="chars"></div>
     <div class="cdesc" id="cdesc"></div>
-    <div class="pline">Pseudo : <b id="tName">—</b> <button class="lnk" id="bName">modifier</button> · Pièces : <b id="tCoins" class="coin">0</b></div>
+    <div class="pline">Pseudo : <b id="tName">—</b> <button class="lnk" id="bName">modifier</button><button class="lnk hosted-only" id="bAcc">Se connecter</button> · Pièces : <b id="tCoins" class="coin">0</b></div>
     <div class="modes">
       <button class="mode main" id="bNew"><b>Solo</b><small>Toi contre 8 bots</small></button>
       <button class="mode" id="bFriends"><b>Avec des amis</b><small>Salon privé avec un code</small></button>
@@ -978,10 +994,10 @@ function loot(o){o.searched=true;count('crates');const r=Math.random();let m=nul
  if(m){say('Tu trouves '+m+'.','good');SFX.ok()}else say('La caisse est vide.','')}
 function useItem(n){
  if(state!=='play'||UI.modal||!P||P.cell>0||P.vent)return;
- if(n===1||n===3||n===4){if(P.hidden){SFX.bad();return}const kind=n===1?'leurre':n===3?'petard':'radio';
-  if(kind==='leurre'&&G.items.leurre>0)G.items.leurre--;else if(!MP&&!G.tuto&&STOCK[kind]>0){STOCK[kind]--;saveShop()}else{SFX.bad();if(n!==1&&MP)say('Les leurres achetés sont réservés au solo.','');return}
-  const d=ray(P.x,P.y,P.a,190,(x,y)=>solidT(x,y))-14;const x=P.x+Math.cos(P.a)*Math.max(10,d),y=P.y+Math.sin(P.a)*Math.max(10,d);DC.push({x,y,t:DCK[kind].t*(G.char.id==='ines'?2:1),ping:0,kind});say({leurre:'Leurre lancé.',petard:'Pétard lancé !',radio:'Radio posée.'}[kind],'good')}
- if(n===2){if(G.items.fumigene<=0){SFX.bad();return}G.items.fumigene--;SM.push({x:P.x,y:P.y,r:100,t:8});SFX.smoke();for(const h of H)if(h.state==='chase'&&inSmoke(h.x,h.y)||h.state==='chase'){h.state='search';h.searchT=3;h.sus=.4}say('Écran de fumée !','good')}}
+ if(n===1||n===3){if(P.hidden){SFX.bad();return}const kind=n===1?'leurre':'petard';
+  if(kind==='leurre'&&G.items.leurre>0)G.items.leurre--;else if(!MP&&!G.tuto&&STOCK[kind]>0){STOCK[kind]--;saveShop();accUse(kind)}else{SFX.bad();if(n!==1&&MP)say('Les leurres achetés sont réservés au solo.','');return}
+  const d=ray(P.x,P.y,P.a,190,(x,y)=>solidT(x,y))-14;const x=P.x+Math.cos(P.a)*Math.max(10,d),y=P.y+Math.sin(P.a)*Math.max(10,d);DC.push({x,y,t:DCK[kind].t*(G.char.id==='ines'?2:1),ping:0,kind});say({leurre:'Leurre lancé.',petard:'Pétard lancé !'}[kind],'good')}
+ if(n===2){if(G.items.fumigene>0)G.items.fumigene--;else if(!MP&&!G.tuto&&STOCK.fumigene>0){STOCK.fumigene--;saveShop();accUse('fumigene')}else{SFX.bad();return}SM.push({x:P.x,y:P.y,r:100,t:8});SFX.smoke();for(const h of H)if(h.state==='chase'&&inSmoke(h.x,h.y)||h.state==='chase'){h.state='search';h.searchT=3;h.sus=.4}say('Écran de fumée !','good')}}
 function ability(){
  if(state!=='play'||UI.modal||!P||P.cell>0||P.vent)return;if(P.ab>0){SFX.bad();return}
  const c=G.char;P.ab=c.cd;
@@ -1198,8 +1214,8 @@ function hud(dt){
  const fr=hEl('hFrag');fr.textContent=P.frag+'/'+M.need;fr.className=P.frag>=M.need?'done':'';
  hEl('hTok').textContent=G.tokens;const ms=maxStrikes();hEl('hStr').textContent='●'.repeat(G.strikes)+'○'.repeat(Math.max(0,ms-G.strikes));
  hEl('hSta').style.width=(P.stam*100)+'%';hEl('hNoise').style.width=Math.min(100,P.noise/270*100)+'%';hEl('hNoise').style.background=P.noise>200?'#e0483d':P.noise>60?'#e9c46a':'#79d9b1';
- const solo=!MP&&!G.tuto;document.body.classList.toggle('mpgame',!solo);hEl('n1').textContent=G.items.leurre+(solo?STOCK.leurre:0);hEl('n4').textContent=STOCK.petard;hEl('n5').textContent=STOCK.radio;hEl('sl4').classList.toggle('empty',!STOCK.petard);hEl('sl5').classList.toggle('empty',!STOCK.radio);hEl('n2').textContent=G.items.fumigene;hEl('n3').textContent=G.items.brouilleur;
- hEl('sl1').classList.toggle('empty',!(G.items.leurre+(solo?STOCK.leurre:0)));hEl('sl2').classList.toggle('empty',!G.items.fumigene);hEl('sl3').classList.toggle('empty',!G.items.brouilleur);
+ const solo=!MP&&!G.tuto;document.body.classList.toggle('mpgame',!solo);hEl('n1').textContent=G.items.leurre+(solo?STOCK.leurre:0);hEl('n4').textContent=STOCK.petard;hEl('sl4').classList.toggle('empty',!STOCK.petard);hEl('n2').textContent=G.items.fumigene+(solo?STOCK.fumigene:0);hEl('n3').textContent=G.items.brouilleur;
+ hEl('sl1').classList.toggle('empty',!(G.items.leurre+(solo?STOCK.leurre:0)));hEl('sl2').classList.toggle('empty',!(G.items.fumigene+(solo?STOCK.fumigene:0)));hEl('sl3').classList.toggle('empty',!G.items.brouilleur);
  hEl('nF').textContent=P.flash?'ON':'OFF';hEl('slF').classList.toggle('on',P.flash);hEl('nC').textContent=P.crouch?'OUI':'—';hEl('slC').classList.toggle('on',P.crouch);
  hEl('abName').textContent=G.char.ab;const cd=hEl('cdQ');if(P.ab>0){cd.classList.remove('hide');cd.textContent=Math.ceil(P.ab)}else cd.classList.add('hide');
  document.querySelectorAll('#tbtn [data-a="crouch"]').forEach(b=>b.classList.toggle('on',P.crouch));document.querySelectorAll('#tbtn [data-a="flash"]').forEach(b=>b.classList.toggle('on',P.flash));
@@ -1330,7 +1346,7 @@ function openSab(){
   draw();const iv=setInterval(()=>{if(!alive()){clearInterval(iv);return}b.querySelectorAll('.trow .bar i').forEach((el,i)=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));if(al[i])el.style.width=prog(al[i])*100+'%'})},800)})}
 
 // ---------- screens
-const screens=['shop','settings','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
+const screens=['account','shop','settings','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
 function hideScreens(){screens.forEach(s=>$('#'+s).classList.add('hide'))}
 function showScreen(s){hideScreens();$('#'+s).classList.remove('hide')}
 let selChar=CHARS[0],helpBack='title';
@@ -1342,7 +1358,7 @@ function buildTitle(){
   drawPerson(x,150,84,-Math.PI/2,c,0,3.1);el.onclick=()=>{if(!owns(c)){SFX.click();openShop(c.id);return}selChar=c;SFX.click();buildTitle()}});
  if(!owns(selChar))selChar=CHARS[0];$('#tCoins').textContent=COINS.toLocaleString('fr-FR');
  $('#cdesc').innerHTML=`<b>${selChar.name}, ${selChar.title.toLowerCase()}.</b> ${selChar.passive}<br><b>${selChar.ab}</b> (<kbd>Espace</kbd>, recharge ${selChar.cd} s) : ${selChar.abd}`;
- $('#tName').textContent=PSEUDO||'—';$('#tErr').textContent='';const s=load();$('#bCont').disabled=!s;$('#bCont').textContent=s?`Continuer · Jour ${s.day} (${(CHARS.find(c=>c.id===s.char)||CHARS[0]).name})`:'Continuer'}
+ $('#tName').textContent=PSEUDO||'—';$('#bAcc').textContent=ACC?'Compte':'Se connecter';$('#bName').classList.toggle('hide',!!ACC);$('#tErr').textContent='';const s=load();$('#bCont').disabled=!s;$('#bCont').textContent=s?`Continuer · Jour ${s.day} (${(CHARS.find(c=>c.id===s.char)||CHARS[0]).name})`:'Continuer'}
 function newGame(){
  audioInit();G={char:selChar,day:1,tokens:2,items:{leurre:1,fumigene:1,brouilleur:0},strikes:0,story:[],desig:false,
   stats:{time:0,caught:0,frags:0,sab:0,recv:0,spotted:0,days:[]},rivals:RIVALS.map(r=>({...r,skill:r.collector?.86:rnd(.88,1.16),alive:true,pen:0}))};
@@ -1419,7 +1435,7 @@ addEventListener('keydown',e=>{
  if(state!=='play'||e.repeat)return;
  if(D.allyOffer&&(c==='KeyO'||c==='KeyY')){allyAnswer(true);return}if(D.allyOffer&&c==='KeyN'){allyAnswer(false);return}
  if(c==='KeyE'||c==='Enter')act();else if(c==='Space')ability();else if(c==='KeyF')toggleFlash();else if(c==='KeyC'||c==='ControlLeft')toggleCrouch();
- else if(c==='Digit1'||c==='Numpad1')useItem(1);else if(c==='Digit2'||c==='Numpad2')useItem(2);else if(c==='Digit3'||c==='Numpad3')useItem(3);else if(c==='Digit4'||c==='Numpad4')useItem(4);else if(c==='KeyR'||c==='Tab')openSab();else if(c==='KeyJ')openJournal();else if(c==='KeyH')toggleHud();else if(c==='Escape'||c==='KeyP')pauseGame();
+ else if(c==='Digit1'||c==='Numpad1')useItem(1);else if(c==='Digit2'||c==='Numpad2')useItem(2);else if(c==='Digit3'||c==='Numpad3')useItem(3);else if(c==='KeyR'||c==='Tab')openSab();else if(c==='KeyJ')openJournal();else if(c==='KeyH')toggleHud();else if(c==='Escape'||c==='KeyP')pauseGame();
  else if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c)&&P&&P.hidden){/* stay hidden until E */}});
 addEventListener('keyup',e=>{K[e.code]=false});
 addEventListener('blur',()=>{for(const k in K)K[k]=false;touchRun=false;joy.on=false});
@@ -1433,16 +1449,16 @@ function applyPlat(p){PLAT=p;try{localStorage.setItem(PKEY,p)}catch(e){}const mo
 let platBack='title';
 function askPlat(back){platBack=back;$('#recPC').textContent=coarse?'':'Recommandé pour cet appareil';$('#recMob').textContent=coarse?'Recommandé pour cet appareil':'';showScreen('platform');(coarse?$('#pMob'):$('#pPC')).focus()}
 $('#pPC').onclick=()=>{applyPlat('pc');SFX.click();platDone()};$('#pMob').onclick=()=>{applyPlat('mobile');SFX.click();platDone()};
-function platDone(){if(platBack==='pause'){showScreen('pause')}else if(!PSEUDO){askPseudo('title')}else{buildTitle();showScreen('title')}}
+function platDone(){if(platBack==='pause'){showScreen('pause')}else if(!PSEUDO){if(window.GAMENET)openAccount('first');else askPseudo('title')}else{buildTitle();showScreen('title')}}
 $('#bPlat').onclick=()=>askPlat('title');$('#bPPlat').onclick=()=>askPlat('pause');
 cv.addEventListener('pointerdown',e=>{if(PLAT!=='mobile'||e.pointerType==='mouse')return;audioInit();if(state!=='play')return;if(e.clientX<VW*.55&&joyId===null){joyId=e.pointerId;joyO={x:e.clientX,y:e.clientY};joy.on=true;joy.x=joy.y=0;joyEl.style.display='block';joyEl.style.left=e.clientX+'px';joyEl.style.top=e.clientY+'px';joyK.style.transform='';try{cv.setPointerCapture(e.pointerId)}catch(_){}}});
 cv.addEventListener('pointermove',e=>{if(e.pointerId!==joyId)return;let dx=e.clientX-joyO.x,dy=e.clientY-joyO.y;const d=Math.hypot(dx,dy),m=50/SET.sens;if(d>m){dx*=m/d;dy*=m/d}joy.x=dx/m;joy.y=dy/m;if(Math.hypot(joy.x,joy.y)<.2){joy.x=joy.y=0}joyK.style.transform=`translate(${dx}px,${dy}px)`});
 const joyEnd=e=>{if(e.pointerId!==joyId)return;joyId=null;joy.on=false;joy.x=joy.y=0;joyEl.style.display='none'};cv.addEventListener('pointerup',joyEnd);cv.addEventListener('pointercancel',joyEnd);
 document.querySelectorAll('#tbtn button').forEach(b=>{const a=b.dataset.a;
  b.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();if(a==='run'){touchRun=true;b.classList.add('on');return}
-  ({act,ab:ability,crouch:toggleCrouch,flash:toggleFlash,i1:()=>useItem(1),i2:()=>useItem(2),i3:()=>useItem(3),i4:()=>useItem(4),sab:openSab})[a]()});
+  ({act,ab:ability,crouch:toggleCrouch,flash:toggleFlash,i1:()=>useItem(1),i2:()=>useItem(2),i3:()=>useItem(3),sab:openSab})[a]()});
  if(a==='run'){const off=()=>{touchRun=false;b.classList.remove('on')};b.addEventListener('pointerup',off);b.addEventListener('pointercancel',off);b.addEventListener('pointerleave',off)}});
-$('#sl1').onclick=()=>useItem(1);$('#sl4').onclick=()=>useItem(3);$('#sl5').onclick=()=>useItem(4);$('#sl2').onclick=()=>useItem(2);$('#slF').onclick=toggleFlash;$('#slC').onclick=toggleCrouch;$('#slQ').onclick=ability;
+$('#sl1').onclick=()=>useItem(1);$('#sl4').onclick=()=>useItem(3);$('#sl2').onclick=()=>useItem(2);$('#slF').onclick=toggleFlash;$('#slC').onclick=toggleCrouch;$('#slQ').onclick=ability;
 $('#bSab').onclick=openSab;$('#bJour').onclick=openJournal;$('#bPause').onclick=pauseGame;
 $('#bNew').onclick=()=>{if(!PSEUDO){askPseudo('title');return}if(!owns(selChar))selChar=CHARS[0];newGame()};$('#bCont').onclick=resume;$('#bHelp').onclick=()=>{helpBack='title';showScreen('help')};$('#bHelpBack').onclick=()=>showScreen(helpBack);
 $('#bEnter').onclick=beginDay;$('#bResume').onclick=resumeGame;$('#bPHelp').onclick=()=>{helpBack='pause';showScreen('help')};$('#bQuit').onclick=()=>{state='title';toTitle()};
@@ -1507,9 +1523,9 @@ const ACHK='collectionneur_ach',CNTK='collectionneur_cnt';let ACHS={},CNT={missi
 try{ACHS=JSON.parse(localStorage.getItem(ACHK)||'{}')||{}}catch(_){}try{Object.assign(CNT,JSON.parse(localStorage.getItem(CNTK)||'{}'))}catch(_){}
 const toastEl=$('#toast');let toastQ=[],toastOn=false;
 function showToast(){if(toastOn||!toastQ.length)return;toastOn=true;const a=toastQ.shift();toastEl.innerHTML=`<small>Succès débloqué</small><b>${esc(a.n)}</b><span>${esc(a.d)}</span>`;toastEl.classList.add('on');SFX.frag();setTimeout(()=>{toastEl.classList.remove('on');setTimeout(()=>{toastOn=false;showToast()},400)},3200)}
-function unlock(id){if(ACHS[id])return;const a=ACH.find(x=>x.id===id);if(!a)return;ACHS[id]=Date.now();try{localStorage.setItem(ACHK,JSON.stringify(ACHS))}catch(_){}toastQ.push(a);showToast()}
+function unlock(id){if(ACHS[id])return;const a=ACH.find(x=>x.id===id);if(!a)return;ACHS[id]=Date.now();try{localStorage.setItem(ACHK,JSON.stringify(ACHS))}catch(_){}toastQ.push(a);showToast();accMeta()}
 function count(k,n=1){CNT[k]=(CNT[k]||0)+n;try{localStorage.setItem(CNTK,JSON.stringify(CNT))}catch(_){}
- if(CNT.missions>=40)unlock('technicien');if(CNT.crates>=25)unlock('fouilleur')}
+ accMeta();if(CNT.missions>=40)unlock('technicien');if(CNT.crates>=25)unlock('fouilleur')}
 function openAchs(){showScreen('achs');const n=ACH.filter(a=>ACHS[a.id]).length;
  $('#achInfo').textContent=`${n} sur ${ACH.length} débloqués · ${CNT.missions||0} missions et ${CNT.crates||0} caisses au total.`;
  $('#achList').innerHTML=ACH.map(a=>`<li class="${ACHS[a.id]?'ok':''}"><b>${esc(a.n)}</b><span>${esc(a.d)}</span></li>`).join('')}
@@ -1640,27 +1656,27 @@ const DCK={
  voix:{t:4,iv:.8,r:400,col:'rgb(214,107,142)',snd:()=>SFX.voice()},
 };
 const WK='collectionneur_coins',OWK='collectionneur_owned',STK='collectionneur_stock';
-let COINS=0,OWNED=[];const STOCK={leurre:0,petard:0,radio:0};
+let COINS=0,OWNED=[];const STOCK={leurre:0,petard:0,fumigene:0};
 try{COINS=Math.max(0,+localStorage.getItem(WK)||0);OWNED=JSON.parse(localStorage.getItem(OWK)||'[]')||[];Object.assign(STOCK,JSON.parse(localStorage.getItem(STK)||'{}'))}catch(_){}
 function saveShop(){try{localStorage.setItem(WK,String(COINS));localStorage.setItem(OWK,JSON.stringify(OWNED));localStorage.setItem(STK,JSON.stringify(STOCK))}catch(_){}}
 const owns=c=>!c.price||OWNED.includes(c.id);
 const SHOPI=[
  {id:'leurre',n:'Leurre sonore',d:'Bipe 6 s pour attirer les traqueurs. Touche 1.',p:20},
  {id:'petard',n:'Pétard',d:'Très bruyant mais court : attire les traqueurs de loin. Touche 3.',p:20},
- {id:'radio',n:'Radio',d:'Joue de la musique 14 s, moins fort. Touche 4.',p:20},
+ {id:'fumigene',n:'Fumigène',d:'Écran de fumée 8 s : les traqueurs ne te voient plus. Touche 2.',p:20},
 ];
 let shopBack='title';
 function openShop(focus){shopBack='title';showScreen('shop');renderShop();if(focus){const el=document.querySelector(`[data-buy="${focus}"]`);if(el)el.closest('.shc').scrollIntoView({block:'center'})}}
 function renderShop(){
- $('#shopCoins').innerHTML=`Tu as <b>${COINS.toLocaleString('fr-FR')}</b> pièces.`;
+ $('#shopCoins').innerHTML=`Tu as <b>${COINS.toLocaleString('fr-FR')}</b> pièces.`+(NET&&!ACC?' <span style="color:var(--dim);font-size:16px">Sans compte, tes achats restent sur cet appareil.</span>':'');
  const paid=CHARS.filter(c=>c.price);
  $('#shopChars').innerHTML=paid.map(c=>`<div class="shc${owns(c)?' own':''}"><canvas width="240" height="120"></canvas><div><b>${esc(c.name)}</b> <small>${esc(c.title)}</small><p>${esc(c.passive)}<br><em>${esc(c.ab)} :</em> ${esc(c.abd)}</p>${owns(c)?'<span class="owned">Débloqué</span>':`<button class="btn sm main" data-buy="${c.id}" ${COINS<c.price?'disabled':''}>Acheter · ${c.price} pièces</button>`}</div></div>`).join('');
  $('#shopChars').querySelectorAll('canvas').forEach((cn,i)=>{const x=cn.getContext('2d');x.fillStyle='#0f1a17';x.fillRect(0,0,240,120);drawPerson(x,120,64,-Math.PI/2,paid[i],0,2.6)});
  $('#shopItems').innerHTML=SHOPI.map(it=>`<div class="shi"><div><b>${esc(it.n)}</b><p>${esc(it.d)}</p><small>En réserve : ${STOCK[it.id]||0}</small></div><button class="btn sm" data-item="${it.id}" ${COINS<it.p?'disabled':''}>Acheter · ${it.p}</button></div>`).join('');
- $('#shopChars').querySelectorAll('[data-buy]').forEach(bt=>bt.onclick=()=>{const c=CHARS.find(x=>x.id===bt.dataset.buy);if(!c||owns(c)||COINS<c.price){SFX.bad();return}COINS-=c.price;OWNED.push(c.id);saveShop();selChar=c;SFX.frag();renderShop()});
- $('#shopItems').querySelectorAll('[data-item]').forEach(bt=>bt.onclick=()=>{const it=SHOPI.find(x=>x.id===bt.dataset.item);if(!it||COINS<it.p){SFX.bad();return}COINS-=it.p;STOCK[it.id]=(STOCK[it.id]||0)+1;saveShop();SFX.ok();renderShop()})}
+ $('#shopChars').querySelectorAll('[data-buy]').forEach(bt=>bt.onclick=()=>{const c=CHARS.find(x=>x.id===bt.dataset.buy);if(!c||owns(c)||COINS<c.price){SFX.bad();return}if(ACC){selChar=c;accBuy(c.id);return}COINS-=c.price;OWNED.push(c.id);saveShop();selChar=c;SFX.frag();renderShop()});
+ $('#shopItems').querySelectorAll('[data-item]').forEach(bt=>bt.onclick=()=>{const it=SHOPI.find(x=>x.id===bt.dataset.item);if(!it||COINS<it.p){SFX.bad();return}if(ACC){accBuy(it.id);return}COINS-=it.p;STOCK[it.id]=(STOCK[it.id]||0)+1;saveShop();SFX.ok();renderShop()})}
 $('#bShop').onclick=()=>{audioInit();openShop()};$('#bShopBack').onclick=()=>{buildTitle();showScreen('title')};
-function payCoins(won){if(!G||G.paid||G.tuto)return 0;G.paid=true;const n=Math.floor(calcScore(won)/10);COINS+=n;saveShop();return n}
+function payCoins(won){if(!G||G.paid||G.tuto)return 0;G.paid=true;const n=Math.floor(calcScore(won)/10);if(!ACC){COINS+=n;saveShop()}return n}
 
 // ---------- seeded random
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -1686,13 +1702,15 @@ async function submitScore(won){
  if(!G||G.submitted)return null;G.submitted=true;
  const e={name:PSEUDO||'Anonyme',score:calcScore(won),day:won?5:G.day,win:!!won,char:G.char.id,mode:MP?MP.kind:'solo',at:Date.now()};
  try{const L=JSON.parse(localStorage.getItem(LKEY)||'[]');L.push(e);L.sort((a,b)=>b.score-a.score);localStorage.setItem(LKEY,JSON.stringify(L.slice(0,30)))}catch(_){}
- let online='off';await capP;
+ let online='off';
+ if(ACC&&NET){try{const p=await accCall({t:'award',data:e});applyProfile(p);return{e,online:'ok'}}catch(_){return{e,online:'denied'}}}
+ await capP;
  if(DB&&USER){try{const id=await USER.id();if(id){const ref=DB.doc('scores/'+id),cur=await ref.get(),old=cur.exists?cur.data():null;
    if(!old||!(+old.score>=e.score))await ref.set({...e,games:((old&&+old.games)||0)+1});else await ref.set({...old,name:e.name,games:((+old.games)||0)+1});online='ok'}}catch(err){online='denied'}}
  return{e,online}}
 function scoreBlock(won){
  const sc=calcScore(won);
- setTimeout(()=>{submitScore(won).then(r=>{const el=$('#scoreNet');if(!el||!r)return;
+ setTimeout(()=>{submitScore(won).then(r=>{const el=$('#scoreNet');const cl=document.querySelector('.coinL');if(cl)cl.textContent=`+${gain} pièces · total ${COINS.toLocaleString('fr-FR')}`;if(!el||!r)return;
   el.textContent=r.online==='ok'?'Score envoyé au classement en ligne. Seul ton meilleur score y est gardé.':r.online==='denied'?'Score gardé sur cet appareil : le serveur n\'a pas répondu.':'Score gardé sur cet appareil.'})},50);
  const gain=payCoins(won);
  return`<p class="scoreL">Score : <b>${sc.toLocaleString('fr-FR')}</b> <small>${esc(PSEUDO||'Anonyme')}</small></p><p class="coinL">+${gain} pièces · total ${COINS.toLocaleString('fr-FR')}</p><p class="hint" id="scoreNet">Enregistrement du score…</p>`}
@@ -1839,6 +1857,43 @@ $('#jForm').addEventListener('submit',e=>{e.preventDefault();const c=$('#jIn').v
 $('#bFBack').onclick=()=>{buildTitle();showScreen('title')};
 $('#bLStart').onclick=()=>{if(LOBBY)hostStart(lobbyPeers())};
 $('#bLQuit').onclick=()=>{leaveLobby();buildTitle();showScreen('title')};
+
+// ---------- comptes (version hébergée)
+const NET=window.GAMENET||null,TOKK='collectionneur_token';let ACC=null,TOKEN='';try{TOKEN=localStorage.getItem(TOKK)||''}catch(_){}
+function applyProfile(p){
+ if(!p||typeof p!=='object'||!p.name)return;ACC=p;PSEUDO=cleanName(p.name)||PSEUDO;try{localStorage.setItem(NKEY,PSEUDO)}catch(_){}
+ COINS=Math.max(0,+p.coins||0);OWNED=Array.isArray(p.owned)?p.owned.slice():[];Object.assign(STOCK,{leurre:0,petard:0,fumigene:0},p.stock||{});
+ for(const k in(p.ach||{}))if(!ACHS[k])ACHS[k]=p.ach[k];CNT.missions=Math.max(CNT.missions||0,(p.cnt||{}).missions||0);CNT.crates=Math.max(CNT.crates||0,(p.cnt||{}).crates||0);
+ saveShop();try{localStorage.setItem(ACHK,JSON.stringify(ACHS));localStorage.setItem(CNTK,JSON.stringify(CNT))}catch(_){}
+ if(state==='title')buildTitle();if(!$('#shop').classList.contains('hide'))renderShop()}
+const accErr=e=>(e&&(e.code||e.message))==='upstream_error'?'Le serveur ne répond pas. Réessaie dans un instant (il peut mettre une minute à se réveiller).':(e&&e.code)==='session'?'Session expirée : reconnecte-toi.':String((e&&(e.code||e.message))||'Erreur');
+function setToken(t){TOKEN=t||'';try{t?localStorage.setItem(TOKK,t):localStorage.removeItem(TOKK)}catch(_){}}
+async function accCall(m){if(!NET||!TOKEN)throw{code:'session'};try{return await NET.call({...m,token:TOKEN})}catch(e){if(e&&e.code==='session'){setToken('');ACC=null;if(state==='title')buildTitle()}throw e}}
+function accBuy(id){accCall({t:'buy',item:id}).then(p=>{applyProfile(p);SFX.frag();renderShop()}).catch(e=>{SFX.bad();$('#shopCoins').innerHTML=`<span style="color:#ff8a80">${esc(accErr(e))}</span>`})}
+function accUse(kind){if(ACC)accCall({t:'use',item:kind}).catch(()=>{})}
+let metaT=null;function accMeta(){if(!ACC)return;clearTimeout(metaT);metaT=setTimeout(()=>accCall({t:'meta',ach:ACHS,cnt:CNT}).catch(()=>{}),2000)}
+let accMode='login',accBack='title';
+function openAccount(back){accBack=back||'title';showScreen('account');$('#aErr').textContent='';
+ $('#aOut').classList.toggle('hide',!!ACC);$('#aIn').classList.toggle('hide',!ACC);$('#aSkip').classList.toggle('hide',accBack!=='first');
+ if(ACC)$('#aInfo').innerHTML=`Connecté en tant que <b>${esc(ACC.name)}</b>. Tu as <b class="coin">${COINS.toLocaleString('fr-FR')}</b> pièces, ${OWNED.length} personnage${OWNED.length>1?'s':''} acheté${OWNED.length>1?'s':''}, meilleur score ${(+ACC.best||0).toLocaleString('fr-FR')}. Tout est gardé sur le serveur.`;
+ else setAccMode(accMode)}
+function setAccMode(m){accMode=m;$('#aTabL').classList.toggle('sel',m==='login');$('#aTabR').classList.toggle('sel',m==='register');$('#aPass2').classList.toggle('hide',m!=='register');
+ $('#aSubmit').textContent=m==='login'?'Se connecter':'Créer mon compte';$('#aPass').autocomplete=m==='login'?'current-password':'new-password';$('#aErr').textContent=''}
+$('#aTabL').onclick=()=>setAccMode('login');$('#aTabR').onclick=()=>setAccMode('register');
+$('#aForm').addEventListener('submit',async e=>{e.preventDefault();const name=cleanName($('#aName').value),pass=$('#aPass').value;
+ if(name.length<3){$('#aErr').textContent='Pseudo : 3 caractères minimum (lettres, chiffres, espace, _ . -).';return}
+ if(pass.length<6){$('#aErr').textContent='Mot de passe : 6 caractères minimum.';return}
+ if(accMode==='register'&&pass!==$('#aPass2').value){$('#aErr').textContent='Les deux mots de passe ne sont pas identiques.';return}
+ $('#aErr').textContent='Connexion…';$('#aSubmit').disabled=true;
+ try{const r=await NET.call(accMode==='login'?{t:'login',name,pass}:{t:'register',name,pass,local:{coins:COINS,owned:OWNED,stock:STOCK,ach:ACHS,cnt:CNT}},15000);
+  setToken(r.token);applyProfile(r.profile);$('#aPass').value='';$('#aPass2').value='';SFX.ok();
+  if(accBack==='first'){buildTitle();if(!maybeAskTuto())showScreen('title')}else openAccount(accBack)}
+ catch(err){$('#aErr').textContent=accErr(err)}finally{$('#aSubmit').disabled=false}});
+$('#aSkip').onclick=()=>askPseudo('title');
+$('#aBack').onclick=()=>{buildTitle();showScreen('title')};
+$('#aLogout').onclick=()=>{const t=TOKEN;if(NET&&t)NET.call({t:'logout',token:t}).catch(()=>{});setToken('');ACC=null;COINS=0;OWNED=[];Object.assign(STOCK,{leurre:0,petard:0,fumigene:0});saveShop();openAccount('title')};
+$('#bAcc').onclick=()=>openAccount('title');
+if(NET){document.body.classList.add('hosted');if(TOKEN)NET.call({t:'auth',token:TOKEN},12000).then(applyProfile).catch(e=>{if(e&&e.code==='session')setToken('')})}
 
 }
 

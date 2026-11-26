@@ -24,8 +24,9 @@ Tout le monde peut jouer avec le lien, sans compte.
 3. Clique **Apply**. Au bout de 2 à 3 minutes, Render te donne une adresse du type
    `https://le-collectionneur.onrender.com`. C'est le lien du jeu à partager.
 
-### 3. Garder le classement pour toujours (recommandé)
-Sur l'offre gratuite de Render, les fichiers sont effacés à chaque redémarrage, donc le classement aussi.
+### 3. Garder les comptes et le classement (indispensable)
+Le jeu a des comptes joueurs (pièces, personnages achetés, leurres, succès) et un classement.
+Sur l'offre gratuite de Render, les fichiers sont effacés à chaque redémarrage : **sans base de données, tous les comptes seraient perdus**.
 Pour le garder, branche une base de données gratuite :
 1. Crée un compte sur https://neon.tech et un projet (gratuit).
 2. Copie la « connection string » (elle commence par `postgresql://`).

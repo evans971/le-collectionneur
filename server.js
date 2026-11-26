@@ -36,21 +36,25 @@ let store;
 if (DATABASE_URL) {
   const { Pool } = require('pg');
   const pool = new Pool({ connectionString: DATABASE_URL, ssl: /localhost|127\.0\.0\.1/.test(DATABASE_URL) ? false : { rejectUnauthorized: false } });
-  const ready = pool.query('CREATE TABLE IF NOT EXISTS scores (id TEXT PRIMARY KEY, score INTEGER NOT NULL, data JSONB NOT NULL)');
+  const ready = pool.query('CREATE TABLE IF NOT EXISTS scores (id TEXT PRIMARY KEY, score INTEGER NOT NULL, data JSONB NOT NULL)').then(() => pool.query('CREATE TABLE IF NOT EXISTS kv (k TEXT PRIMARY KEY, v JSONB NOT NULL)'));
   store = {
     kind: 'postgres',
     async get(id) { await ready; const r = await pool.query('SELECT data FROM scores WHERE id=$1', [id]); return r.rows[0] ? r.rows[0].data : null; },
     async put(id, data) { await ready; await pool.query('INSERT INTO scores (id, score, data) VALUES ($1,$2,$3) ON CONFLICT (id) DO UPDATE SET score=EXCLUDED.score, data=EXCLUDED.data', [id, data.score, data]); },
     async top(n) { await ready; const r = await pool.query('SELECT data FROM scores ORDER BY score DESC LIMIT $1', [n]); return r.rows.map(x => x.data); },
+    async kget(k) { await ready; const r = await pool.query('SELECT v FROM kv WHERE k=$1', [k]); return r.rows[0] ? r.rows[0].v : null; },
+    async kset(k, v) { await ready; await pool.query('INSERT INTO kv (k, v) VALUES ($1,$2) ON CONFLICT (k) DO UPDATE SET v=EXCLUDED.v', [k, JSON.stringify(v)]); },
+    async kdel(k) { await ready; await pool.query('DELETE FROM kv WHERE k=$1', [k]); },
   };
 } else {
   let db = {};
   try { db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')) || {}; } catch (e) { db = {}; }
+  Object.defineProperty(db, '__kv', { value: db.__kv || {}, writable: true, enumerable: false });
   let saveT = null;
   const save = () => {
     clearTimeout(saveT);
     saveT = setTimeout(() => {
-      try { fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true }); fs.writeFileSync(DATA_FILE + '.tmp', JSON.stringify(db)); fs.renameSync(DATA_FILE + '.tmp', DATA_FILE); }
+      try { fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true }); fs.writeFileSync(DATA_FILE + '.tmp', JSON.stringify({ ...db, __kv: db.__kv })); fs.renameSync(DATA_FILE + '.tmp', DATA_FILE); }
       catch (e) { console.error('Sauvegarde impossible :', e.message); }
     }, 500);
   };
@@ -58,7 +62,10 @@ if (DATABASE_URL) {
     kind: 'fichier',
     async get(id) { return db[id] || null; },
     async put(id, data) { db[id] = data; save(); },
-    async top(n) { return Object.values(db).sort((a, b) => b.score - a.score).slice(0, n); },
+    async top(n) { return Object.values(db).filter(x => x && typeof x.score === 'number').sort((a, b) => b.score - a.score).slice(0, n); },
+    async kget(k) { return (db.__kv && db.__kv[k]) || null; },
+    async kset(k, v) { db.__kv = db.__kv || {}; db.__kv[k] = v; save(); },
+    async kdel(k) { if (db.__kv) { delete db.__kv[k]; save(); } },
   };
 }
 async function submit(id, raw) {
@@ -69,6 +76,68 @@ async function submit(id, raw) {
   const best = !old || e.score > +old.score ? { ...e, games } : { ...old, name: e.name, games };
   await store.put(id, best);
   return best;
+}
+
+
+// ---------------------------------------------------------------- comptes
+const crypto = require('crypto');
+const PRICES = { ines: 300, rosa: 400, sam: 500 };
+const ITEMS = { leurre: 20, petard: 20, fumigene: 20 };
+const ACH_IDS = /^[a-z0-9]{2,20}$/;
+const hashPass = (pass, salt) => crypto.scryptSync(String(pass), salt, 32).toString('hex');
+const locks = new Map();
+function withLock(id, fn) { const prev = locks.get(id) || Promise.resolve(); const next = prev.then(fn, fn); locks.set(id, next.catch(() => {})); return next; }
+function profile(a) { return { name: a.name, coins: a.coins, owned: a.owned, stock: a.stock, ach: a.ach, cnt: a.cnt, best: a.best || 0, games: a.games || 0 }; }
+async function newSession(id) { const token = crypto.randomBytes(24).toString('hex'); await store.kset('sess:' + token, { id, at: Date.now() }); return token; }
+async function accFromToken(token) {
+  if (typeof token !== 'string' || !/^[a-f0-9]{48}$/.test(token)) throw new Error('session');
+  const s = await store.kget('sess:' + token); if (!s) throw new Error('session');
+  const a = await store.kget('acc:' + s.id); if (!a) throw new Error('session');
+  return a;
+}
+function importLocal(a, loc) {
+  if (!loc || typeof loc !== 'object') return;
+  a.coins = Math.min(3000, Math.max(0, Math.floor(+loc.coins) || 0));
+  if (Array.isArray(loc.owned)) a.owned = loc.owned.filter(x => PRICES[x]).slice(0, 10);
+  if (loc.stock && typeof loc.stock === 'object') for (const k in ITEMS) a.stock[k] = Math.min(20, Math.max(0, Math.floor(+loc.stock[k]) || 0));
+  mergeMeta(a, loc.ach, loc.cnt);
+}
+function mergeMeta(a, ach, cnt) {
+  if (ach && typeof ach === 'object') for (const k of Object.keys(ach).slice(0, 60)) if (ACH_IDS.test(k) && !a.ach[k]) a.ach[k] = Date.now();
+  if (cnt && typeof cnt === 'object') for (const k of ['missions', 'crates']) { const v = Math.floor(+cnt[k]) || 0; if (v > (a.cnt[k] || 0)) a.cnt[k] = Math.min(v, (a.cnt[k] || 0) + 500); }
+}
+const accounts = {
+  async register(name, pass, loc) {
+    name = cleanName(name); if (name.length < 3) throw new Error('Pseudo trop court (3 caractères minimum).');
+    if (typeof pass !== 'string' || pass.length < 6 || pass.length > 100) throw new Error('Mot de passe : 6 caractères minimum.');
+    const key = 'name:' + name.toLowerCase();
+    return withLock(key, async () => {
+      if (await store.kget(key)) throw new Error('Ce pseudo est déjà pris.');
+      const id = 'a' + crypto.randomBytes(9).toString('hex'), salt = crypto.randomBytes(16).toString('hex');
+      const a = { id, name, salt, hash: hashPass(pass, salt), coins: 0, owned: [], stock: { leurre: 0, petard: 0, fumigene: 0 }, ach: {}, cnt: { missions: 0, crates: 0 }, created: Date.now() };
+      importLocal(a, loc);
+      await store.kset('acc:' + id, a); await store.kset(key, { id });
+      return { token: await newSession(id), profile: profile(a) };
+    });
+  },
+  async login(name, pass) {
+    const n = await store.kget('name:' + cleanName(name).toLowerCase());
+    const a = n && await store.kget('acc:' + n.id);
+    if (!a || hashPass(pass, a.salt) !== a.hash) throw new Error('Pseudo ou mot de passe incorrect.');
+    return { token: await newSession(a.id), profile: profile(a) };
+  },
+  async auth(token) { return profile(await accFromToken(token)); },
+  async logout(token) { if (typeof token === 'string' && /^[a-f0-9]{48}$/.test(token)) await store.kdel('sess:' + token); return true; },
+  async op(token, fn) { const a0 = await accFromToken(token); return withLock(a0.id, async () => { const a = await store.kget('acc:' + a0.id); const r = await fn(a); await store.kset('acc:' + a.id, a); return r || profile(a); }); },
+};
+async function award(token, d) {
+  return accounts.op(token, async a => {
+    const e = cleanScore({ ...d, name: a.name }); if (!e) throw new Error('score invalide');
+    const gain = Math.floor(e.score / 10);
+    a.coins += gain; a.games = (a.games || 0) + 1; if (e.score > (a.best || 0)) a.best = e.score;
+    await submit('a_' + a.id, e);
+    return { ...profile(a), gain };
+  });
 }
 
 // ---------------------------------------------------------------- fichiers
@@ -139,6 +208,28 @@ wss.on('connection', (ws, req) => {
         reply(await store.get(m.id));
       } else if (m.t === 'set' && idOk(m.id)) {
         reply(await submit(m.id, m.data));
+      } else if (m.t === 'register') {
+        if ((ws.authTries = (ws.authTries || 0) + 1) > 20) return reply(null, 'Trop d\'essais, recharge la page.');
+        reply(await accounts.register(m.name, m.pass, m.local));
+      } else if (m.t === 'login') {
+        if ((ws.authTries = (ws.authTries || 0) + 1) > 20) return reply(null, 'Trop d\'essais, recharge la page.');
+        reply(await accounts.login(m.name, m.pass));
+      } else if (m.t === 'auth') {
+        reply(await accounts.auth(m.token));
+      } else if (m.t === 'logout') {
+        reply(await accounts.logout(m.token));
+      } else if (m.t === 'award') {
+        reply(await award(m.token, m.data));
+      } else if (m.t === 'buy') {
+        reply(await accounts.op(m.token, async a => {
+          if (PRICES[m.item]) { if (a.owned.includes(m.item)) return; if (a.coins < PRICES[m.item]) throw new Error('Pas assez de pièces.'); a.coins -= PRICES[m.item]; a.owned.push(m.item); }
+          else if (ITEMS[m.item]) { if (a.coins < ITEMS[m.item]) throw new Error('Pas assez de pièces.'); a.coins -= ITEMS[m.item]; a.stock[m.item] = (a.stock[m.item] || 0) + 1; }
+          else throw new Error('Article inconnu.');
+        }));
+      } else if (m.t === 'use' && ITEMS[m.item]) {
+        reply(await accounts.op(m.token, async a => { if ((a.stock[m.item] || 0) > 0) a.stock[m.item]--; }));
+      } else if (m.t === 'meta') {
+        reply(await accounts.op(m.token, async a => { mergeMeta(a, m.ach, m.cnt); }));
       }
     } catch (e) { reply(null, String(e.message || e)); }
   });
@@ -149,4 +240,4 @@ setInterval(() => {
   for (const ws of wss.clients) { if (!ws.alive) { ws.terminate(); continue; } ws.alive = false; try { ws.ping(); } catch (e) {} }
 }, 20000);
 
-server.listen(PORT, () => console.log(`Le Collectionneur : http://localhost:${PORT}  (classement : ${store.kind})`));
+server.listen(PORT, () => console.log(`Le Collectionneur : http://localhost:${PORT}  (stockage : ${store.kind})`));

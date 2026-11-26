@@ -103,6 +103,7 @@
     },
   };
   const user = { id: async () => uid, isOwner: async () => false, canEdit: async () => false };
+  window.GAMENET = { call: (m, ms) => call(m, ms), online: () => open };
   window.claude = { use: async n => n === 'room' ? room : n === 'db' ? db : n === 'user' ? user : null };
   connect();
 })();
