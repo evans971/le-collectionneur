@@ -1,0 +1,27 @@
+# Publie automatiquement le jeu sur itch.io à chaque mise à jour du dossier public/.
+# Il faut une seule fois ajouter le secret BUTLER_API_KEY (voir README).
+name: Publier sur itch.io
+
+on:
+  push:
+    branches: [main]
+    paths: ['public/**']
+  workflow_dispatch:
+
+jobs:
+  itch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer butler (l'outil officiel d'itch.io)
+        run: |
+          curl -sSL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -q butler.zip -d butler
+          chmod +x butler/butler
+          ./butler/butler -V
+
+      - name: Envoyer le jeu sur itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: ./butler/butler push public sunless97/le-collectionneur:html5 --userversion "1.0.${{ github.run_number }}"

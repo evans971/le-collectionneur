@@ -59,3 +59,16 @@ npm install
 npm start
 ```
 Puis ouvre http://localhost:3000 dans deux onglets pour tester un salon entre amis.
+
+---
+
+## Mise à jour automatique sur itch.io
+Le fichier `.github/workflows/itch.yml` envoie le dossier `public` sur itch.io à chaque modification sur GitHub.
+À faire une seule fois :
+1. Sur itch.io : **Settings → API keys → Generate new API key**, puis copie la clé.
+2. Sur GitHub, dans ce dépôt : **Settings → Secrets and variables → Actions → New repository secret**.
+   Nom : `BUTLER_API_KEY`, valeur : la clé itch.io.
+3. Onglet **Actions** du dépôt → « Publier sur itch.io » → **Run workflow**.
+4. Sur itch.io, dans **Edit game → Uploads**, un fichier « html5 » apparaît : coche **This file will be played in the browser**,
+   supprime l'ancien zip envoyé à la main, puis **Save**.
+Ensuite, chaque mise à jour du jeu arrive toute seule sur itch.io en 1 à 2 minutes.
