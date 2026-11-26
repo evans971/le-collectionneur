@@ -574,7 +574,7 @@ const INTRO=[
 const SAB=[
  {id:'coupure',name:'Coupure de courant',desc:'Plonge son aile dans le noir.',cost:1,d:[12,18]},
  {id:'verrou',name:'Portes verrouillées',desc:'Bloque ses couloirs.',cost:2,d:[18,26]},
- {id:'faux',name:'Faux indice',desc:'Lui fait chercher au mauvais endroit.',cost:2,d:[20,30]},
+ {id:'faux',name:'Brouillage des sens',desc:'Inverse ses commandes un moment.',cost:2,d:[20,30]},
  {id:'gaz',name:'Gaz lacrymogène',desc:"L'aveugle un long moment.",cost:3,d:[28,38]},
  {id:'traqueur',name:'Envoyer un traqueur',desc:'Peut le capturer.',cost:3,d:[24,40]},
 ];
@@ -927,8 +927,11 @@ function updateMisc(dt){
   const under=dd<30&&!P.hidden&&!P.vent&&P.cell<=0;
   if(under){if(!d.told){d.told=true;say('Reste sous le drone pour le casser !','good')}d.brk+=dt;if(Math.random()<dt*6)PF.push({x:d.x+rnd(-8,8),y:d.y+rnd(-8,8),t:.4})}else d.brk=Math.max(0,d.brk-dt*.5);
   if(d.brk>=5){d.t=0;SFX.caught();noiseB(.4,.3,1800);for(let i=0;i<14;i++)PF.push({x:d.x+rnd(-18,18),y:d.y+rnd(-18,18),t:rnd(.4,.8)});say('Drone détruit !','good');shake=.3;continue}
-  if(dd<120&&!P.hidden&&!P.vent&&P.cell<=0&&!(P.grace>0)){d.ping-=dt;if(d.ping<=0){d.ping=3;SFX.beep();alarmAt(P.x,P.y,1)}}}
+  if(!(d.brk>0)&&dd<120&&!P.hidden&&!P.vent&&P.cell<=0&&!(P.grace>0)){d.ping-=dt;if(d.ping<=0){d.ping=3;SFX.beep();alarmAt(P.x,P.y,1)}}}
  DR=DR.filter(d=>d.t>0);
+ if(D&&D.alarmT>0){const b0=Math.ceil(D.alarmT);D.alarmT-=dt;const b1=Math.ceil(D.alarmT);
+  if(D.alarmT<=0){D.alarmT=0;SFX.alarm();alarmAt(P.x,P.y,9);big('ALARME !','red');say('L\'alarme sonne : les traqueurs foncent là où tu es.','bad')}
+  else if(b1!==b0){SFX.beep();big('ALARME DANS '+b1+' S','red')}}
  for(const s of SM)s.t-=dt;SM=SM.filter(s=>s.t>0);
  for(const c of DC){c.t-=dt;c.ping-=dt;if(c.ping<=0){const K=DCK[c.kind||'leurre'];c.ping=K.iv;K.snd();makeNoise(c.x,c.y,K.r)}}DC=DC.filter(c=>c.t>0);
  for(const f of PF)f.t-=dt;PF=PF.filter(f=>f.t>0);
@@ -1152,7 +1155,7 @@ function receiveMalus(r,m,nb){
  else if(m.id==='locks'){const ds=M.doors.slice().sort((a,b)=>dst(a.x*TS,a.y*TS,P.x,P.y)-dst(b.x*TS,b.y*TS,P.x,P.y));let n=0;for(const d of ds){if(n>=3)break;if(d.tiles.some(([x,y])=>dst((x+.5)*TS,(y+.5)*TS,P.x,P.y)<40))continue;d.tiles.forEach(([x,y])=>locked.set(y*MW+x,25));n++}SFX.lock()}
  else if(m.id==='gas')FX.gas=20;
  else if(m.id==='invert')FX.invert=12;
- else if(m.id==='alarm'){SFX.alarm();alarmAt(P.x,P.y,9)}
+ else if(m.id==='alarm'){D.alarmT=4;SFX.beep()}
  else if(m.id==='hunter')spawnHunter(true);
  else if(m.id==='drone'){const a=rnd(0,6.28);DR.push({x:P.x+Math.cos(a)*520,y:P.y+Math.sin(a)*520,t:32,ping:2})}
 }
@@ -1228,6 +1231,7 @@ function hud(dt){
  document.querySelectorAll('#tbtn [data-a="crouch"]').forEach(b=>b.classList.toggle('on',P.crouch));document.querySelectorAll('#tbtn [data-a="flash"]').forEach(b=>b.classList.toggle('on',P.flash));
  const ab=document.querySelector('#tbtn [data-a="ab"]');if(ab)ab.textContent=P.ab>0?Math.ceil(P.ab)+' s':G.char.ab;
  const fxs=[];const lab={blackout:'Coupure',gas:'Gaz',invert:'Sens brouillés',hack:'Piratage',plan:'Plans',sprint:'Sprint'};
+ if(D.alarmT>0)fxs.push(`<span>Alarme dans ${Math.ceil(D.alarmT)} s</span>`);
  if(inCover())fxs.push('<span class="g">À couvert</span>');
  if(P.grace>0)fxs.push(`<span class="g">Protection ${Math.ceil(P.grace)} s</span>`);
  for(const k in lab)if(on(k))fxs.push(`<span class="${['hack','plan','sprint'].includes(k)?'g':''}">${lab[k]} ${Math.ceil(FX[k])} s</span>`);
