@@ -186,6 +186,45 @@ body.mobile #mleg{font-size:11px;padding:2px 6px}
 .eng .tl{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--red);box-shadow:0 0 10px var(--red)}
 .eng .nd{position:absolute;top:14px;bottom:14px;width:10px;margin-left:-5px;border-radius:5px;background:var(--gold)}.eng .nd.ok{background:var(--mint);box-shadow:0 0 12px var(--mint)}
 .rng{width:100%;height:44px;accent-color:var(--mint);touch-action:auto}
+.setg{display:flex;flex-direction:column;gap:12px;margin:8px 0 18px}
+.sr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) 52px;gap:10px;align-items:center;font-size:18px}
+.sr small{color:var(--dim)}.sr b{text-align:right;font-variant-numeric:tabular-nums}
+.sr input{width:100%;height:40px;accent-color:var(--mint);touch-action:auto}
+.sc{display:flex;gap:10px;align-items:center;font-size:18px;min-height:44px;cursor:pointer}
+.sc input{width:22px;height:22px;accent-color:var(--mint)}
+@media(max-width:520px){.sr{grid-template-columns:1fr 46px}.sr span{grid-column:1/-1}}
+.achl{list-style:none;padding:0;margin:8px 0 16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.achl li{background:#0b1311;border:1px solid var(--line);border-radius:10px;padding:8px 12px;opacity:.5}
+.achl li b{display:block;font-size:19px}.achl li span{color:var(--dim);font-size:15px}
+.achl li.ok{opacity:1;border-color:var(--gold);background:#1b190c}.achl li.ok b{color:var(--gold)}
+#toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-140%);z-index:40;background:#1b190c;border:1px solid var(--gold);border-radius:12px;padding:8px 16px;min-width:240px;text-align:center;transition:transform .35s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+#toast.on{transform:translate(-50%,0)}
+#toast small{display:block;color:var(--gold);font-size:13px}#toast b{display:block;font-size:22px}#toast span{color:var(--dim);font-size:15px}
+#specbar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:12;display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px 10px;max-width:calc(100vw - 20px);flex-wrap:wrap;justify-content:center}
+#spInfo{font-size:17px;padding:0 6px}#spInfo b{color:var(--mint)}
+#tuto{background:rgba(9,16,15,.8);border:1px solid var(--mint);border-radius:12px;padding:8px 10px;font-size:15px;display:flex;flex-direction:column;gap:4px}
+#tuto .rh{display:flex;justify-content:space-between;color:var(--mint);font-weight:700}
+#tuto .ts{color:var(--dim);padding-left:18px;position:relative;line-height:1.25}
+#tuto .ts::before{content:'';position:absolute;left:0;top:4px;width:10px;height:10px;border-radius:50%;border:2px solid #45574f}
+#tuto .ts.ok{color:#6c8a7d;text-decoration:line-through}#tuto .ts.ok::before{background:var(--mint);border-color:var(--mint)}
+#tuto .ts.cur{color:var(--ink)}#tuto .ts.cur::before{border-color:var(--gold)}#tuto .ts span{display:block;font-size:14px;color:#cfd6cf}
+#tuto button{margin-top:4px}
+.plug em,.pad em{font-style:normal;font:700 12px 'Barlow Condensed',sans-serif;color:#fff;text-shadow:0 1px 2px #000}
+.filt{position:relative;height:240px;border-radius:12px;background:#0d1714;border:1px solid var(--line);overflow:hidden;touch-action:none;background-image:radial-gradient(circle at 70% 40%,rgba(121,217,177,.06),transparent 60%)}
+.vent2{position:absolute;left:0;top:0;bottom:0;width:17%;background:repeating-linear-gradient(0deg,#1e2a26 0 8px,#0a100e 8px 12px);border-right:2px dashed var(--mint);color:var(--mint);font:700 11px 'Barlow Condensed',sans-serif;writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;letter-spacing:.1em}
+.leaf{position:absolute;width:40px;height:30px;margin:-15px 0 0 -20px;border-radius:60% 10% 60% 10%;background:hsl(var(--h) 45% 38%);transform:rotate(var(--r));cursor:grab;touch-action:none;box-shadow:inset 0 0 0 2px rgba(0,0,0,.25)}
+.leaf.drag{cursor:grabbing;outline:2px solid #fff;z-index:2}
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:min(330px,84vw);margin:6px auto}
+.mem button{aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background:repeating-linear-gradient(45deg,#16231f 0 6px,#12201b 6px 12px);color:var(--ink);font-size:30px;cursor:pointer}
+.mem button span{visibility:hidden}.mem button.up{background:#1d2e29}.mem button.up span{visibility:visible}
+.mem button.ok{background:#1f4a3a;border-color:var(--mint);color:var(--mint);opacity:1}
+.pipew{display:flex;gap:4px;align-items:stretch;justify-content:center;margin:6px auto}
+.pipes{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:3px;width:min(300px,70vw)}
+.pipes button{aspect-ratio:1;padding:0;border-radius:6px;border:1px solid #22332d;background:#0d1714;color:#4e6159;cursor:pointer}
+.pipes button svg{width:100%;height:100%;display:block;fill:currentColor;transition:transform .12s}
+.pipes button.lit{color:var(--mint);background:#10211b}
+.pside{display:grid;grid-template-rows:repeat(var(--n),1fr);gap:3px;width:12px}
+.pside i{display:block;border-radius:4px}.pside i.on{background:var(--gold);box-shadow:0 0 8px var(--gold)}
 .tok{font-size:19px;margin-bottom:8px}.tok b{color:var(--gold);font-size:24px}
 .mal{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-bottom:12px}
 .mal button{position:relative;text-align:left;padding:7px 36px 7px 10px;border-radius:10px;border:1px solid var(--line);background:#121d1a;color:var(--ink);cursor:pointer;min-height:44px}
@@ -287,7 +326,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
     <div class="meter"><span>Bruit</span><div class="bar"><i id="hNoise"></i></div></div>
     <div class="tlb"><button class="pe red" id="bSab">Saboter <kbd>R</kbd></button><button class="pe" id="bJour">Carnet <kbd>J</kbd></button><button class="pe" id="bPause" aria-label="Pause">II</button></div>
   </div>
-  <div id="tr"><canvas id="mini" width="424" height="292"></canvas><div id="mleg"><span><i class="lt"></i>Terminal</span><span><i class="ls"></i>Sortie</span><span><i class="lc"></i>Caisse</span><span><i class="ln"></i>Note</span></div><div id="rivals" class="pe"></div></div>
+  <div id="tr"><canvas id="mini" width="424" height="292"></canvas><div id="mleg"><span><i class="lt"></i>Terminal</span><span><i class="ls"></i>Sortie</span><span><i class="lc"></i>Caisse</span><span><i class="ln"></i>Note</span></div><div id="rivals" class="pe"></div><div id="tuto" class="hide pe"></div></div>
   <div id="feed"></div>
   <div id="big"></div>
   <div id="fx"></div>
@@ -312,6 +351,8 @@ body.mobile #tbtn button{height:62px;font-size:14px}
 </div>
 
 <div id="modal" class="hide"></div>
+<div id="specbar" class="hide"><button class="btn sm" id="spPrev" aria-label="Joueur précédent">◀</button><div id="spInfo"></div><button class="btn sm" id="spNext" aria-label="Joueur suivant">▶</button><button class="btn sm main" id="spQuit">Quitter</button></div>
+<div id="toast" role="status"></div>
 
 <section id="platform" class="screen hide">
   <div class="panel narrow">
@@ -339,12 +380,29 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   <h2 id="lTitle">Salon</h2><div id="lCode" class="code hide"></div><p class="tag" id="lInfo"></p><div id="lCount" class="count"></div>
   <ul id="lList" class="plist"></ul>
   <div class="actions"><button class="btn main hide" id="bLStart">Lancer la partie</button><button class="btn" id="bLQuit">Quitter</button></div></div></section>
-<section id="wait" class="screen hide"><div class="panel narrow"><h2>Salle d'attente</h2><p class="tag" id="wInfo"></p><ul id="wList" class="plist"></ul></div></section>
+<section id="wait" class="screen hide"><div class="panel narrow"><h2>Salle d'attente</h2><p class="tag" id="wInfo"></p><ul id="wList" class="plist"></ul><div class="actions"><button class="btn" id="bWSpec">Regarder les autres joueurs</button></div><p class="hint" id="wSpecMsg"></p></div></section>
 <section id="board" class="screen hide"><div class="panel narrow">
   <h2>Classement</h2><div class="tabs"><button class="tab sel" id="tOn">En ligne</button><button class="tab" id="tLoc">Sur cet appareil</button></div>
   <p class="hint" id="bInfo"></p><table class="rank" id="bTable"></table>
   <p class="hint">Score : 1 000 par jour survécu, 150 par fragment, 120 par dossier lu, 40 par sabotage, −75 par capture. Une victoire rapporte 5 000, plus un bonus de vitesse.</p>
   <button class="btn main" id="bBBack">Retour</button></div></section>
+
+<section id="settings" class="screen hide"><div class="panel narrow">
+  <h2>Réglages</h2>
+  <div class="setg">
+    <label class="sr"><span>Volume</span><input type="range" id="sVol" min="0" max="100" step="5"><b id="sVolV"></b></label>
+    <label class="sr"><span>Sensibilité du joystick <small>(mobile)</small></span><input type="range" id="sSens" min="60" max="160" step="10"><b id="sSensV"></b></label>
+    <label class="sc"><input type="checkbox" id="sShake"><span>Tremblements de l'écran</span></label>
+    <label class="sc"><input type="checkbox" id="sFade"><span>Panneaux qui s'effacent quand tu passes dessous</span></label>
+    <label class="sc"><input type="checkbox" id="sCb"><span>Mode daltonien : nom des couleurs écrit sur les missions</span></label>
+  </div>
+  <button class="btn main" id="bSetBack">Retour</button></div></section>
+<section id="achs" class="screen hide"><div class="panel narrow">
+  <h2>Succès</h2><p class="tag" id="achInfo"></p><ul id="achList" class="achl"></ul>
+  <button class="btn main" id="bAchBack">Retour</button></div></section>
+<section id="tutoask" class="screen hide"><div class="panel narrow">
+  <h2>Première fois ?</h2><p class="tag">Un tutoriel de 2 minutes t'apprend à te cacher, à faire les missions et à sortir. Il n'est pas obligatoire, et tu pourras le refaire depuis le menu.</p>
+  <div class="actions"><button class="btn main" id="bTAYes">Faire le tutoriel</button><button class="btn" id="bTANo">Passer</button></div></div></section>
 
 <section id="title" class="screen">
   <div class="panel">
@@ -360,7 +418,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
       <button class="mode" id="bBoard"><b>Classement</b><small>Meilleurs scores</small></button>
     </div>
     <p class="err" id="tErr"></p>
-    <div class="actions"><button class="btn" id="bCont">Continuer</button><button class="btn" id="bHelp">Comment jouer</button><button class="btn" id="bPlat">Plateforme : PC</button></div>
+    <div class="actions"><button class="btn" id="bCont">Continuer</button><button class="btn" id="bTuto">Tutoriel</button><button class="btn" id="bAchs">Succès</button><button class="btn" id="bSettings">Réglages</button><button class="btn" id="bHelp">Comment jouer</button><button class="btn" id="bPlat">Plateforme : PC</button></div>
   </div>
 </section>
 
@@ -381,7 +439,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
         <p>Les traqueurs voient dans un cône devant eux et entendent tes pas. Marcher fait du bruit, courir beaucoup, s'accroupir presque pas.</p>
         <p>Cache-toi dans les casiers et sous les lits <kbd>E</kbd>, mais pas sous leurs yeux. Les conduits d'aération relient deux salles.</p>
         <p>La nuit, coupe ta lampe <kbd>F</kbd> pour être moins visible. Les caméras déclenchent l'alarme.</p>
-        <p>Attrapé ? Retour en cellule, puis 5 s de protection à la sortie. Trois captures dans la journée et tu es éliminé.</p>
+        <p>En chasse, un traqueur va plus vite que toi quand tu marches : cours, coupe-lui la vue, cache-toi ou prends un conduit. Attrapé ? Retour en cellule, puis 5 s de protection à la sortie. Trois captures dans la journée et tu es éliminé.</p>
       </div>
       <div>
         <h3>Saboter</h3>
@@ -414,7 +472,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   <div class="panel narrow">
     <h2>Pause</h2>
     <p class="tag" id="pauseInfo"></p>
-    <div class="actions"><button class="btn main" id="bResume">Reprendre</button><button class="btn" id="bPHelp">Comment jouer</button><button class="btn" id="bPPlat">Changer de plateforme</button><button class="btn" id="bQuit">Quitter vers le menu</button></div>
+    <div class="actions"><button class="btn main" id="bResume">Reprendre</button><button class="btn" id="bPSet">Réglages</button><button class="btn" id="bPHelp">Comment jouer</button><button class="btn" id="bPPlat">Changer de plateforme</button><button class="btn" id="bQuit">Quitter vers le menu</button></div>
   </div>
 </section>
 
@@ -453,7 +511,7 @@ const RIVALS=[
  {name:'Ilona',color:'#e76f51'},{name:'Sacha',color:'#9aa5b1',collector:true},{name:'Bastien',color:'#2a9d8f'},{name:'Yuki',color:'#f4a261'},
  {name:'Malik',color:'#8ab17d'},{name:'Inès',color:'#c77d93'},{name:'Ruben',color:'#6d9dc5'},{name:'Oriane',color:'#e9c46a'}];
 const CHEM=[{n:'Rouge',c:'#d8443a'},{n:'Bleu',c:'#4a8fe0'},{n:'Jaune',c:'#e9c84a'},{n:'Vert',c:'#5cc178'},{n:'Violet',c:'#a070dc'},{n:'Orange',c:'#ee8a3a'}];
-const PZNAME={simon:'Terminal acoustique',digicode:'Coffre à digicode',cables:'Boîtier électrique',chimie:'Paillasse chimique',sequence:'Collecteurs à déverrouiller',calibre:'Calibreur de distribution',badge:'Lecteur de badge',moteur:'Alignement du moteur'};
+const PZNAME={simon:'Terminal acoustique',digicode:'Coffre à digicode',cables:'Boîtier électrique',chimie:'Paillasse chimique',sequence:'Collecteurs à déverrouiller',calibre:'Calibreur de distribution',badge:'Lecteur de badge',moteur:'Alignement du moteur',filtre:'Filtre à oxygène',memoire:'Mémoire du serveur',tuyaux:'Circuit de refroidissement'};
 const STORY=[
  {title:"Fiche d'admission",text:"INSTITUT VALMONT — Admission n° 0417\nDate : 14 mars 2011\nPatiente : Clara V., 12 ans\nMotif : traitement expérimental, « protocole Lazare »\n\nHuit signatures au bas de la page.\nL'une d'elles ressemble beaucoup à la tienne."},
  {title:'Coupure de presse',text:"L'ÉCHO DU NORD — 3 novembre 2011\n\nIncendie dans l'aile Est de l'Institut Valmont. Une victime : une enfant de 12 ans.\nLes portes coupe-feu étaient verrouillées de l'extérieur.\nL'enquête est classée sans suite. Aucun témoin ne s'est présenté."},
@@ -498,7 +556,7 @@ const roomName=r=>r?ROOMT[r.type].n:'';
 
 // ---------- audio
 let AC=null,master=null;
-function audioInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=.55;master.connect(AC.destination);
+function audioInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=.55*SET.vol;master.connect(AC.destination);
  const o=AC.createOscillator(),o2=AC.createOscillator(),f=AC.createBiquadFilter(),g=AC.createGain();o.type='sawtooth';o.frequency.value=46;o2.frequency.value=46.6;f.type='lowpass';f.frequency.value=150;g.gain.value=.045;o.connect(f);o2.connect(f);f.connect(g);g.connect(master);o.start();o2.start()}catch(e){AC=null}}
 function tone(fr,dur,type='sine',vol=.2,slide=0,delay=0){if(!AC)return;try{const t=AC.currentTime+delay,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(fr,t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(20,fr+slide),t+dur);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.05)}catch(e){}}
 function noiseB(dur,vol=.1,fr=800){if(!AC)return;try{const b=AC.createBuffer(1,Math.max(1,AC.sampleRate*dur|0),AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);const s=AC.createBufferSource();s.buffer=b;const f=AC.createBiquadFilter();f.type='bandpass';f.frequency.value=fr;const g=AC.createGain();g.gain.value=vol;s.connect(f);f.connect(g);g.connect(master);s.start()}catch(e){}}
@@ -535,6 +593,9 @@ function pzData(k,day){
  if(k==='sequence')return{n:day<=2?8:day<=4?10:12};
  if(k==='calibre')return{dials:day<=2?2:3,speed:.75+day*.15,zone:.22-day*.02};
  if(k==='badge')return{lo:.45+day*.05,hi:1.5-day*.1};
+ if(k==='filtre')return{n:5+day};
+ if(k==='memoire')return{pairs:day<=2?6:8};
+ if(k==='tuyaux')return{n:day<=2?4:5};
  return{tol:.075-day*.007,drift:.5+day*.12};
 }
 
@@ -599,7 +660,7 @@ function genMap(day){
  rooms.forEach(r=>FURN[r.type](r,put));
  m.furn.filter(f=>f.kind==='bed').forEach(f=>m.objs.push({t:'bed',x:(f.x+.5)*TS,y:(f.y+1)*TS,f,r:f.r}));
  // puzzles
- const kinds=shuffle(['simon','digicode','cables','chimie','sequence','calibre','badge','moteur']).slice(0,NEED[day-1]);
+ const kinds=shuffle(['simon','digicode','cables','chimie','sequence','calibre','badge','moteur','filtre','memoire','tuyaux']).slice(0,NEED[day-1]);
  const cand=shuffle(rooms.filter(r=>r!==start&&r!==exitR));let ci=0;
  for(const k of kinds){let f=null,r=null;while(!f&&ci<cand.length){r=cand[ci++];f=putWall(r,'terminal',T.LOW)}
   if(!f)for(const r2 of shuffle(rooms.filter(x=>x!==start))){f=putWall(r2,'terminal',T.LOW);if(f){r=r2;break}}
@@ -755,7 +816,7 @@ function setPath(h,x,y){const p=bfs(Math.floor(h.x/TS),Math.floor(h.y/TS),Math.f
 
 // ---------- entities
 function newPlayer(){return{x:M.start.cx,y:M.start.cy,a:-Math.PI/2,stam:1,flash:true,crouch:false,running:false,moving:false,noise:0,hidden:null,vent:null,cell:0,act:null,ab:0,grace:0,frag:0,walk:0,stepT:0,noiseT:0}}
-function makeHunter(x,y,extra){return{x,y,a:Math.random()*6.28,state:'patrol',path:[],sus:0,stun:0,lost:0,searchT:0,repath:0,wait:rnd(0,1.5),last:null,walk:0,range:230,fov:.68,sawHide:false,rush:false,extra:!!extra,cone:null}}
+function makeHunter(x,y,extra){return{x,y,a:Math.random()*6.28,state:'patrol',path:[],sus:0,stun:0,lost:0,searchT:0,repath:0,wait:rnd(0,1.5),last:null,walk:0,range:215,fov:.64,sawHide:false,rush:false,extra:!!extra,cone:null}}
 function spawnHunter(extra){
  for(let k=0;k<80;k++){const r=pick(M.rooms);if(r===M.start&&k<70)continue;const[x,y]=[ri(r.x0,r.x1),ri(r.y0,r.y1)];if(solidT(x,y))continue;
   const px=(x+.5)*TS,py=(y+.5)*TS;if(P&&dst(px,py,P.x,P.y)<TS*9&&k<70)continue;const h=makeHunter(px,py,extra);H.push(h);return h}
@@ -774,7 +835,7 @@ function makeNoise(x,y,r,src){
  for(const h of H){if(h.stun>0||h.state==='chase')continue;const d=dst(h.x,h.y,x,y),eff=los(h.x,h.y,x,y)?r:r*.55;
   if(d<eff){h.state='inv';h.rush=false;setPath(h,x+rnd(-24,24),y+rnd(-24,24));h.a=turnTo(h.a,Math.atan2(y-h.y,x-h.x),.8)}}}
 function alarmAt(x,y,n){const hs=H.filter(h=>h.stun<=0).sort((a,b)=>dst(a.x,a.y,x,y)-dst(b.x,b.y,x,y)).slice(0,n);for(const h of hs){if(h.state==='chase')continue;h.state='inv';h.rush=true;setPath(h,x,y)}}
-function startChase(h){if(!H.some(o=>o.state==='chase')){SFX.spotted();big('REPÉRÉ !','red');G.stats.spotted++}h.state='chase';h.sus=1.2;h.repath=0;h.lost=0;h.rush=false}
+function startChase(h){if(!H.some(o=>o.state==='chase')){SFX.spotted();big('REPÉRÉ !','red');G.stats.spotted++;G.stats.spotDay=(G.stats.spotDay||0)+1}h.state='chase';h.sus=1.2;h.repath=0;h.lost=0;h.rush=false}
 
 function updateHunters(dt){
  const play=state==='play'&&P;
@@ -785,21 +846,22 @@ function updateHunters(dt){
   else h.sus=Math.max(0,h.sus-dt*.3);
   if(sees&&h.sus>=1&&h.state!=='chase')startChase(h);
   let spd=0;
-  if(h.state==='patrol'){spd=62;if(!h.path.length){h.wait-=dt;h.a+=dt*.9*Math.sin(TIME*.7+h.x);if(h.wait<=0){const w=randomWP();setPath(h,w.x,w.y);h.wait=rnd(.6,2.2)}}
+  if(h.state==='patrol'){spd=57;if(!h.path.length){h.wait-=dt;h.a+=dt*.9*Math.sin(TIME*.7+h.x);if(h.wait<=0){const w=randomWP();setPath(h,w.x,w.y);h.wait=rnd(.6,2.2)}}
    if(sees&&h.sus>.3){h.a=turnTo(h.a,Math.atan2(P.y-h.y,P.x-h.x),dt*5);spd=0}}
-  else if(h.state==='inv'){spd=h.rush?150:100;if(sees&&h.sus>.3)h.a=turnTo(h.a,Math.atan2(P.y-h.y,P.x-h.x),dt*5);if(!h.path.length){h.state='search';h.searchT=rnd(3,5);h.rush=false}}
-  else if(h.state==='chase'){spd=(D&&D.night)?175:162;if(h.extra)spd+=6;h.repath-=dt;
+  else if(h.state==='inv'){spd=h.rush?140:93;if(sees&&h.sus>.3)h.a=turnTo(h.a,Math.atan2(P.y-h.y,P.x-h.x),dt*5);if(!h.path.length){h.state='search';h.searchT=rnd(3,5);h.rush=false}}
+  else if(h.state==='chase'){spd=(D&&D.night)?163:151;if(h.extra)spd+=6;h.repath-=dt;
    if(P.hidden&&!h.sawHide){h.state='search';h.searchT=4;h.path=[];h.sus=.5}
    else{if(h.repath<=0){h.repath=.35;const tg=P.hidden?P.hidden:(sees?P:h.last);if(tg)setPath(h,tg.x,tg.y)}
     h.lost=sees||P.hidden?0:h.lost+dt;if(h.lost>3.5||(!h.path.length&&!sees&&!P.hidden)){h.state='search';h.searchT=4;h.sus=.6}}}
   else if(h.state==='search'){h.searchT-=dt;h.a+=dt*2.2;if(h.searchT<=0){h.state='patrol';h.path=[];h.sawHide=false}}
+  if(G&&G.tuto)spd*=.8;
   if(h.path.length&&spd>0){const p=h.path[0];const ptx=Math.floor(p.x/TS),pty=Math.floor(p.y/TS);
    if(solidT(ptx,pty)){h.path=[];if(h.state==='inv'){h.state='search';h.searchT=2}}
    else{const dx=p.x-h.x,dy=p.y-h.y,d=Math.hypot(dx,dy),st=spd*dt;if(d<=st){h.x=p.x;h.y=p.y;h.path.shift()}else{h.x+=dx/d*st;h.y+=dy/d*st;h.a=turnTo(h.a,Math.atan2(dy,dx),dt*8)}h.walk+=st}}
   h.cone=poly(h.x,h.y,h.a-h.fov,h.a+h.fov,14,h.range*(isDark()?.85:1),false);
   if(play&&!P.vent&&P.cell<=0){
    if(P.hidden){if(h.sawHide&&h.state==='chase'&&dst(h.x,h.y,P.hidden.x,P.hidden.y)<40){capture("Il t'a vu te cacher et t'a tiré de là.");return}}
-   else if(!(P.grace>0)&&dst(h.x,h.y,P.x,P.y)<21){capture('Un traqueur t\'a attrapé.');return}}
+   else if(!(P.grace>0)&&dst(h.x,h.y,P.x,P.y)<19){capture('Un traqueur t\'a attrapé.');return}}
  }}
 
 function updateCams(dt){
@@ -829,9 +891,9 @@ function updatePlayer(dt){
  if(!blocked){if(K.KeyW||K.ArrowUp)my-=1;if(K.KeyS||K.ArrowDown)my+=1;if(K.KeyA||K.ArrowLeft)mx-=1;if(K.KeyD||K.ArrowRight)mx+=1;if(joy.on){mx+=joy.x;my+=joy.y}}
  if(on('invert')){mx=-mx;my=-my}
  let len=Math.hypot(mx,my);if(len>1){mx/=len;my/=len;len=1}
- P.moving=len>.15;
+ P.moving=len>.15;if(P.moving)tutoStep('move');
  const wantRun=(K.ShiftLeft||K.ShiftRight||touchRun)&&P.moving&&!P.crouch;const marcus=G.char.id==='marcus';
- P.running=wantRun&&P.stam>.02;
+ P.running=wantRun&&P.stam>.02;if(P.running)tutoStep('run');
  if(P.running)P.stam=Math.max(0,P.stam-dt*(marcus?.16:.32));else P.stam=Math.min(1,P.stam+dt*(P.moving?.12:.22));
  let spd=P.crouch?74:P.running?196:124;if(on('sprint')){spd=280}if(on('gas'))spd*=.85;
  if(P.act){if(P.moving||blocked){P.act=null}else{P.act.t+=dt;if(P.act.t>=P.act.need){const a=P.act;P.act=null;a.done()}}}
@@ -869,16 +931,16 @@ function act(){
   case'note':openNote(o);break;
   case'crate':P.act={t:0,need:G.char.id==='lea'?.7:1.5,label:'Fouille…',done:()=>loot(o)};makeNoise(o.x,o.y,70);break;
   case'locker':case'bed':hide(o);break;
-  case'vent':P.vent={t:1.4,to:o.pair};SFX.vent();for(const h of H)if(h.state==='chase'){h.state='search';h.searchT=3}break;
+  case'vent':P.vent={t:1.4,to:o.pair};G.stats.vents=(G.stats.vents||0)+1;if(G.stats.vents>=5)unlock('rat');SFX.vent();for(const h of H)if(h.state==='chase'){h.state='search';h.searchT=3}break;
   case'exit':if(P.frag>=M.need)completeDay();else{SFX.bad();say(`Il te manque ${M.need-P.frag} fragment${M.need-P.frag>1?'s':''}.`,'')}break;
   case'lock':if(G.char.id==='victor'){unlockAt(o.k);SFX.lock()}else P.act={t:0,need:2.4,label:'Crochetage…',done:()=>{unlockAt(o.k);SFX.lock()}};break;
  }}
 function unlockAt(k){for(const d of M.doors){const ks=d.tiles.map(([x,y])=>y*MW+x);if(ks.includes(k))ks.forEach(q=>locked.delete(q))}locked.delete(k)}
 function hide(o){
  for(const h of H){h.sawHide=h.stun<=0&&(hunterSees(h)||(h.state==='chase'&&dst(h.x,h.y,P.x,P.y)<180&&los(h.x,h.y,P.x,P.y)))}
- P.hidden=o;P.act=null;SFX.click();
+ P.hidden=o;P.act=null;SFX.click();tutoStep('hide');
  if(H.some(h=>h.sawHide))say('Ils t\'ont vu te cacher…','bad');else say('Tu retiens ton souffle.','')}
-function loot(o){o.searched=true;const r=Math.random();let m=null;
+function loot(o){o.searched=true;count('crates');const r=Math.random();let m=null;
  if(r<.3){G.items.leurre++;m='un leurre sonore'}else if(r<.52){G.items.fumigene++;m='une grenade fumigène'}else if(r<.68){G.items.brouilleur++;m='un brouilleur (bloque le prochain malus)'}else if(r<.9){G.tokens++;m='un jeton'}
  if(m){say('Tu trouves '+m+'.','good');SFX.ok()}else say('La caisse est vide.','')}
 function useItem(n){
@@ -895,7 +957,9 @@ function ability(){
  else if(c.id==='victor'){FX.plan=15;M.objs.forEach(o=>{if(o.t==='puzzle'||o.t==='exit')o.revealed=true});say('Tu te souviens des plans de cette aile.','good')}
  SFX.ok()}
 function capture(msg){
- if(state!=='play')return;SFX.caught();shake=.6;flashT=1;G.strikes++;G.stats.caught++;closeModal();P.act=null;P.hidden=null;
+ if(state!=='play')return;SFX.caught();shake=.6;flashT=1;
+ if(G.tuto){closeModal();P.act=null;P.hidden=null;say('Attrapé ! En vraie partie, cela compte comme une capture.','bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=3;for(const h of H){h.state='patrol';h.path=[];h.sus=0;h.sawHide=false;const w=randomWP();if(dst(w.x,w.y,P.x,P.y)>TS*9){h.x=w.x;h.y=w.y}}return}
+ G.strikes++;G.stats.caught++;closeModal();P.act=null;P.hidden=null;
  const it=['leurre','fumigene','brouilleur'].filter(k=>G.items[k]>0);let lost='';if(it.length){const k=pick(it);G.items[k]--;lost={leurre:' Tu perds un leurre.',fumigene:' Tu perds un fumigène.',brouilleur:' Tu perds un brouilleur.'}[k]}
  if(G.strikes>=maxStrikes()){lose('Capturé '+G.strikes+' fois aujourd\'hui. Le Collectionneur te retire du jeu.');return}
  say(msg+lost,'bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=G.char.id==='okafor'?4:8;
@@ -904,10 +968,11 @@ const maxStrikes=()=>G.char.id==='okafor'?4:3;
 
 // ---------- render
 function render(){
+ if(state==='spec'){renderSpec();return}
  const W=cv.width,Hh=cv.height;ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#050807';ctx.fillRect(0,0,W,Hh);if(!M)return;
  const vw=VW/ZOOM,vh=VH/ZOOM,mw=MW*TS,mh=MH*TS;let fx=CAM.x,fy=CAM.y;if(P&&state!=='title'){fx=P.x;fy=P.y}
  const mob=document.body.classList.contains('mobile')&&state!=='title';let cx=mob?fx-vw/2:mw<vw?(mw-vw)/2:clamp(fx-vw/2,0,mw-vw),cy=mob?fy-vh*.45:mh<vh?(mh-vh)/2:clamp(fy-vh/2,-60,mh-vh+60);
- if(shake>0){cx+=rnd(-6,6)*shake;cy+=rnd(-6,6)*shake}
+ if(shake>0&&SET.shake){cx+=rnd(-6,6)*shake;cy+=rnd(-6,6)*shake}
  CAM.vx=cx;CAM.vy=cy;const S=DPR*ZOOM;const setW=c=>c.setTransform(S,0,0,S,-cx*S,-cy*S);setW(ctx);
  const sx=Math.max(0,cx),sy=Math.max(0,cy),sw=Math.min(mw-sx,vw+2),sh=Math.min(mh-sy,vh+2);if(sw>0&&sh>0)ctx.drawImage(M.pre,sx,sy,sw,sh,sx,sy,sw,sh);
  const t=TIME;
@@ -994,6 +1059,7 @@ function drawMini(){
 const prog=r=>!D?0:r.done?1:r.human?clamp((r.frag||0)/(r.need||M.need),0,.98):clamp(D.t/r.finish,0,.99);
 function scheduleRivals(){G.rivals.forEach((r,i)=>{if(!r.alive)return;r.done=false;r.out=false;if(r.human){r.finish=Infinity;r.frag=0;r.need=M.need;r.t=0;return}const R=MP?mulberry(MP.seed+G.day*131+i*17):Math.random;const a=40+R()*28,b=20+R()*35;r.finish=(M.need*a+b)*r.skill*(G.day===5?1.12:1)+(r.pen||0);r.pen=0})}
 function updateRivals(dt){
+ if(G.tuto)return;
  const alive=G.rivals.filter(r=>r.alive);
  for(const r of alive)if(!r.human&&!r.done&&D.t>=r.finish){r.done=true;say(G.day===5?`${r.name} a franchi la porte.`:`${r.name} a quitté son aile.`,'rival');SFX.beep()}
  const undone=alive.filter(r=>!r.done&&!r.out),outs=alive.filter(r=>r.out&&!r.done).length,ubots=undone.filter(r=>!r.human);
@@ -1032,7 +1098,8 @@ function sabotage(r,s){
  if(state!=='play')return;if(s.id==='traqueur'&&G.day<2){SFX.bad();say('Envoyer un traqueur est scellé le premier jour.','bad');return}if(G.tokens<s.cost||r.done||!r.alive){SFX.bad();return}
  if(MP&&r.human){if(r.out){SFX.bad();return}G.tokens-=s.cost;G.stats.sab++;G.stats.sabDay=(G.stats.sabDay||0)+1;mpSab({to:r.peer,k:{coupure:'blackout',verrou:'locks',faux:'invert',gaz:'gas',traqueur:'hunter'}[s.id]});say(`${s.name} envoyé à ${r.name}.`,'good');SFX.ok();return}
  G.tokens-=s.cost;G.stats.sab++;G.stats.sabDay=(G.stats.sabDay||0)+1;
- if(D.ally===r){D.ally=null;D.betrayAt=0;say(`Tu as trahi ${r.name}.`,'bad')}
+ if(G.stats.sab>=10)unlock('saboteur');
+ if(D.ally===r){D.ally=null;D.betrayAt=0;say(`Tu as trahi ${r.name}.`,'bad');unlock('traitre')}
  if(Math.random()<(r.collector?.4:.15)){say(`${r.name} avait un brouilleur : ton sabotage est bloqué.`,'bad');SFX.bad();return}
  let d=Math.round(rnd(s.d[0],s.d[1]));if(s.id==='traqueur'&&Math.random()<.3){d+=20;say(`Ton traqueur a attrapé ${r.name} !`,'good')}
  r.finish+=d;if(MP)mpSab({to:'bot:'+r.name,d});say(`${s.name} → ${r.name} : +${Math.round(d)} s de retard.`,'good');SFX.ok();
@@ -1049,27 +1116,29 @@ function allyAnswer(yes){
  else{say(`${r.name} : « Comme tu voudras. »`,'rival');if(Math.random()<.5)D.revenge=r}}
 
 function solve(o){
- closeModal();o.solved=true;P.frag++;G.tokens+=2;G.stats.frags++;SFX.frag();
- say(`Fragment ${P.frag}/${M.need} récupéré · +2 jetons.`,'good');
+ closeModal();o.solved=true;P.frag++;count('missions');G.tokens+=2;G.stats.frags++;SFX.frag();
+ say(`Fragment ${P.frag}/${M.need} récupéré · +2 jetons.`,'good');tutoStep('mission');
  if(P.frag>=M.need){big('SORTIE OUVERTE','mint');announce(`La porte du sas est ouverte. Elle est dans la salle : ${roomName(M.exitR)}.`);M.exit.revealed=true}}
 function pzFail(o){SFX.bad();makeNoise(o.x,o.y,300);say('Le terminal émet un bip strident…','bad')}
 
 function startDay(){
- if(!MP)save();feed.innerHTML='';bigEl.className='';locked.clear();if(MP)withSeed(MP.seed+G.day*7919,()=>genMap(G.day));else genMap(G.day);P=newPlayer();H=[];DR=[];SM=[];DC=[];FX={};target=null;
+ if(!MP&&!G.tuto)save();feed.innerHTML='';bigEl.className='';locked.clear();if(MP)withSeed(MP.seed+G.day*7919,()=>genMap(G.day));else genMap(G.day);P=newPlayer();H=[];DR=[];SM=[];DC=[];FX={};target=null;
  const nh=HUNTERS[G.day-1]+(G.desig?1:0);G.desig=false;for(let k=0;k<nh;k++)spawnHunter();
- G.strikes=0;G.stats.sabDay=0;if(MP){MP.st='intro';MP.t=0;MP.waitT=0;MP.resAge=0;MP.nextSent=false}
+ G.strikes=0;G.stats.sabDay=0;G.stats.spotDay=0;if(G.tuto){M.need=2}if(MP){MP.st='intro';MP.t=0;MP.waitT=0;MP.resAge=0;MP.nextSent=false}
  D={t:0,night:false,nextMalus:rnd(38,52),nextEvent:rnd(10,18),allyAt:rnd(40,80),allyDone:G.day===1&&Math.random()<.3,ally:null,allyOffer:null,betrayAt:0,revenge:null,notes:[],warn1:false,gasWarn:false,limit:LIMIT[G.day-1]};
  scheduleRivals();$('#ally').classList.add('hide');
- showIntro()}
-function beginDay(){if(state!=='intro')return;if(MP)MP.st='play';hideScreens();$('#hud').classList.remove('hide');state='play';TIME=0;announce(G.day===1?'Trouve les terminaux. Évite mes traqueurs. Bonne chance.':`Jour ${G.day}. ${M.need} fragments. Le dernier sorti sera éliminé.`)}
+ if(G.tuto){state='intro';beginDay()}else showIntro()}
+function beginDay(){if(state!=='intro')return;if(MP)MP.st='play';hideScreens();$('#hud').classList.remove('hide');state='play';TIME=0;
+ $('#tuto').classList.toggle('hide',!G.tuto);$('#rivals').classList.toggle('hide',!!G.tuto);if(G.tuto){drawTuto();announce('Bienvenue dans ton aile d\'entraînement. Suis les étapes à droite : ici, rien ne compte.');return}announce(G.day===1?'Trouve les terminaux. Évite mes traqueurs. Bonne chance.':`Jour ${G.day}. ${M.need} fragments. Le dernier sorti sera éliminé.`)}
 function updateDay(dt){
- D.t+=dt;G.stats.time+=dt;
+ D.t+=dt;G.stats.time+=dt;if(G.tuto)return;
  if(!D.night&&D.t>=NIGHT_AT){D.night=true;announce('La nuit tombe. Les lumières s\'éteignent. Mon traqueur voit mieux que toi dans le noir.');big('LA NUIT TOMBE','');SFX.malus()}
  if(!D.gasWarn&&D.t>=D.limit-60){D.gasWarn=true;big('LE GAZ ARRIVE DANS 60 S','red');announce('Il te reste une minute avant que le gaz ne remplisse ton aile.')}
  if(D.t>=D.limit){lose('Le gaz a envahi ton aile.');return}
  updateRivals(dt)}
 function completeDay(){
- const pt=D.t;closeModal();G.stats.days.push(Math.round(pt));
+ const pt=D.t;closeModal();if(G.tuto){tutoStep('exit');tutoFinish();return}G.stats.days.push(Math.round(pt));
+ if(!G.stats.spotDay)unlock('fantome');if(pt<120)unlock('eclair');if(D.night&&!P.flash)unlock('noctambule');if(!MP&&G.day===1)unlock('jour1');
  if(MP){MP.t=pt;MP.st='done';MP.tk=0;if(G.day===5){win(pt);return}state='wait';MP.waitT=0;$('#hud').classList.add('hide');showScreen('wait');renderWait();return}
  if(G.day===5){win(pt);return}
  const alive=G.rivals.filter(r=>r.alive);const slow=alive.filter(r=>!r.collector).sort((a,b)=>b.finish-a.finish)[0]||alive.sort((a,b)=>b.finish-a.finish)[0];
@@ -1106,8 +1175,8 @@ function hud(dt){
  if(P.act){pr.classList.remove('hide');pr.innerHTML=`${P.act.label}<span class="pb"><i style="width:${P.act.t/P.act.need*100}%"></i></span>`}
  else if(target&&!UI.modal){pr.classList.remove('hide');pr.innerHTML=`<kbd>E</kbd> ${esc(target.label)}`}else pr.classList.add('hide');
  miniT-=.1;if(miniT<=0){miniT=.2;drawMini()}
- const sx=(P.x-CAM.vx)*ZOOM,sy=(P.y-CAM.vy)*ZOOM;for(const id of['tl','tr']){const el=hEl(id),r=el.getBoundingClientRect();el.classList.toggle('fade',sx>r.left-50&&sx<r.right+50&&sy>r.top-50&&sy<r.bottom+50)}
- rivT-=.1;if(rivT<=0){rivT=.5;drawRivals()}
+ const sx=(P.x-CAM.vx)*ZOOM,sy=(P.y-CAM.vy)*ZOOM;for(const id of['tl','tr']){const el=hEl(id),r=el.getBoundingClientRect();el.classList.toggle('fade',SET.fade&&sx>r.left-50&&sx<r.right+50&&sy>r.top-50&&sy<r.bottom+50)}
+ rivT-=.1;if(rivT<=0){rivT=.5;if(!G.tuto)drawRivals()}
  if(bigT>0){bigT-=.1;if(bigT<=0)bigEl.classList.remove('on')}}
 function drawRivals(){
  const al=G.rivals.filter(r=>r.alive),und=al.filter(r=>!r.done).length;
@@ -1129,7 +1198,7 @@ modalEl.addEventListener('pointerdown',e=>{if(e.target===modalEl)closeModal()});
 const PZ={};
 PZ.simon=(o,b,done,alive)=>{
  const cols=['#e0483d','#79d9b1','#e9c46a','#5a9be0'],fq=[262,330,392,523];
- b.innerHTML=`<p class="hint">Mémorise la séquence lumineuse puis reproduis-la. Une erreur fait du bruit.</p><div class="simon">${cols.map((c,i)=>`<button class="pad" data-i="${i}" style="--c:${c}" aria-label="Touche ${i+1}"></button>`).join('')}</div><div class="pzs">Regarde…</div>`;
+ b.innerHTML=`<p class="hint">Mémorise la séquence lumineuse puis reproduis-la. Une erreur fait du bruit.</p><div class="simon">${cols.map((c,i)=>`<button class="pad" data-i="${i}" style="--c:${c}" aria-label="Touche ${i+1}">${SET.cb?`<em>${['Rouge','Vert','Jaune','Bleu'][i]}</em>`:''}</button>`).join('')}</div><div class="pzs">Regarde…</div>`;
  const pads=[...b.querySelectorAll('.pad')],st=b.querySelector('.pzs');let seq=[],inp=[],busy=true;
  const fl=(i,ms=380)=>{if(!alive())return;pads[i].classList.add('on');tone(fq[i],ms/1000,'triangle',.2);setTimeout(()=>pads[i].classList.remove('on'),ms)};
  const play=()=>{busy=true;inp=[];st.textContent='Regarde…';seq.forEach((v,k)=>setTimeout(()=>fl(v),600+k*560));setTimeout(()=>{if(!alive())return;busy=false;st.textContent=`À toi : ${seq.length} touches`},600+seq.length*560)};
@@ -1145,7 +1214,7 @@ PZ.digicode=(o,b,done)=>{
  UI.keyHook=k=>{if(/^[0-9]$/.test(k))key(k);else if(k==='Enter')key('OK');else if(k==='Backspace')key('C')}};
 PZ.cables=(o,b,done)=>{
  const n=o.data.n,cols=shuffle(CHEM.slice()).slice(0,n),right=shuffle(cols.map((c,i)=>i));let sel=null;const conn=new Set();
- b.innerHTML=`<p class="hint">${o.data.stroop?'Relie chaque fil au <b>mot</b> qui nomme sa couleur. Ne te fie pas à la couleur des lettres.':'Relie chaque fil à la prise de la même couleur.'}</p><div class="cab"><svg></svg><div class="col">${cols.map((c,i)=>`<button class="plug" data-i="${i}" style="--c:${c.c}" aria-label="${c.n}"></button>`).join('')}</div><div class="col">${right.map(i=>{const c=cols[i];if(o.data.stroop){const w=pick(CHEM.filter(x=>x!==c));return`<button class="plug word" data-j="${i}" style="color:${w.c}">${c.n.toUpperCase()}</button>`}return`<button class="plug" data-j="${i}" style="--c:${c.c}" aria-label="${c.n}"></button>`}).join('')}</div></div>`;
+ b.innerHTML=`<p class="hint">${o.data.stroop?'Relie chaque fil au <b>mot</b> qui nomme sa couleur. Ne te fie pas à la couleur des lettres.':'Relie chaque fil à la prise de la même couleur.'}</p><div class="cab"><svg></svg><div class="col">${cols.map((c,i)=>`<button class="plug" data-i="${i}" style="--c:${c.c}" aria-label="${c.n}">${SET.cb?`<em>${c.n}</em>`:''}</button>`).join('')}</div><div class="col">${right.map(i=>{const c=cols[i];if(o.data.stroop){const w=pick(CHEM.filter(x=>x!==c));return`<button class="plug word" data-j="${i}" style="color:${w.c}">${c.n.toUpperCase()}</button>`}return`<button class="plug" data-j="${i}" style="--c:${c.c}" aria-label="${c.n}">${SET.cb?`<em>${c.n}</em>`:''}</button>`}).join('')}</div></div>`;
  const svg=b.querySelector('svg'),box=b.querySelector('.cab');
  const draw=()=>{const br=box.getBoundingClientRect();svg.setAttribute('viewBox',`0 0 ${br.width} ${br.height}`);svg.innerHTML=[...conn].map(i=>{const l=b.querySelector(`[data-i="${i}"]`).getBoundingClientRect(),r=b.querySelector(`[data-j="${i}"]`).getBoundingClientRect();const x1=l.right-br.left,y1=l.top+l.height/2-br.top,x2=r.left-br.left,y2=r.top+r.height/2-br.top;return`<path d="M${x1} ${y1} C${(x1+x2)/2} ${y1} ${(x1+x2)/2} ${y2} ${x2} ${y2}" stroke="${cols[i].c}" stroke-width="7" fill="none" stroke-linecap="round"/>`}).join('')};
  const L=[...b.querySelectorAll('[data-i]')];
@@ -1204,7 +1273,7 @@ PZ.moteur=(o,b,done,alive)=>{
 function openPuzzle(o){openModal(PZNAME[o.kind],roomName(o.r),(b,alive)=>PZ[o.kind](o,b,()=>{if(alive())solve(o)},alive))}
 function openNote(o){
  const first=!o.read;o.read=true;if(!D.notes.includes(o))D.notes.push(o);
- if(o.kind==='story'&&!G.story.includes(o.story)){G.story.push(o.story);G.tokens++;setTimeout(()=>say('Dossier retrouvé · +1 jeton. Il est rangé dans ton carnet.','good'),50)}
+ tutoStep('note');if(o.kind==='story'&&!G.story.includes(o.story)){G.story.push(o.story);if(G.story.length>=5)unlock('archiviste');G.tokens++;setTimeout(()=>say('Dossier retrouvé · +1 jeton. Il est rangé dans ton carnet.','good'),50)}
  openModal(o.title,roomName(o.r)+(first?'':' · relu'),b=>{b.innerHTML=`<div class="paper">${esc(o.text)}</div>`});SFX.click()}
 function openJournal(){
  if(state!=='play')return;
@@ -1212,7 +1281,7 @@ function openJournal(){
  openModal('Carnet','Notes du jour et dossiers retrouvés',b=>{b.innerHTML=`<div class="notes">${day.length?day.map(n=>`<div><h4>${esc(n.title)} · ${esc(roomName(n.r))}</h4><div class="paper">${esc(n.text)}</div></div>`).join(''):'<p class="hint">Aucun indice trouvé aujourd\'hui. Les codes et protocoles sont écrits sur des notes jaunes, au sol.</p>'}
   ${st.length?`<h4 style="margin-top:6px">Dossiers sur l'Institut Valmont (${st.length}/5)</h4>`+st.map(i=>`<div class="paper">${esc(STORY[i].title+'\n\n'+STORY[i].text)}</div>`).join(''):''}</div>`})}
 function openSab(){
- if(state!=='play'||!P)return;let sel=SAB[0];
+ if(state!=='play'||!P)return;tutoStep('sab');let sel=SAB[0];
  openModal('Saboter un rival','Le jeu continue pendant que tu choisis',(b,alive)=>{
   const draw=()=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));
    b.innerHTML=`<div class="tok">Tu as <b>${G.tokens}</b> jeton${G.tokens>1?'s':''}.</div><div class="mal">${SAB.map(s=>{const lk=s.id==='traqueur'&&G.day<2;return`<button class="${s===sel?'sel':''}" data-m="${s.id}" ${lk?'disabled':''}><b>${s.name}</b><small>${lk?'Scellé le premier jour.':s.desc+' +'+s.d[0]+'–'+s.d[1]+' s'}</small><span class="cost">${s.cost}</span></button>`}).join('')}</div>
@@ -1222,7 +1291,7 @@ function openSab(){
   draw();const iv=setInterval(()=>{if(!alive()){clearInterval(iv);return}b.querySelectorAll('.trow .bar i').forEach((el,i)=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));if(al[i])el.style.width=prog(al[i])*100+'%'})},800)})}
 
 // ---------- screens
-const screens=['platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
+const screens=['settings','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
 function hideScreens(){screens.forEach(s=>$('#'+s).classList.add('hide'))}
 function showScreen(s){hideScreens();$('#'+s).classList.remove('hide')}
 let selChar=CHARS[0],helpBack='title';
@@ -1277,18 +1346,19 @@ function doVote(name,rank){
  $('#bNext').onclick=()=>{G.day++;startDay()};$('#bNext').focus();SFX.ok()}
 function statsHTML(){const s=G.stats;return`<div class="stats"><div><b>${fmt(s.time)}</b><small>temps total</small></div><div><b>${s.frags}</b><small>fragments</small></div><div><b>${s.sab}</b><small>sabotages envoyés</small></div><div><b>${s.recv}</b><small>malus subis</small></div><div><b>${s.caught}</b><small>captures</small></div><div><b>${G.story.length}/5</b><small>dossiers lus</small></div></div>`}
 function lose(reason,force){
- if(state!=='play'&&!force)return;if(MP){MP.alive=false;MP.st='out';MP.tk=0}state='over';closeModal();$('#hud').classList.add('hide');SFX.caught();
- $('#overIn').innerHTML=`<div class="dayno">Éliminé</div><p class="tag">${esc(reason)}</p><p class="voice" style="min-height:0">« Dommage. Tu étais presque intéressant. »</p>${scoreBlock(false)}${statsHTML()}<div class="actions">${MP?'':`<button class="btn main" id="bRetry">Rejouer le jour ${G.day}</button>`}<button class="btn${MP?' main':''}" id="bMenu">Menu</button><button class="btn" id="bOBoard">Classement</button></div>`;
- showScreen('over');if(!MP)$('#bRetry').onclick=resume;$('#bMenu').onclick=toTitle;$('#bOBoard').onclick=()=>{toTitle();openBoard()}}
+ if(state!=='play'&&!force)return;SPEC=null;$('#specbar').classList.add('hide');if(MP){MP.alive=false;MP.st='out';MP.tk=0}state='over';closeModal();$('#hud').classList.add('hide');SFX.caught();
+ $('#overIn').innerHTML=`<div class="dayno">Éliminé</div><p class="tag">${esc(reason)}</p><p class="voice" style="min-height:0">« Dommage. Tu étais presque intéressant. »</p>${scoreBlock(false)}${statsHTML()}<div class="actions">${MP?'':`<button class="btn main" id="bRetry">Rejouer le jour ${G.day}</button>`}${MP?'<button class="btn main" id="bSpec">Regarder la partie</button>':''}<button class="btn" id="bMenu">Menu</button><button class="btn" id="bOBoard">Classement</button></div>`;
+ showScreen('over');if(!MP)$('#bRetry').onclick=resume;else{$('#bSpec').onclick=()=>startSpec('over');$('#overIn').insertAdjacentHTML('beforeend','<p class="hint" id="oSpecMsg" style="margin-top:8px"></p>')}$('#bMenu').onclick=toTitle;$('#bOBoard').onclick=()=>{toTitle();openBoard()}}
 function win(pt){
+ unlock('libre');if(!G.stats.caught)unlock('intouchable');if(!G.stats.sab)unlock('pacifiste');
  state='win';$('#hud').classList.add('hide');if(MP){MP.st='done';MP.t=pt;MP.tk=0}else clearSave();SFX.frag();
  const full=G.story.length>=5;
  $('#winIn').innerHTML=`<div class="dayno" style="color:var(--mint)">Libre</div><p class="tag">Tu franchis la dernière porte en ${fmt(pt)}. Dehors, l'air est froid et il pleut. Derrière toi, la porte se referme sur les autres.</p>
  <div class="reveal">${full?esc("Dans ta poche, les cinq dossiers de l'Institut Valmont.\n\nSacha n'était pas une prisonnière. Sacha, c'était Élias Valmont, le petit frère de Clara. Il a joué avec vous jusqu'au bout, dans sa propre aile, pour vous regarder attendre derrière une porte.\n\nIl t'a laissé sortir. Peut-être parce que tu as été le seul à lire toute l'histoire."):esc(`Tu as retrouvé ${G.story.length} dossier${G.story.length>1?'s':''} sur 5.\n\nUne question te suit sous la pluie : qui était vraiment Sacha, et pourquoi ses brouilleurs semblaient-ils toujours prêts ?\n\nRejoue et lis tous les dossiers pour connaître la vérité.`)}</div>
  ${scoreBlock(true)}${statsHTML()}<div class="actions"><button class="btn main" id="bAgain">Menu</button><button class="btn" id="bWBoard">Classement</button></div>`;
  showScreen('win');$('#bAgain').onclick=toTitle;$('#bWBoard').onclick=()=>{toTitle();openBoard()}}
-function toTitle(){closeModal();if(MP){const m=MP;if(state==='over'||state==='win')setTimeout(()=>{if(MP===m)leaveMP()},1500);else leaveMP()}leaveLobby();state='title';P=null;D=null;$('#hud').classList.add('hide');genMap(1);H=[];for(let i=0;i<3;i++)spawnHunter();CAM.x=MW*TS/2;CAM.y=MH*TS/2;buildTitle();showScreen('title')}
-function pauseGame(){if(state!=='play')return;closeModal();state='pause';$('#pauseInfo').textContent=`Jour ${G.day} · ${fmt(D.t)} · ${P.frag}/${M.need} fragments`;showScreen('pause')}
+function toTitle(){closeModal();SPEC=null;$('#specbar').classList.add('hide');$('#tuto').classList.add('hide');$('#rivals').classList.remove('hide');if(state==='spec')state='over';if(MP){const m=MP;if(state==='over'||state==='win')setTimeout(()=>{if(MP===m)leaveMP()},1500);else leaveMP()}leaveLobby();state='title';P=null;D=null;$('#hud').classList.add('hide');genMap(1);H=[];for(let i=0;i<3;i++)spawnHunter();CAM.x=MW*TS/2;CAM.y=MH*TS/2;buildTitle();showScreen('title')}
+function pauseGame(){if(state!=='play')return;if(MP){say('Pas de pause en ligne : la partie continue pour les autres.','bad');return}closeModal();state='pause';$('#pauseInfo').textContent=`Jour ${G.day} · ${fmt(D.t)} · ${P.frag}/${M.need} fragments`;showScreen('pause')}
 function resumeGame(){if(state!=='pause')return;hideScreens();state='play'}
 
 // ---------- input
@@ -1296,7 +1366,7 @@ let hudMini=false;try{hudMini=localStorage.getItem('collectionneur_hudmini')==='
 function applyHudMini(){$('#tl').classList.toggle('compact',hudMini);$('#bTgl').textContent=hudMini?'+':'–';$('#bTgl').setAttribute('aria-label',hudMini?'Agrandir le panneau':'Réduire le panneau')}
 function toggleHud(){hudMini=!hudMini;try{localStorage.setItem('collectionneur_hudmini',hudMini?'1':'0')}catch(_){}applyHudMini()}
 $('#bTgl').onclick=toggleHud;applyHudMini();
-const toggleFlash=()=>{if(!P||state!=='play')return;P.flash=!P.flash;SFX.click()},toggleCrouch=()=>{if(!P||state!=='play')return;P.crouch=!P.crouch;SFX.click()};
+const toggleFlash=()=>{if(!P||state!=='play')return;P.flash=!P.flash;SFX.click()},toggleCrouch=()=>{if(!P||state!=='play')return;P.crouch=!P.crouch;if(P.crouch)tutoStep('crouch');SFX.click()};
 addEventListener('keydown',e=>{
  if(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;
  const c=e.code;if(['Tab','Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c)&&state!=='title')e.preventDefault();
@@ -1326,7 +1396,7 @@ $('#pPC').onclick=()=>{applyPlat('pc');SFX.click();platDone()};$('#pMob').onclic
 function platDone(){if(platBack==='pause'){showScreen('pause')}else if(!PSEUDO){askPseudo('title')}else{buildTitle();showScreen('title')}}
 $('#bPlat').onclick=()=>askPlat('title');$('#bPPlat').onclick=()=>askPlat('pause');
 cv.addEventListener('pointerdown',e=>{if(PLAT!=='mobile'||e.pointerType==='mouse')return;audioInit();if(state!=='play')return;if(e.clientX<VW*.55&&joyId===null){joyId=e.pointerId;joyO={x:e.clientX,y:e.clientY};joy.on=true;joy.x=joy.y=0;joyEl.style.display='block';joyEl.style.left=e.clientX+'px';joyEl.style.top=e.clientY+'px';joyK.style.transform='';try{cv.setPointerCapture(e.pointerId)}catch(_){}}});
-cv.addEventListener('pointermove',e=>{if(e.pointerId!==joyId)return;let dx=e.clientX-joyO.x,dy=e.clientY-joyO.y;const d=Math.hypot(dx,dy),m=50;if(d>m){dx*=m/d;dy*=m/d}joy.x=dx/m;joy.y=dy/m;if(Math.hypot(joy.x,joy.y)<.2){joy.x=joy.y=0}joyK.style.transform=`translate(${dx}px,${dy}px)`});
+cv.addEventListener('pointermove',e=>{if(e.pointerId!==joyId)return;let dx=e.clientX-joyO.x,dy=e.clientY-joyO.y;const d=Math.hypot(dx,dy),m=50/SET.sens;if(d>m){dx*=m/d;dy*=m/d}joy.x=dx/m;joy.y=dy/m;if(Math.hypot(joy.x,joy.y)<.2){joy.x=joy.y=0}joyK.style.transform=`translate(${dx}px,${dy}px)`});
 const joyEnd=e=>{if(e.pointerId!==joyId)return;joyId=null;joy.on=false;joy.x=joy.y=0;joyEl.style.display='none'};cv.addEventListener('pointerup',joyEnd);cv.addEventListener('pointercancel',joyEnd);
 document.querySelectorAll('#tbtn button').forEach(b=>{const a=b.dataset.a;
  b.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();if(a==='run'){touchRun=true;b.classList.add('on');return}
@@ -1340,7 +1410,8 @@ $('#bEnter').onclick=beginDay;$('#bResume').onclick=resumeGame;$('#bPHelp').oncl
 // ---------- loop
 let last=performance.now();
 function update(dt){
- TIME+=dt;if(MP)mpTick(dt);if(state==='wait'&&D)D.t+=dt;if(shake>0)shake=Math.max(0,shake-dt);if(flashT>0)flashT=Math.max(0,flashT-dt*1.5);
+ TIME+=dt;if(MP)mpTick(dt);if(state==='spec'){if(SPEC)specUpdate(dt);return}
+ if(MP&&state==='play'&&P){MP.posT=(MP.posT||0)-dt;if(MP.posT<=0){MP.posT=.1;mpPub({pos:[Math.round(P.x),Math.round(P.y),Math.round(P.a*100)/100,P.hidden||P.vent?1:0],hs:H.slice(0,10).map(h=>[Math.round(h.x),Math.round(h.y),Math.round(h.a*100)/100,h.state==='chase'?1:0]),nt:isDark()?1:0})}}if(state==='wait'&&D)D.t+=dt;if(shake>0)shake=Math.max(0,shake-dt);if(flashT>0)flashT=Math.max(0,flashT-dt*1.5);
  if(state==='title'||state==='intro'){CAM.x=MW*TS/2+Math.sin(TIME*.07)*500;CAM.y=MH*TS/2+Math.cos(TIME*.05)*200;if(state==='title')updateHunters(dt);return}
  if(state!=='play')return;
  for(const k in FX)if(FX[k]>0)FX[k]-=dt;
@@ -1353,6 +1424,173 @@ function boot(){resize();toTitle();if(PLAT==='pc'||PLAT==='mobile')applyPlat(PLA
 const fontWait=document.fonts&&document.fonts.load?Promise.race([Promise.all([document.fonts.load('900 30px "Big Shoulders Stencil Display"'),document.fonts.load('600 16px "Barlow Condensed"')]),new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
 fontWait.then(boot,boot);
 window.__dbg={get G(){return G},get D(){return D},get P(){return P},get M(){return M},get H(){return H},get state(){return state},FX:()=>FX,completeDay:()=>completeDay(),openPuzzle,openSab,openNote};
+
+// ---------- réglages
+const SETK='collectionneur_set';const SET={vol:.8,shake:true,cb:false,sens:1,fade:true};
+try{Object.assign(SET,JSON.parse(localStorage.getItem(SETK)||'{}'))}catch(_){}
+function saveSet(){try{localStorage.setItem(SETK,JSON.stringify(SET))}catch(_){}if(master)master.gain.value=.55*SET.vol}
+let setBack='title';
+function openSettings(back){setBack=back||'title';showScreen('settings');
+ $('#sVol').value=Math.round(SET.vol*100);$('#sVolV').textContent=Math.round(SET.vol*100)+' %';
+ $('#sSens').value=Math.round(SET.sens*100);$('#sSensV').textContent=Math.round(SET.sens*100)+' %';
+ $('#sShake').checked=SET.shake;$('#sCb').checked=SET.cb;$('#sFade').checked=SET.fade}
+$('#sVol').addEventListener('input',e=>{SET.vol=e.target.value/100;$('#sVolV').textContent=e.target.value+' %';saveSet()});
+$('#sVol').addEventListener('change',()=>{audioInit();SFX.ok()});
+$('#sSens').addEventListener('input',e=>{SET.sens=e.target.value/100;$('#sSensV').textContent=e.target.value+' %';saveSet()});
+$('#sShake').addEventListener('change',e=>{SET.shake=e.target.checked;saveSet()});
+$('#sCb').addEventListener('change',e=>{SET.cb=e.target.checked;saveSet()});
+$('#sFade').addEventListener('change',e=>{SET.fade=e.target.checked;saveSet()});
+$('#bSetBack').onclick=()=>{if(setBack==='pause')showScreen('pause');else{buildTitle();showScreen('title')}};
+$('#bSettings').onclick=()=>openSettings('title');$('#bPSet').onclick=()=>openSettings('pause');
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play'&&!MP&&!(G&&G.tuto))pauseGame()});
+
+// ---------- succès
+const ACH=[
+ {id:'apprenti',n:'Apprenti',d:'Terminer le tutoriel.'},
+ {id:'jour1',n:'Première évasion',d:'Survivre au premier jour.'},
+ {id:'libre',n:'Libre',d:'Gagner une partie.'},
+ {id:'intouchable',n:'Intouchable',d:'Gagner sans jamais être capturé.'},
+ {id:'pacifiste',n:'Pacifiste',d:'Gagner sans saboter personne.'},
+ {id:'fantome',n:'Fantôme',d:'Finir un jour sans être repéré une seule fois.'},
+ {id:'eclair',n:'Éclair',d:'Finir un jour en moins de 2 minutes.'},
+ {id:'noctambule',n:'Noctambule',d:'Sortir de ton aile la nuit, lampe éteinte.'},
+ {id:'archiviste',n:'Archiviste',d:"Lire les 5 dossiers de l'Institut Valmont."},
+ {id:'saboteur',n:'Saboteur',d:'Envoyer 10 sabotages dans une même partie.'},
+ {id:'traitre',n:'Traître',d:'Saboter un rival avec qui tu es allié.'},
+ {id:'rat',n:'Rat des conduits',d:'Utiliser 5 conduits dans une même partie.'},
+ {id:'fouilleur',n:'Fouilleur',d:'Fouiller 25 caisses au total.'},
+ {id:'technicien',n:'Technicien',d:'Réussir 40 missions au total.'},
+ {id:'social',n:'En bonne compagnie',d:"Jouer une partie avec d'autres joueurs."},
+ {id:'spectateur',n:'Œil du Collectionneur',d:'Regarder un autre joueur en mode spectateur.'},
+];
+const ACHK='collectionneur_ach',CNTK='collectionneur_cnt';let ACHS={},CNT={missions:0,crates:0};
+try{ACHS=JSON.parse(localStorage.getItem(ACHK)||'{}')||{}}catch(_){}try{Object.assign(CNT,JSON.parse(localStorage.getItem(CNTK)||'{}'))}catch(_){}
+const toastEl=$('#toast');let toastQ=[],toastOn=false;
+function showToast(){if(toastOn||!toastQ.length)return;toastOn=true;const a=toastQ.shift();toastEl.innerHTML=`<small>Succès débloqué</small><b>${esc(a.n)}</b><span>${esc(a.d)}</span>`;toastEl.classList.add('on');SFX.frag();setTimeout(()=>{toastEl.classList.remove('on');setTimeout(()=>{toastOn=false;showToast()},400)},3200)}
+function unlock(id){if(ACHS[id])return;const a=ACH.find(x=>x.id===id);if(!a)return;ACHS[id]=Date.now();try{localStorage.setItem(ACHK,JSON.stringify(ACHS))}catch(_){}toastQ.push(a);showToast()}
+function count(k,n=1){CNT[k]=(CNT[k]||0)+n;try{localStorage.setItem(CNTK,JSON.stringify(CNT))}catch(_){}
+ if(CNT.missions>=40)unlock('technicien');if(CNT.crates>=25)unlock('fouilleur')}
+function openAchs(){showScreen('achs');const n=ACH.filter(a=>ACHS[a.id]).length;
+ $('#achInfo').textContent=`${n} sur ${ACH.length} débloqués · ${CNT.missions||0} missions et ${CNT.crates||0} caisses au total.`;
+ $('#achList').innerHTML=ACH.map(a=>`<li class="${ACHS[a.id]?'ok':''}"><b>${esc(a.n)}</b><span>${esc(a.d)}</span></li>`).join('')}
+$('#bAchs').onclick=openAchs;$('#bAchBack').onclick=()=>{buildTitle();showScreen('title')};
+
+// ---------- tutoriel
+const TSTEPS=[
+ {id:'move',t:'Déplace-toi',pc:'ZQSD, WASD ou les flèches.',mob:"Pose le pouce sur la moitié gauche de l'écran."},
+ {id:'run',t:'Cours un instant',pc:'Maintiens Maj. La jauge de bruit monte : les traqueurs entendent.',mob:'Maintiens « Courir ». La jauge de bruit monte.'},
+ {id:'crouch',t:'Accroupis-toi',pc:'Touche C : tu fais presque aucun bruit.',mob:'Bouton « Accroupi » : presque aucun bruit.'},
+ {id:'hide',t:'Cache-toi',pc:"Va près d'un casier bleu ou d'un lit, puis E. E encore pour sortir.",mob:"Va près d'un casier bleu ou d'un lit, puis « Action »."},
+ {id:'note',t:'Lis une note',pc:'Les feuilles jaunes au sol cachent des codes. E pour lire.',mob:'Les feuilles jaunes au sol cachent des codes.'},
+ {id:'mission',t:'Réussis 2 missions',pc:'Les terminaux verts (ronds verts sur la carte) donnent des fragments.',mob:'Les terminaux verts (ronds verts sur la carte) donnent des fragments.'},
+ {id:'sab',t:'Ouvre le menu Saboter',pc:'Touche R. En vraie partie, tu y dépenses tes jetons.',mob:'Bouton « Saboter ». En vraie partie, tu y dépenses tes jetons.'},
+ {id:'exit',t:'Sors par la porte du sas',pc:'Avec les fragments, la porte devient verte. E pour sortir.',mob:'Avec les fragments, la porte devient verte.'},
+];
+const TUK='collectionneur_tuto_seen';
+function tutoStep(id){if(!G||!G.tuto||G.tutoDone[id])return;if(id==='mission'&&(P?P.frag:0)<2)return;G.tutoDone[id]=true;SFX.ok();drawTuto()}
+function drawTuto(){if(!G||!G.tuto)return;const mob=document.body.classList.contains('mobile');const cur=TSTEPS.find(s=>!G.tutoDone[s.id]);
+ $('#tuto').innerHTML=`<div class="rh"><span>Tutoriel</span><span>${TSTEPS.filter(s=>G.tutoDone[s.id]).length}/${TSTEPS.length}</span></div>`+TSTEPS.map(s=>`<div class="ts${G.tutoDone[s.id]?' ok':''}${s===cur?' cur':''}"><b>${esc(s.t)}</b>${s===cur?`<span>${esc(mob?s.mob:s.pc)}</span>`:''}</div>`).join('')+`<button class="btn sm pe" id="bTutoQuit">Quitter le tutoriel</button>`;
+ $('#bTutoQuit').onclick=()=>{toTitle()}}
+function startTutorial(){
+ audioInit();try{localStorage.setItem(TUK,'1')}catch(_){}
+ G={char:selChar,day:1,tokens:3,items:{leurre:1,fumigene:1,brouilleur:1},strikes:0,story:[],desig:false,tuto:true,tutoDone:{},
+  stats:{time:0,caught:0,frags:0,sab:0,recv:0,spotted:0,days:[]},rivals:[]};
+ startDay()}
+function tutoFinish(){
+ state='win';$('#hud').classList.add('hide');unlock('apprenti');SFX.frag();
+ $('#winIn').innerHTML=`<div class="dayno" style="color:var(--mint)">Bien joué</div><p class="tag">Tu connais les bases : avancer sans bruit, te cacher, lire les indices, réussir les missions et sortir. En vraie partie, 8 rivaux font la course contre toi et le dernier sorti est éliminé chaque soir.</p><div class="actions"><button class="btn main" id="bTSolo">Lancer une partie solo</button><button class="btn" id="bTMenu">Menu</button></div>`;
+ showScreen('win');$('#bTSolo').onclick=()=>{state='title';newGame()};$('#bTMenu').onclick=toTitle}
+$('#bTuto').onclick=()=>{if(!PSEUDO){askPseudo('title');return}startTutorial()};
+$('#bTAYes').onclick=()=>startTutorial();$('#bTANo').onclick=()=>{try{localStorage.setItem(TUK,'1')}catch(_){}buildTitle();showScreen('title')};
+function maybeAskTuto(){let seen=false;try{seen=localStorage.getItem(TUK)==='1'}catch(_){}if(seen)return false;showScreen('tutoask');return true}
+
+// ---------- nouvelles missions
+PZ.filtre=(o,b,done,alive)=>{
+ const n=o.data.n;b.innerHTML=`<p class="hint">Fais glisser chaque déchet jusqu'à la grille d'évacuation, à gauche.</p><div class="filt"><div class="vent2">ÉVACUATION</div></div><div class="pzs">Déchets restants : ${n}</div>`;
+ const box=b.querySelector('.filt'),st=b.querySelector('.pzs');let left=n;const items=[],sp=1+G.day*.35;
+ for(let i=0;i<n;i++){const el=document.createElement('div');el.className='leaf';el.style.setProperty('--h',ri(25,110));el.style.setProperty('--r',ri(0,360)+'deg');
+  const it={el,x:rnd(.4,.9),y:rnd(.12,.85),vx:rnd(-.06,.06),vy:rnd(-.06,.06),drag:false,gone:false};box.appendChild(el);items.push(it);
+  el.addEventListener('pointerdown',e=>{it.drag=true;el.classList.add('drag');try{el.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+  el.addEventListener('pointermove',e=>{if(!it.drag)return;const r=box.getBoundingClientRect();it.x=clamp((e.clientX-r.left)/r.width,0,1);it.y=clamp((e.clientY-r.top)/r.height,0,1)});
+  const up=()=>{if(!it.drag)return;it.drag=false;el.classList.remove('drag');
+   if(it.x<.17&&!it.gone){it.gone=true;el.remove();left--;tone(300+left*30,.1,'triangle',.12);st.textContent='Déchets restants : '+left;if(!left){st.textContent='Filtre propre.';setTimeout(done,400)}}};
+  el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)}
+ let last=performance.now();
+ const fr=t=>{if(!alive())return;const dt=Math.min(.05,(t-last)/1000);last=t;
+  for(const it of items){if(it.gone)continue;if(!it.drag){it.x+=it.vx*dt*sp;it.y+=it.vy*dt*sp;if(it.x<.24||it.x>.95)it.vx*=-1;if(it.y<.08||it.y>.92)it.vy*=-1;it.x=clamp(it.x,.24,.95);it.y=clamp(it.y,.08,.92)}it.el.style.left=(it.x*100)+'%';it.el.style.top=(it.y*100)+'%'}
+  requestAnimationFrame(fr)};requestAnimationFrame(fr)};
+PZ.memoire=(o,b,done)=>{
+ const SY=['▲','●','■','◆','★','✚','☾','♣'],p=o.data.pairs,deck=shuffle(SY.slice(0,p).flatMap(s=>[s,s]));let open=[],found=0,miss=0,busy=false;
+ b.innerHTML=`<p class="hint">Retourne les cartes deux par deux et retrouve les paires. Trop d'erreurs font du bruit.</p><div class="mem">${deck.map((s,i)=>`<button data-i="${i}" aria-label="Carte ${i+1}"><span>${s}</span></button>`).join('')}</div><div class="pzs">Paires : 0/${p}</div>`;
+ const bs=[...b.querySelectorAll('.mem button')],st=b.querySelector('.pzs');
+ bs.forEach(x=>x.onclick=()=>{if(busy||x.classList.contains('up'))return;x.classList.add('up');SFX.click();open.push(x);if(open.length<2)return;const[a,c]=open;open=[];
+  if(deck[+a.dataset.i]===deck[+c.dataset.i]){a.classList.add('ok');c.classList.add('ok');a.disabled=c.disabled=true;found++;tone(500+found*60,.12,'triangle',.14);st.textContent=`Paires : ${found}/${p}`;if(found===p){st.textContent='Mémoire restaurée.';setTimeout(done,400)}}
+  else{busy=true;miss++;if(miss%4===0)pzFail(o);setTimeout(()=>{a.classList.remove('up');c.classList.remove('up');busy=false},650)}})};
+PZ.tuyaux=(o,b,done)=>{
+ const n=o.data.n,OUT={I:[[3,1],[0,2],[3,1],[0,2]],L:[[0,1],[1,2],[2,3],[3,0]]},DX=[0,1,0,-1],DY=[-1,0,1,0];
+ let path=null;
+ for(let k=0;k<300&&!path;k++){const r0=ri(0,n-1),vis=new Set(['0,'+r0]),pth=[[0,r0]];
+  for(let s=0;s<n*n;s++){const[x,y]=pth[pth.length-1];if(x===n-1&&pth.length>=n+1&&Math.random()<.6)break;
+   const nb=[0,1,2,3].map(d=>[x+DX[d],y+DY[d]]).filter(([a,c])=>a>=0&&c>=0&&a<n&&c<n&&!vis.has(a+','+c));if(!nb.length)break;
+   const fw=nb.filter(([a])=>a>x),nx=fw.length&&Math.random()<.5?pick(fw):pick(nb);vis.add(nx[0]+','+nx[1]);pth.push(nx)}
+  if(pth[pth.length-1][0]===n-1&&pth.length>=n+1)path=pth}
+ const dirTo=(a,c)=>c[0]>a[0]?1:c[0]<a[0]?3:c[1]>a[1]?2:0;
+ const grid=Array.from({length:n*n},()=>({t:Math.random()<.5?'I':'L',r:ri(0,3)}));
+ path.forEach((c,i)=>{const din=i===0?3:dirTo(c,path[i-1]),dout=i===path.length-1?1:dirTo(c,path[i+1]);const cell=grid[c[1]*n+c[0]];
+  if((din+2)%4===dout){cell.t='I';cell.r=(din===1||din===3)?0:1}else{cell.t='L';cell.r=[0,1,2,3].find(r=>OUT.L[r].includes(din)&&OUT.L[r].includes(dout))}cell.sol=true});
+ for(const c of grid)c.r=c.sol?(c.r+ri(1,3))%4:ri(0,3);
+ const r0=path[0][1],r1=path[path.length-1][1];
+ const SVG={I:'<path d="M0 15h40v10H0z"/>',L:'<path d="M15 0h10v15h15v10H15z"/>'};
+ b.innerHTML=`<p class="hint">Tourne les tuyaux (clic) pour relier l'entrée à gauche à la sortie à droite.</p><div class="pipew"><div class="pside" style="--n:${n}">${Array.from({length:n},(_,i)=>`<i class="${i===r0?'on':''}"></i>`).join('')}</div><div class="pipes" style="--n:${n}">${grid.map((c,i)=>`<button data-i="${i}" aria-label="Tuyau"><svg viewBox="0 0 40 40">${SVG[c.t]}</svg></button>`).join('')}</div><div class="pside" style="--n:${n}">${Array.from({length:n},(_,i)=>`<i class="${i===r1?'on':''}"></i>`).join('')}</div></div><div class="pzs">Circuit coupé</div>`;
+ const bs=[...b.querySelectorAll('.pipes button')],st=b.querySelector('.pzs');let fin=false;
+ const flow=()=>{const lit=new Set();let x=0,y=r0,din=3,ok=false;
+  for(let s=0;s<n*n+2;s++){if(x<0||y<0||x>=n||y>=n)break;const c=grid[y*n+x],cn=OUT[c.t][c.r];if(!cn.includes(din))break;lit.add(y*n+x);const out=cn[0]===din?cn[1]:cn[0];
+   if(x===n-1&&y===r1&&out===1){ok=true;break}x+=DX[out];y+=DY[out];din=(out+2)%4}
+  return{lit,ok}};
+ const paint=()=>{const f=flow();bs.forEach((x,i)=>{x.querySelector('svg').style.transform=`rotate(${grid[i].r*90}deg)`;x.classList.toggle('lit',f.lit.has(i))});return f};
+ bs.forEach(x=>x.onclick=()=>{if(fin)return;const c=grid[+x.dataset.i];c.r=(c.r+1)%4;SFX.click();const f=paint();
+  st.textContent=f.ok?'Circuit rétabli.':`Circuit : ${f.lit.size} tuyau${f.lit.size>1?'x':''} reliés`;if(f.ok){fin=true;tone(700,.2,'triangle',.15);setTimeout(done,450)}});
+ if(paint().ok){const c=grid[path[0][1]*n];c.r=(c.r+1)%4;paint()}};
+
+// ---------- mode spectateur
+let SPEC=null;
+const isSpecWait=()=>state==='spec'&&SPEC&&SPEC.back==='wait';
+function specTargets(){if(!MP)return[];return MP.room.peers().filter(p=>!p.sameTab&&p.presence&&p.presence.st==='play'&&Array.isArray(p.presence.pos))}
+function startSpec(back){
+ const ts=specTargets();const msgEl=back==='wait'?$('#wSpecMsg'):$('#oSpecMsg');
+ if(!ts.length){if(msgEl)msgEl.textContent='Personne à regarder pour l\'instant : aucun autre joueur n\'est dans son aile.';return}
+ SPEC={back,peer:ts[0].peer,day:0,x:0,y:0,a:0,first:true};state='spec';hideScreens();$('#specbar').classList.remove('hide');unlock('spectateur')}
+function stopSpec(){const b=SPEC&&SPEC.back;SPEC=null;$('#specbar').classList.add('hide');
+ if(b==='wait'){state='wait';showScreen('wait');renderWait()}else{state='over';showScreen('over')}}
+function specNext(d){const ts=specTargets();if(!ts.length||!SPEC)return;let i=ts.findIndex(p=>p.peer===SPEC.peer);i=(i+d+ts.length)%ts.length;SPEC.peer=ts[i].peer;SPEC.first=true;SFX.click()}
+$('#spPrev').onclick=()=>specNext(-1);$('#spNext').onclick=()=>specNext(1);$('#spQuit').onclick=stopSpec;
+function specUpdate(dt){
+ if(!MP){stopSpec();return}
+ let p=MP.room.peers().find(x=>x.peer===SPEC.peer);
+ if(!p||!p.presence||p.presence.st!=='play'||!Array.isArray(p.presence.pos)){const alt=specTargets()[0];if(alt){SPEC.peer=alt.peer;SPEC.first=true;p=alt}else{$('#spInfo').textContent='Plus personne en jeu pour le moment.';SPEC.pr=null;return}}
+ const pr=p.presence,day=+pr.day||1;SPEC.pr=pr;
+ if(SPEC.day!==day){SPEC.day=day;withSeed(MP.seed+day*7919,()=>genMap(day));SPEC.first=true}
+ const[x,y,a]=pr.pos.map(Number);if(SPEC.first){SPEC.x=x;SPEC.y=y;SPEC.first=false}const k=Math.min(1,dt*10);SPEC.x+=(x-SPEC.x)*k;SPEC.y+=(y-SPEC.y)*k;SPEC.a=a;SPEC.walk=(SPEC.walk||0)+Math.hypot(x-SPEC.x,y-SPEC.y)*.1;
+ const ts=specTargets();$('#spInfo').innerHTML=`Tu regardes <b>${esc(cleanName(pr.n)||'Joueur')}</b> · Jour ${day} · ${+pr.frag||0}/${+pr.need||'?'} fragments${ts.length>1?` · ${ts.length} joueurs en jeu`:''}`}
+function renderSpec(){
+ const W=cv.width,Hh=cv.height;ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#050807';ctx.fillRect(0,0,W,Hh);if(!M||!SPEC||!SPEC.pr)return;
+ const vw=VW/ZOOM,vh=VH/ZOOM,cx=SPEC.x-vw/2,cy=SPEC.y-vh/2,S=DPR*ZOOM,t=TIME,pr=SPEC.pr;ctx.setTransform(S,0,0,S,-cx*S,-cy*S);
+ const sx=Math.max(0,cx),sy=Math.max(0,cy),sw=Math.min(MW*TS-sx,vw+2),sh=Math.min(MH*TS-sy,vh+2);if(sw>0&&sh>0)ctx.drawImage(M.pre,sx,sy,sw,sh,sx,sy,sw,sh);
+ const hs=Array.isArray(pr.hs)?pr.hs.slice(0,12):[],dk=!!pr.nt;
+ const hunters=hs.map(h=>({x:+h[0],y:+h[1],a:+h[2],state:h[3]?'chase':'patrol',stun:0,walk:t*40,range:230,fov:.68,sus:0}));
+ const ch=CHARS.find(c=>c.id===pr.c)||CHARS[0],hidden=!!pr.pos[3];
+ if(!hidden){ctx.fillStyle='rgba(121,217,177,.2)';circ(ctx,SPEC.x,SPEC.y,17);drawPerson(ctx,SPEC.x,SPEC.y,SPEC.a,ch,SPEC.walk)}
+ for(const h of hunters)drawHunter(ctx,h,t);
+ dctx.setTransform(1,0,0,1,0,0);dctx.globalCompositeOperation='source-over';dctx.clearRect(0,0,W,Hh);dctx.fillStyle=`rgba(3,6,6,${dk?.9:.55})`;dctx.fillRect(0,0,W,Hh);
+ dctx.setTransform(S,0,0,S,-cx*S,-cy*S);dctx.globalCompositeOperation='destination-out';const R=dk?300:560;
+ const g=dctx.createRadialGradient(SPEC.x,SPEC.y,R*.15,SPEC.x,SPEC.y,R);g.addColorStop(0,'rgba(0,0,0,1)');g.addColorStop(1,'rgba(0,0,0,0)');dctx.fillStyle=g;fillPoly(dctx,poly(SPEC.x,SPEC.y,0,Math.PI*2,90,R,false));
+ for(const h of hunters){const cone=poly(h.x,h.y,h.a-h.fov,h.a+h.fov,12,h.range,false);dctx.fillStyle='rgba(0,0,0,.6)';fillPoly(dctx,cone,h.x,h.y);h.cone=cone}
+ dctx.globalCompositeOperation='source-over';ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(dark,0,0);ctx.setTransform(S,0,0,S,-cx*S,-cy*S);
+ for(const h of hunters){ctx.fillStyle=h.state==='chase'?'rgba(224,72,61,.2)':'rgba(255,236,180,.08)';fillPoly(ctx,h.cone,h.x,h.y)}
+ ctx.font='700 15px "Barlow Condensed",sans-serif';ctx.textAlign='center';ctx.fillStyle='#e8e2d4';ctx.fillText(cleanName(pr.n)||'Joueur',SPEC.x,SPEC.y-24);
+ if(hidden){ctx.fillStyle='#79d9b1';ctx.fillText('caché',SPEC.x,SPEC.y-8)}
+ ctx.setTransform(1,0,0,1,0,0)}
+$('#bWSpec').onclick=()=>startSpec('wait');
 
 // ---------- seeded random
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -1369,7 +1607,7 @@ const cleanName=s=>String(s==null?'':s).replace(/[^\p{L}\p{N} _.\-]/gu,'').repla
 let pseudoBack='title';
 function askPseudo(back){pseudoBack=back||'title';showScreen('pseudo');const i=$('#pIn');i.value=PSEUDO;$('#pErr').textContent='';setTimeout(()=>{try{i.focus()}catch(_){}},60)}
 $('#pForm').addEventListener('submit',e=>{e.preventDefault();const v=cleanName($('#pIn').value);if(v.length<2){$('#pErr').textContent='Au moins 2 caractères : lettres, chiffres, espace, _ . -';return}
- PSEUDO=v;try{localStorage.setItem(NKEY,v)}catch(_){}SFX.click();buildTitle();showScreen(pseudoBack)});
+ PSEUDO=v;try{localStorage.setItem(NKEY,v)}catch(_){}SFX.click();buildTitle();if(pseudoBack==='title'&&maybeAskTuto())return;showScreen(pseudoBack)});
 
 // ---------- scores
 const LKEY='collectionneur_scores';
@@ -1448,7 +1686,7 @@ async function beginMP(s,isHost){
  setTimeout(()=>{if(LOBBY===lob)leaveLobby()},isHost?6000:400);
  const humans=s.ids.filter(x=>x&&x.p!==myPeer).slice(0,8);
  MP={kind:lob.kind,room:game,seed:(+s.seed>>>0)||1,me:myPeer,alive:true,st:'intro',t:0,seen:new Set(),everSeen:new Set(),sabOut:[],resDone:new Set(),tk:0,pubLast:'',waitT:0,resAge:0,rdy:0,nextSent:false,total:s.ids.length};
- MP.unsub=game.onPeers(()=>mpSync(),()=>{});
+ MP.unsub=game.onPeers(()=>mpSync(),()=>{});unlock('social');
  newGameMP(humans)}
 const HCOL=['#ff7a59','#59c3ff','#c9ff59','#ff59c9','#ffd359','#59ffb4','#b089ff','#ff9f40'];
 function newGameMP(humans){
@@ -1477,7 +1715,7 @@ function mpSync(){
    if(!sb||typeof sb.id!=='string'||MP.seen.has(sb.id))continue;MP.seen.add(sb.id);if(+sb.day!==G.day)continue;
    if(sb.to===MP.me){if(state==='play'&&MP.alive){const m=RMAL.find(x=>x.id===sb.k);if(m)receiveMalus(r,m)}}
    else if(typeof sb.to==='string'&&sb.to.startsWith('bot:')){const b=G.rivals.find(x=>!x.human&&x.name===sb.to.slice(4)),d=+sb.d;if(b&&d>0&&d<=60)b.finish+=d}}
-  if(pr.res&&typeof pr.res==='object'&&+pr.res.d===G.day&&!MP.resDone.has(G.day)&&(state==='wait'||state==='play'))applyRes(pr.res);
+  if(pr.res&&typeof pr.res==='object'&&+pr.res.d===G.day&&!MP.resDone.has(G.day)&&(state==='wait'||state==='play'||isSpecWait()))applyRes(pr.res);
   if(+pr.next===G.day+1&&state==='endday'&&MP.resDone.has(G.day))goNext()}}
 function mpTick(dt){
  if(!MP||!G)return;MP.tk-=dt;if(MP.tk>0)return;MP.tk=.4;mpSync();if(!MP)return;
@@ -1486,7 +1724,7 @@ function mpTick(dt){
  if(MP.alive&&hostPeer()===MP.me)hostTick(.4)}
 function hostTick(dt){
  if(G.day>=5)return;
- if(state==='wait'&&!MP.resDone.has(G.day)){MP.waitT+=dt;
+ if((state==='wait'||isSpecWait())&&!MP.resDone.has(G.day)){MP.waitT+=dt;
   const hs=G.rivals.filter(r=>r.human&&r.alive),unres=hs.filter(r=>r.present&&!r.done&&!r.out),cap=Math.max(20,D.limit-MP.t)+25;
   if(unres.length&&MP.waitT<cap)return;
   const ent=[{k:'p:'+MP.me,n:PSEUDO,t:MP.t}];
@@ -1504,7 +1742,8 @@ function applyRes(res){
  const el=Array.isArray(res.elim)?res.elim.map(String):[];
  for(const r of G.rivals){if(!r.alive)continue;if(el.includes(r.human?'p:'+r.peer:'b:'+r.name)){r.alive=false;r.elimDay=G.day}}
  if(el.includes('p:'+MP.me)){lose(state==='play'?'Les autres ont tous fini avant toi : tu es éliminé ce soir.':'Tu es le plus lent ce soir. Le gaz envahit ton aile.',true);return}
- closeModal();state='endday';$('#hud').classList.add('hide');showEndDayMP(res)}
+ if(state==='spec'){SPEC=null;$('#specbar').classList.add('hide')}
+ closeModal();state='endday';$('#hud').classList.add('hide');if(G.day===1)unlock('jour1');showEndDayMP(res)}
 function showEndDayMP(res){
  showScreen('endday');const el=(res.elim||[]).map(String),order=(Array.isArray(res.order)?res.order:[]).slice(0,12);
  const deadNames=G.rivals.filter(r=>r.elimDay===G.day).map(r=>r.name);
