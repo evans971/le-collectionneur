@@ -45,6 +45,7 @@ if (DATABASE_URL) {
     async kget(k) { await ready; const r = await pool.query('SELECT v FROM kv WHERE k=$1', [k]); return r.rows[0] ? r.rows[0].v : null; },
     async kset(k, v) { await ready; await pool.query('INSERT INTO kv (k, v) VALUES ($1,$2) ON CONFLICT (k) DO UPDATE SET v=EXCLUDED.v', [k, JSON.stringify(v)]); },
     async kdel(k) { await ready; await pool.query('DELETE FROM kv WHERE k=$1', [k]); },
+    async klist(pre) { await ready; const r = await pool.query('SELECT k, v FROM kv WHERE k LIKE $1', [pre + '%']); return r.rows.map(x => x.v); },
   };
 } else {
   let db = {};
@@ -66,6 +67,7 @@ if (DATABASE_URL) {
     async kget(k) { return (db.__kv && db.__kv[k]) || null; },
     async kset(k, v) { db.__kv = db.__kv || {}; db.__kv[k] = v; save(); },
     async kdel(k) { if (db.__kv) { delete db.__kv[k]; save(); } },
+    async klist(pre) { return Object.entries(db.__kv || {}).filter(([k]) => k.startsWith(pre)).map(([, v]) => v); },
   };
 }
 async function submit(id, raw) {
@@ -140,10 +142,54 @@ async function award(token, d) {
   });
 }
 
+// ---------------------------------------------------------------- avis des joueurs
+const shortTag = v => String(v == null ? '' : v).replace(/[^\w.\-]/g, '').slice(0, 60);
+async function saveRating(m) {
+  if (!idOk(m.uid)) throw new Error('invalid');
+  const stars = Math.round(+m.stars);
+  if (!(stars >= 1 && stars <= 5)) throw new Error('invalid');
+  const text = String(m.text == null ? '' : m.text).replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, '').trim().slice(0, 500);
+  const prev = await store.kget('rate:' + m.uid);
+  await store.kset('rate:' + m.uid, {
+    stars, text, lang: shortTag(m.lang), plat: shortTag(m.plat), site: shortTag(m.site),
+    day: Math.min(5, Math.max(0, Math.round(+m.day) || 0)), at: Date.now(), first: (prev && (prev.first || prev.at)) || Date.now(),
+  });
+  return true;
+}
+const escH = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+function keyOk(given) {
+  const want = process.env.ADMIN_KEY || '';
+  const a = Buffer.from(String(given)), b = Buffer.from(want);
+  return want.length >= 6 && a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+async function avisPage(req, res) {
+  const send = (code, html) => { res.writeHead(code, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' }); res.end(html); };
+  const head = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Avis des joueurs · Valmont</title><style>body{font:16px/1.5 system-ui,sans-serif;background:#0f1715;color:#e8e4d8;max-width:860px;margin:0 auto;padding:28px 18px}h1{margin:0 0 4px}small,.m{color:#93a39c}.big{font-size:56px;font-weight:700;color:#f2c14e;line-height:1}.top{display:flex;gap:32px;align-items:center;flex-wrap:wrap;margin:22px 0 28px}.bars div{display:flex;align-items:center;gap:8px;font-size:14px}.bars i{display:block;height:10px;background:#f2c14e;border-radius:3px}.c{background:#17221f;border:1px solid #2a3a35;border-radius:10px;padding:12px 14px;margin:10px 0}.s{color:#f2c14e;letter-spacing:2px}.t{white-space:pre-wrap;margin-top:6px}form{margin-top:30px}input{font:inherit;padding:8px;border-radius:6px;border:1px solid #2a3a35;background:#17221f;color:inherit}button{font:inherit;padding:8px 14px;border-radius:6px;border:0;background:#e0483e;color:#fff}</style></head><body>';
+  if (!process.env.ADMIN_KEY) return send(503, head + '<h1>Avis des joueurs</h1><p>Page désactivée : ajoute la variable <b>ADMIN_KEY</b> (au moins 6 caractères) dans Render → Environment, puis reviens sur <code>/avis?cle=TA_CLE</code>.</p></body></html>');
+  const q = new URLSearchParams((req.url || '').split('?')[1] || '');
+  if (!keyOk(q.get('cle') || '')) return send(403, head + '<h1>Avis des joueurs</h1><form method="get"><p>Entre ta clé :</p><input name="cle" type="password" autofocus> <button>Voir</button></form></body></html>');
+  let list = [];
+  try { list = (await store.klist('rate:')).filter(x => x && x.stars >= 1 && x.stars <= 5); } catch (e) { return send(500, head + '<p>Lecture impossible : ' + escH(e.message) + '</p></body></html>'); }
+  list.sort((a, b) => b.at - a.at);
+  const n = list.length, avg = n ? list.reduce((t, x) => t + x.stars, 0) / n : 0;
+  const dist = [5, 4, 3, 2, 1].map(k => [k, list.filter(x => x.stars === k).length]);
+  const max = Math.max(1, ...dist.map(d => d[1]));
+  const site = s => /itch/.test(s) ? 'itch.io' : /poki/.test(s) ? 'Poki' : /onrender/.test(s) ? 'site' : (s || '?');
+  const date = t => new Date(t).toLocaleString('fr-FR', { timeZone: 'America/Guadeloupe', dateStyle: 'short', timeStyle: 'short' });
+  const stars = k => '★'.repeat(k) + '<span style="opacity:.25">' + '★'.repeat(5 - k) + '</span>';
+  const withText = list.filter(x => x.text).length;
+  send(200, head + `<h1>Avis des joueurs</h1><small>Valmont: Last Door Out · un avis par appareil (le plus récent compte)</small>
+<div class="top"><div><div class="big">${n ? avg.toFixed(2).replace('.', ',') : '–'}</div><div class="m">sur 5 · ${n} avis · ${withText} avec un commentaire</div></div>
+<div class="bars">${dist.map(([k, c]) => `<div><span class="s">${k}★</span><i style="width:${Math.round(c / max * 220)}px"></i><span class="m">${c}</span></div>`).join('')}</div></div>
+${list.map(x => `<div class="c"><span class="s">${stars(x.stars)}</span> <small>${date(x.at)} · ${escH(site(x.site))} · ${escH(x.lang || '?')} · ${escH(x.plat || '?')}${x.day ? ' · jour ' + x.day : ''}</small>${x.text ? `<div class="t">${escH(x.text)}</div>` : ''}</div>`).join('') || '<p class="m">Pas encore d\'avis.</p>'}
+</body></html>`);
+}
+
 // ---------------------------------------------------------------- fichiers
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css', '.png': 'image/png', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.json': 'application/json', '.woff2': 'font/woff2' };
 const server = http.createServer((req, res) => {
   const url = decodeURIComponent((req.url || '/').split('?')[0]);
+  if (url === '/avis') { avisPage(req, res); return; }
   if (url === '/health') { res.writeHead(200, { 'Content-Type': 'text/plain' }); res.end('ok'); return; }
   let file = path.normalize(path.join(PUBLIC, url.endsWith('/') ? url + 'index.html' : url));
   if (!file.startsWith(PUBLIC)) { res.writeHead(403); res.end(); return; }
@@ -228,6 +274,9 @@ wss.on('connection', (ws, req) => {
         }));
       } else if (m.t === 'use' && ITEMS[m.item]) {
         reply(await accounts.op(m.token, async a => { if ((a.stock[m.item] || 0) > 0) a.stock[m.item]--; }));
+      } else if (m.t === 'rate') {
+        if ((ws.rates = (ws.rates || 0) + 1) > 5) return reply(null, 'limit_reached');
+        reply(await saveRating(m));
       } else if (m.t === 'meta') {
         reply(await accounts.op(m.token, async a => { mergeMeta(a, m.ach, m.cnt); }));
       }

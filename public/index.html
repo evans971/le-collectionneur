@@ -51,6 +51,10 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 .help h3{margin:10px 0 4px;font-size:21px;color:var(--mint)}
 .help p{margin:0 0 6px;color:#cfd6cf}
 .help kbd{font-size:14px}
+body:not(.canrate) .rate-only{display:none!important}
+.stars{display:flex;gap:6px;margin:14px 0 4px}.stars button{font-size:40px;line-height:1;background:none;border:0;color:#3a4c45;cursor:pointer;padding:0 2px;transition:transform .1s,color .1s}.stars button.on{color:#f2c14e}.stars button:hover{transform:scale(1.12)}
+.rlab{margin:0 0 12px;color:var(--dim);min-height:1.4em}
+#rTxt{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:10px;border-radius:8px;border:1px solid #2a3a35;background:#0d1513;color:inherit;resize:vertical;margin-bottom:6px}
 .keyl{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin:14px 0 18px}.kr{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px}.kr .kb{min-width:92px;font-family:inherit}.kr .kb.wait{border-color:var(--mint);color:var(--mint)}
 #bKeys{margin:0 0 14px}.kbtns{display:flex;gap:10px;flex-wrap:wrap}
 @media(max-width:620px){.keyl{grid-template-columns:1fr}}
@@ -421,6 +425,14 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   </div>
   <button class="btn only-pc" id="bKeys">Touches du clavier</button>
   <button class="btn main" id="bSetBack">Retour</button></div></section>
+<section id="rate" class="screen hide"><div class="panel narrow">
+  <h2>Donner ton avis</h2>
+  <p class="hint">Ta note et tes idées aident à améliorer le jeu. Seul le développeur les lit.</p>
+  <div class="stars" id="rStars"><button aria-label="1 étoile">★</button><button aria-label="2 étoiles">★</button><button aria-label="3 étoiles">★</button><button aria-label="4 étoiles">★</button><button aria-label="5 étoiles">★</button></div>
+  <p class="rlab" id="rLab"></p>
+  <textarea id="rTxt" maxlength="500" rows="4" placeholder="Une idée, un bug, ce que tu as aimé ou pas… (facultatif)"></textarea>
+  <p class="hint" id="rMsg"></p>
+  <div class="kbtns"><button class="btn main" id="bRateSend">Envoyer</button><button class="btn" id="bRateBack">Retour</button></div></div></section>
 <section id="keys" class="screen hide"><div class="panel narrow">
   <h2>Touches du clavier</h2>
   <p class="hint">Clique sur une action, puis appuie sur la nouvelle touche. Échap pour annuler. Les flèches, Entrée et Échap marchent toujours en plus.</p>
@@ -468,7 +480,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
       <button class="mode" id="bShop"><b>Boutique</b><small>Personnages et leurres</small></button>
     </div>
     <p class="err" id="tErr"></p>
-    <div class="actions"><button class="btn" id="bCont">Continuer</button><button class="btn" id="bTuto">Tutoriel</button><button class="btn" id="bAchs">Succès</button><button class="btn" id="bSettings">Réglages</button><button class="btn" id="bHelp">Comment jouer</button><button class="btn" id="bPlat">Plateforme : PC</button></div>
+    <div class="actions"><button class="btn" id="bCont">Continuer</button><button class="btn" id="bTuto">Tutoriel</button><button class="btn" id="bAchs">Succès</button><button class="btn" id="bSettings">Réglages</button><button class="btn rate-only" id="bRate">★ Donner ton avis</button><button class="btn" id="bHelp">Comment jouer</button><button class="btn" id="bPlat">Plateforme : PC</button></div>
   </div>
 </section>
 
@@ -1367,7 +1379,7 @@ function openSab(){
   draw();const iv=setInterval(()=>{if(!alive()){clearInterval(iv);return}b.querySelectorAll('.trow .bar i').forEach((el,i)=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));if(al[i])el.style.width=prog(al[i])*100+'%'})},800)})}
 
 // ---------- screens
-const screens=['account','shop','settings','keys','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
+const screens=['account','shop','settings','keys','rate','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
 function hideScreens(){screens.forEach(s=>$('#'+s).classList.add('hide'))}
 function showScreen(s){hideScreens();$('#'+s).classList.remove('hide')}
 let selChar=CHARS[0],helpBack='title';
@@ -1424,16 +1436,16 @@ function doVote(name,rank){
 function statsHTML(){const s=G.stats;return`<div class="stats"><div><b>${fmt(s.time)}</b><small>temps total</small></div><div><b>${s.frags}</b><small>fragments</small></div><div><b>${s.sab}</b><small>sabotages envoyés</small></div><div><b>${s.recv}</b><small>malus subis</small></div><div><b>${s.caught}</b><small>captures</small></div><div><b>${G.story.length}/5</b><small>dossiers lus</small></div></div>`}
 function lose(reason,force){
  if(state!=='play'&&!force)return;SPEC=null;$('#specbar').classList.add('hide');if(MP){MP.alive=false;MP.st='out';MP.tk=0}state='over';closeModal();$('#hud').classList.add('hide');SFX.caught();
- $('#overIn').innerHTML=`<div class="dayno">Éliminé</div><p class="tag">${esc(reason)}</p><p class="voice" style="min-height:0">« Dommage. Tu étais presque intéressant. »</p>${scoreBlock(false)}${statsHTML()}<div class="actions">${MP?'':`<button class="btn main" id="bRetry">Rejouer le jour ${G.day}</button>`}${MP?'<button class="btn main" id="bSpec">Regarder la partie</button>':''}<button class="btn" id="bMenu">Menu</button><button class="btn" id="bOBoard">Classement</button></div>`;
- showScreen('over');if(!MP)$('#bRetry').onclick=resume;else{$('#bSpec').onclick=()=>startSpec('over');$('#overIn').insertAdjacentHTML('beforeend','<p class="hint" id="oSpecMsg" style="margin-top:8px"></p>')}$('#bMenu').onclick=toTitle;$('#bOBoard').onclick=()=>{toTitle();openBoard()}}
+ $('#overIn').innerHTML=`<div class="dayno">Éliminé</div><p class="tag">${esc(reason)}</p><p class="voice" style="min-height:0">« Dommage. Tu étais presque intéressant. »</p>${scoreBlock(false)}${statsHTML()}<div class="actions">${MP?'':`<button class="btn main" id="bRetry">Rejouer le jour ${G.day}</button>`}${MP?'<button class="btn main" id="bSpec">Regarder la partie</button>':''}<button class="btn" id="bMenu">Menu</button><button class="btn" id="bOBoard">Classement</button><button class="btn rate-only" id="bORate">★ Donner ton avis</button></div>`;
+ showScreen('over');if(!MP)$('#bRetry').onclick=resume;else{$('#bSpec').onclick=()=>startSpec('over');$('#overIn').insertAdjacentHTML('beforeend','<p class="hint" id="oSpecMsg" style="margin-top:8px"></p>')}$('#bMenu').onclick=toTitle;$('#bOBoard').onclick=()=>{toTitle();openBoard()};$('#bORate').onclick=()=>openRate('over')}
 function win(pt){
  unlock('libre');if(!G.stats.caught)unlock('intouchable');if(!G.stats.sab)unlock('pacifiste');
  state='win';$('#hud').classList.add('hide');if(MP){MP.st='done';MP.t=pt;MP.tk=0}else clearSave();SFX.frag();
  const full=G.story.length>=5;
  $('#winIn').innerHTML=`<div class="dayno" style="color:var(--mint)">Libre</div><p class="tag">Tu franchis la dernière porte en ${fmt(pt)}. Dehors, l'air est froid et il pleut. Derrière toi, la porte se referme sur les autres.</p>
  <div class="reveal">${full?esc("Dans ta poche, les cinq dossiers de l'Institut Valmont.\n\nSacha n'était pas une prisonnière. Sacha, c'était Élias Valmont, le petit frère de Clara. Il a joué avec vous jusqu'au bout, dans sa propre aile, pour vous regarder attendre derrière une porte.\n\nIl t'a laissé sortir. Peut-être parce que tu as été le seul à lire toute l'histoire."):esc(`Tu as retrouvé ${G.story.length} dossier${G.story.length>1?'s':''} sur 5.\n\nUne question te suit sous la pluie : qui était vraiment Sacha, et pourquoi ses brouilleurs semblaient-ils toujours prêts ?\n\nRejoue et lis tous les dossiers pour connaître la vérité.`)}</div>
- ${scoreBlock(true)}${statsHTML()}<div class="actions"><button class="btn main" id="bAgain">Menu</button><button class="btn" id="bWBoard">Classement</button></div>`;
- showScreen('win');$('#bAgain').onclick=toTitle;$('#bWBoard').onclick=()=>{toTitle();openBoard()}}
+ ${scoreBlock(true)}${statsHTML()}<div class="actions"><button class="btn main" id="bAgain">Menu</button><button class="btn" id="bWBoard">Classement</button><button class="btn rate-only" id="bWRate">★ Donner ton avis</button></div>`;
+ showScreen('win');$('#bAgain').onclick=toTitle;$('#bWBoard').onclick=()=>{toTitle();openBoard()};$('#bWRate').onclick=()=>openRate('win')}
 function toTitle(){closeModal();SPEC=null;$('#specbar').classList.add('hide');$('#tuto').classList.add('hide');$('#rivals').classList.remove('hide');if(state==='spec')state='over';if(MP){const m=MP;if(state==='over'||state==='win')setTimeout(()=>{if(MP===m)leaveMP()},1500);else leaveMP()}leaveLobby();state='title';P=null;D=null;$('#hud').classList.add('hide');genMap(1);H=[];for(let i=0;i<3;i++)spawnHunter();CAM.x=MW*TS/2;CAM.y=MH*TS/2;buildTitle();showScreen('title')}
 function pauseGame(){if(state!=='play')return;if(MP){say('Pas de pause en ligne : la partie continue pour les autres.','bad');return}closeModal();state='pause';$('#pauseInfo').textContent=`Jour ${G.day} · ${fmt(D.t)} · ${P.frag}/${M.need} fragments`;showScreen('pause')}
 function resumeGame(){if(state!=='pause')return;hideScreens();state='play'}
@@ -1536,6 +1548,21 @@ $('#bKeys').onclick=openKeys;
 $('#bKeysBack').onclick=()=>{KCAP=null;showScreen('settings')};
 $('#bKeysReset').onclick=()=>{KCAP=null;Object.assign(KB,KDEF);for(const k in KBL)delete KBL[k];saveKeys();SFX.ok();refreshKeys();drawKeys()};
 refreshKeys();
+
+// ---------- avis des joueurs
+const RATEK='valmont_rate';let rateBack='title',rateStars=0;
+if(window.GAMENET&&window.GAMENET.call)document.body.classList.add('canrate');
+function drawStars(){$('#rStars').querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i<rateStars));$('#rLab').textContent=rateStars?['Pas aimé','Bof','Correct','Bien','Génial !'][rateStars-1]:'Choisis une note'}
+function openRate(back){rateBack=back||'title';let o={};try{o=JSON.parse(localStorage.getItem(RATEK)||'{}')||{}}catch(_){}rateStars=o.s||0;$('#rTxt').value=o.txt||'';$('#rMsg').textContent=o.s?'Tu as déjà donné ton avis. Tu peux le modifier.':'';$('#bRateSend').disabled=false;drawStars();showScreen('rate')}
+$('#rStars').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{rateStars=i+1;SFX.click();drawStars()});
+$('#bRate').onclick=()=>openRate('title');
+$('#bRateBack').onclick=()=>showScreen(rateBack);
+$('#bRateSend').onclick=async()=>{
+ if(!rateStars){$('#rMsg').textContent="Choisis d'abord une note.";SFX.bad();return}
+ const txt=$('#rTxt').value.trim().slice(0,500),b=$('#bRateSend');b.disabled=true;$('#rMsg').textContent='Envoi…';
+ try{await window.GAMENET.call({t:'rate',uid:window.GAMENET.uid,stars:rateStars,text:txt,lang:document.documentElement.lang||'fr',plat:document.body.classList.contains('mobile')?'mobile':'pc',site:location.hostname,day:(G&&G.day)||0});
+  try{localStorage.setItem(RATEK,JSON.stringify({s:rateStars,txt}))}catch(_){}$('#rMsg').textContent='Merci pour ton avis !';SFX.ok();setTimeout(()=>{if(!$('#rate').classList.contains('hide'))showScreen(rateBack)},1400)}
+ catch(e){$('#rMsg').textContent='Envoi impossible. Réessaie dans un instant.';SFX.bad();b.disabled=false}};
 
 // ---------- réglages
 const SETK='collectionneur_set';const SET={vol:.8,shake:true,cb:false,sens:1,fade:true};

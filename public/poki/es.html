@@ -58,6 +58,10 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 .help h3{margin:10px 0 4px;font-size:21px;color:var(--mint)}
 .help p{margin:0 0 6px;color:#cfd6cf}
 .help kbd{font-size:14px}
+body:not(.canrate) .rate-only{display:none!important}
+.stars{display:flex;gap:6px;margin:14px 0 4px}.stars button{font-size:40px;line-height:1;background:none;border:0;color:#3a4c45;cursor:pointer;padding:0 2px;transition:transform .1s,color .1s}.stars button.on{color:#f2c14e}.stars button:hover{transform:scale(1.12)}
+.rlab{margin:0 0 12px;color:var(--dim);min-height:1.4em}
+#rTxt{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:10px;border-radius:8px;border:1px solid #2a3a35;background:#0d1513;color:inherit;resize:vertical;margin-bottom:6px}
 .keyl{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin:14px 0 18px}.kr{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px}.kr .kb{min-width:92px;font-family:inherit}.kr .kb.wait{border-color:var(--mint);color:var(--mint)}
 #bKeys{margin:0 0 14px}.kbtns{display:flex;gap:10px;flex-wrap:wrap}
 @media(max-width:620px){.keyl{grid-template-columns:1fr}}
@@ -430,6 +434,14 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   </div>
   <button class="btn only-pc" id="bKeys">Controles del teclado</button>
   <button class="btn main" id="bSetBack">Volver</button></div></section>
+<section id="rate" class="screen hide"><div class="panel narrow">
+  <h2>Valora el juego</h2>
+  <p class="hint">Tu nota y tus ideas ayudan a mejorar el juego. Solo el desarrollador las lee.</p>
+  <div class="stars" id="rStars"><button aria-label="1 estrella">★</button><button aria-label="2 estrellas">★</button><button aria-label="3 estrellas">★</button><button aria-label="4 estrellas">★</button><button aria-label="5 estrellas">★</button></div>
+  <p class="rlab" id="rLab"></p>
+  <textarea id="rTxt" maxlength="500" rows="4" placeholder="Una idea, un error, lo que te gustó o no… (opcional)"></textarea>
+  <p class="hint" id="rMsg"></p>
+  <div class="kbtns"><button class="btn main" id="bRateSend">Enviar</button><button class="btn" id="bRateBack">Volver</button></div></div></section>
 <section id="keys" class="screen hide"><div class="panel narrow">
   <h2>Controles del teclado</h2>
   <p class="hint">Haz clic en una acción y pulsa la nueva tecla. Esc para cancelar. Las flechas, Intro y Esc siempre funcionan también.</p>
@@ -477,7 +489,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
       <button class="mode" id="bShop"><b>Tienda</b><small>Personajes y señuelos</small></button>
     </div>
     <p class="err" id="tErr"></p>
-    <div class="actions"><button class="btn" id="bCont">Continuar</button><button class="btn" id="bTuto">Tutorial</button><button class="btn" id="bAchs">Logros</button><button class="btn" id="bSettings">Ajustes</button><button class="btn" id="bHelp">Cómo jugar</button><button class="btn" id="bPlat">Plataforma: PC</button></div>
+    <div class="actions"><button class="btn" id="bCont">Continuar</button><button class="btn" id="bTuto">Tutorial</button><button class="btn" id="bAchs">Logros</button><button class="btn" id="bSettings">Ajustes</button><button class="btn rate-only" id="bRate">★ Valora el juego</button><button class="btn" id="bHelp">Cómo jugar</button><button class="btn" id="bPlat">Plataforma: PC</button></div>
   </div>
 </section>
 
@@ -1377,7 +1389,7 @@ function openSab(){
   draw();const iv=setInterval(()=>{if(!alive()){clearInterval(iv);return}b.querySelectorAll('.trow .bar i').forEach((el,i)=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));if(al[i])el.style.width=prog(al[i])*100+'%'})},800)})}
 
 // ---------- screens
-const screens=['account','shop','settings','keys','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
+const screens=['account','shop','settings','keys','rate','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
 function hideScreens(){screens.forEach(s=>$('#'+s).classList.add('hide'))}
 function showScreen(s){hideScreens();$('#'+s).classList.remove('hide')}
 let selChar=CHARS[0],helpBack='title';
@@ -1434,16 +1446,16 @@ function doVote(name,rank){
 function statsHTML(){const s=G.stats;return`<div class="stats"><div><b>${fmt(s.time)}</b><small>tiempo total</small></div><div><b>${s.frags}</b><small>fragmentos</small></div><div><b>${s.sab}</b><small>sabotajes enviados</small></div><div><b>${s.recv}</b><small>penalizaciones recibidas</small></div><div><b>${s.caught}</b><small>capturas</small></div><div><b>${G.story.length}/5</b><small>expedientes leídos</small></div></div>`}
 function lose(reason,force){pokiStop();
  if(state!=='play'&&!force)return;SPEC=null;$('#specbar').classList.add('hide');if(MP){MP.alive=false;MP.st='out';MP.tk=0}state='over';closeModal();$('#hud').classList.add('hide');SFX.caught();
- $('#overIn').innerHTML=`<div class="dayno">Eliminado</div><p class="tag">${esc(reason)}</p><p class="voice" style="min-height:0">«Lástima. Casi eras interesante.»</p>${scoreBlock(false)}${statsHTML()}<div class="actions">${MP?'':`<button class="btn main" id="bRetry">Repetir el día ${G.day}</button>`}${MP?'<button class="btn main" id="bSpec">Ver la partida</button>':''}<button class="btn" id="bMenu">Menú</button><button class="btn" id="bOBoard">Clasificación</button></div>`;
- showScreen('over');if(!MP)$('#bRetry').onclick=resume;else{$('#bSpec').onclick=()=>startSpec('over');$('#overIn').insertAdjacentHTML('beforeend','<p class="hint" id="oSpecMsg" style="margin-top:8px"></p>')}$('#bMenu').onclick=toTitle;$('#bOBoard').onclick=()=>{toTitle();openBoard()}}
+ $('#overIn').innerHTML=`<div class="dayno">Eliminado</div><p class="tag">${esc(reason)}</p><p class="voice" style="min-height:0">«Lástima. Casi eras interesante.»</p>${scoreBlock(false)}${statsHTML()}<div class="actions">${MP?'':`<button class="btn main" id="bRetry">Repetir el día ${G.day}</button>`}${MP?'<button class="btn main" id="bSpec">Ver la partida</button>':''}<button class="btn" id="bMenu">Menú</button><button class="btn" id="bOBoard">Clasificación</button><button class="btn rate-only" id="bORate">★ Valora el juego</button></div>`;
+ showScreen('over');if(!MP)$('#bRetry').onclick=resume;else{$('#bSpec').onclick=()=>startSpec('over');$('#overIn').insertAdjacentHTML('beforeend','<p class="hint" id="oSpecMsg" style="margin-top:8px"></p>')}$('#bMenu').onclick=toTitle;$('#bOBoard').onclick=()=>{toTitle();openBoard()};$('#bORate').onclick=()=>openRate('over')}
 function win(pt){
  pokiStop();unlock('libre');if(!G.stats.caught)unlock('intouchable');if(!G.stats.sab)unlock('pacifiste');
  state='win';$('#hud').classList.add('hide');if(MP){MP.st='done';MP.t=pt;MP.tk=0}else clearSave();SFX.frag();
  const full=G.story.length>=5;
  $('#winIn').innerHTML=`<div class="dayno" style="color:var(--mint)">Libre</div><p class="tag">Cruzas la última puerta en ${fmt(pt)}. Fuera, el aire es frío y llueve. Detrás de ti, la puerta se cierra sobre los demás.</p>
  <div class="reveal">${full?esc("En tu bolsillo, los cinco expedientes del Instituto Valmont.\n\nSacha no era una prisionera. Sacha era Élias Valmont, el hermano pequeño de Clara. Jugó con vosotros hasta el final, en su propia ala, para veros esperar detrás de una puerta.\n\nTe dejó salir. Quizá porque fuiste el único que leyó toda la historia."):esc(`Has encontrado ${G.story.length} expediente${G.story.length>1?'s':''} de 5.\n\nUna pregunta te sigue bajo la lluvia: ¿quién era Sacha en realidad, y por qué sus inhibidores siempre estaban listos?\n\nVuelve a jugar y lee todos los expedientes para conocer la verdad.`)}</div>
- ${scoreBlock(true)}${statsHTML()}<div class="actions"><button class="btn main" id="bAgain">Menú</button><button class="btn" id="bWBoard">Clasificación</button></div>`;
- showScreen('win');$('#bAgain').onclick=toTitle;$('#bWBoard').onclick=()=>{toTitle();openBoard()}}
+ ${scoreBlock(true)}${statsHTML()}<div class="actions"><button class="btn main" id="bAgain">Menú</button><button class="btn" id="bWBoard">Clasificación</button><button class="btn rate-only" id="bWRate">★ Valora el juego</button></div>`;
+ showScreen('win');$('#bAgain').onclick=toTitle;$('#bWBoard').onclick=()=>{toTitle();openBoard()};$('#bWRate').onclick=()=>openRate('win')}
 function toTitle(){pokiStop();closeModal();SPEC=null;$('#specbar').classList.add('hide');$('#tuto').classList.add('hide');$('#rivals').classList.remove('hide');if(state==='spec')state='over';if(MP){const m=MP;if(state==='over'||state==='win')setTimeout(()=>{if(MP===m)leaveMP()},1500);else leaveMP()}leaveLobby();state='title';P=null;D=null;$('#hud').classList.add('hide');genMap(1);H=[];for(let i=0;i<3;i++)spawnHunter();CAM.x=MW*TS/2;CAM.y=MH*TS/2;buildTitle();showScreen('title')}
 function pauseGame(){if(state!=='play')return;if(MP){say('Sin pausa en línea: la partida sigue para los demás.','bad');return}closeModal();state='pause';pokiStop();$('#pauseInfo').textContent=`Día ${G.day} · ${fmt(D.t)} · ${P.frag}/${M.need} fragmentos`;showScreen('pause')}
 function resumeGame(){if(state!=='pause')return;hideScreens();pokiBreak().then(()=>{state='play';pokiStart()})}
@@ -1546,6 +1558,21 @@ $('#bKeys').onclick=openKeys;
 $('#bKeysBack').onclick=()=>{KCAP=null;showScreen('settings')};
 $('#bKeysReset').onclick=()=>{KCAP=null;Object.assign(KB,KDEF);for(const k in KBL)delete KBL[k];saveKeys();SFX.ok();refreshKeys();drawKeys()};
 refreshKeys();
+
+// ---------- avis des joueurs
+const RATEK='valmont_rate';let rateBack='title',rateStars=0;
+if(window.GAMENET&&window.GAMENET.call)document.body.classList.add('canrate');
+function drawStars(){$('#rStars').querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i<rateStars));$('#rLab').textContent=rateStars?['No me gustó','Regular','Correcto','Bueno','¡Genial!'][rateStars-1]:'Elige una nota'}
+function openRate(back){rateBack=back||'title';let o={};try{o=JSON.parse(localStorage.getItem(RATEK)||'{}')||{}}catch(_){}rateStars=o.s||0;$('#rTxt').value=o.txt||'';$('#rMsg').textContent=o.s?'Ya diste tu opinión. Puedes cambiarla.':'';$('#bRateSend').disabled=false;drawStars();showScreen('rate')}
+$('#rStars').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{rateStars=i+1;SFX.click();drawStars()});
+$('#bRate').onclick=()=>openRate('title');
+$('#bRateBack').onclick=()=>showScreen(rateBack);
+$('#bRateSend').onclick=async()=>{
+ if(!rateStars){$('#rMsg').textContent="Primero elige una nota.";SFX.bad();return}
+ const txt=$('#rTxt').value.trim().slice(0,500),b=$('#bRateSend');b.disabled=true;$('#rMsg').textContent='Enviando…';
+ try{await window.GAMENET.call({t:'rate',uid:window.GAMENET.uid,stars:rateStars,text:txt,lang:document.documentElement.lang||'fr',plat:document.body.classList.contains('mobile')?'mobile':'pc',site:location.hostname,day:(G&&G.day)||0});
+  try{localStorage.setItem(RATEK,JSON.stringify({s:rateStars,txt}))}catch(_){}$('#rMsg').textContent='¡Gracias por tu opinión!';SFX.ok();setTimeout(()=>{if(!$('#rate').classList.contains('hide'))showScreen(rateBack)},1400)}
+ catch(e){$('#rMsg').textContent='No se pudo enviar. Inténtalo de nuevo en un momento.';SFX.bad();b.disabled=false}};
 
 // ---------- réglages
 const SETK='collectionneur_set';const SET={vol:.8,shake:true,cb:false,sens:1,fade:true};
