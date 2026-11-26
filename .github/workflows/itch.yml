@@ -24,4 +24,4 @@ jobs:
       - name: Envoyer le jeu sur itch.io
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        run: ./butler/butler push public sunless97/escapegame-collectionneur:html5 --userversion "1.0.${{ github.run_number }}"
+        run: ./butler/butler push public sunless97/valmont-last-door-out:html5 --userversion "1.0.${{ github.run_number }}"
