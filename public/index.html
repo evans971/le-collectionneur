@@ -485,7 +485,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
       <div>
         <h3>Saboter</h3>
         <p>Le premier jour, il n'y a qu'un traqueur et personne ne peut en envoyer d'autres. Ensuite, les traqueurs supplémentaires deviennent un malus.</p><p>Chaque fragment rapporte 2 jetons. Dépense-les <kbd>R</kbd> pour retarder les autres : coupure de courant, portes verrouillées, gaz, traqueur…</p>
-        <p>Les autres font pareil avec toi. Un brouilleur bloque automatiquement le prochain malus.</p>
+        <p>Les autres font pareil avec toi. Un brouilleur bloque automatiquement le prochain malus. Un drone espion se casse si tu restes 5 s juste en dessous : il recule, il faut le suivre.</p>
         <p>Une fois vus, les terminaux et la porte de sortie restent marqués sur la carte en haut à droite.</p><p>Les rivaux peuvent proposer une alliance au talkie-walkie. Elle peut être sincère.</p>
         <h3 class="only-pc">Touches (PC)</h3>
         <p class="only-pc"><kbd>ZQSD</kbd>/<kbd>WASD</kbd>/flèches bouger · <kbd>Maj</kbd> courir · <kbd>C</kbd> s'accroupir · <kbd>E</kbd> action · <kbd>Espace</kbd> capacité · <kbd>1</kbd> leurre · <kbd>2</kbd> fumigène · <kbd>F</kbd> lampe · <kbd>R</kbd> saboter · <kbd>J</kbd> carnet · <kbd>H</kbd> réduire le panneau · <kbd>Échap</kbd> pause. La souris oriente la lampe.</p>
@@ -922,7 +922,11 @@ function updateCams(dt){
   const d=dst(c.x,c.y,P.x,P.y);const seen=d<c.range&&Math.abs(angDiff(c.a,Math.atan2(P.y-c.y,P.x-c.x)))<c.fov&&los(c.x,c.y,P.x,P.y);
   if(seen&&!on('disguise')){c.det+=dt;if(c.det>(G.char.id==='sam'?1.3:.65)&&c.cd<=0){c.cd=8;c.det=0;SFX.alarm();say('Une caméra t\'a repéré : les traqueurs arrivent.','bad');alarmAt(P.x,P.y,2);shake=.3}}else c.det=Math.max(0,c.det-dt*.5)}}
 function updateMisc(dt){
- for(const d of DR){d.t-=dt;const a=Math.atan2(P.y-d.y,P.x-d.x),dd=dst(d.x,d.y,P.x,P.y);if(dd>50){d.x+=Math.cos(a)*78*dt;d.y+=Math.sin(a)*78*dt}
+ for(const d of DR){d.t-=dt;d.brk=d.brk||0;const a=Math.atan2(P.y-d.y,P.x-d.x),dd=dst(d.x,d.y,P.x,P.y);
+  if(dd>70){d.x+=Math.cos(a)*78*dt;d.y+=Math.sin(a)*78*dt}else if(dd<55){const nx=d.x-Math.cos(a)*52*dt,ny=d.y-Math.sin(a)*52*dt;if(!sightBlock(Math.floor(nx/TS),Math.floor(ny/TS))){d.x=nx;d.y=ny}}
+  const under=dd<30&&!P.hidden&&!P.vent&&P.cell<=0;
+  if(under){if(!d.told){d.told=true;say('Reste sous le drone pour le casser !','good')}d.brk+=dt;if(Math.random()<dt*6)PF.push({x:d.x+rnd(-8,8),y:d.y+rnd(-8,8),t:.4})}else d.brk=Math.max(0,d.brk-dt*.5);
+  if(d.brk>=5){d.t=0;SFX.caught();noiseB(.4,.3,1800);for(let i=0;i<14;i++)PF.push({x:d.x+rnd(-18,18),y:d.y+rnd(-18,18),t:rnd(.4,.8)});say('Drone détruit !','good');shake=.3;continue}
   if(dd<120&&!P.hidden&&!P.vent&&P.cell<=0&&!(P.grace>0)){d.ping-=dt;if(d.ping<=0){d.ping=3;SFX.beep();alarmAt(P.x,P.y,1)}}}
  DR=DR.filter(d=>d.t>0);
  for(const s of SM)s.t-=dt;SM=SM.filter(s=>s.t>0);
@@ -1067,7 +1071,7 @@ function render(){
    if(h.state!=='chase'){ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(h.x-12,h.y-36,24,4);ctx.fillStyle='#e9c46a';ctx.fillRect(h.x-12,h.y-36,24*Math.min(1,h.sus),4)}}}
  const showCam=G&&(G.char.id==='nadia'||on('hack'));
  for(const c of M.cams){if(!c.cone)continue;const vis=showCam||(P&&playerSees(c.x,c.y,false));if(!vis)continue;ctx.fillStyle=on('hack')?'rgba(120,120,120,.08)':c.det>0?'rgba(224,72,61,.22)':'rgba(233,196,106,.1)';fillPoly(ctx,c.cone,c.x,c.y)}
- for(const d of DR){ctx.save();ctx.translate(d.x,d.y);ctx.fillStyle='rgba(0,0,0,.3)';circ(ctx,6,10,10);ctx.strokeStyle='#8a9592';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-9,-9);ctx.lineTo(9,9);ctx.moveTo(9,-9);ctx.lineTo(-9,9);ctx.stroke();ctx.fillStyle='#2a3130';circ(ctx,0,0,6);for(const[a,b]of[[-9,-9],[9,9],[9,-9],[-9,9]]){ctx.strokeStyle='rgba(200,210,205,.5)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(a,b,6,t*20,t*20+2);ctx.stroke()}ctx.fillStyle=Math.sin(t*10)>0?'#ff3b30':'#501010';circ(ctx,0,0,2.5);ctx.restore()}
+ for(const d of DR){if(d.brk>0){ctx.strokeStyle='#79d9b1';ctx.lineWidth=3;ctx.beginPath();ctx.arc(d.x,d.y,20,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(1,d.brk/5));ctx.stroke();ctx.strokeStyle='rgba(121,217,177,.25)';ctx.beginPath();ctx.arc(d.x,d.y,20,0,7);ctx.stroke()}ctx.save();ctx.translate(d.x,d.y);if(d.brk>0)ctx.translate(rnd(-1,1)*d.brk*.4,rnd(-1,1)*d.brk*.4);ctx.fillStyle='rgba(0,0,0,.3)';circ(ctx,6,10,10);ctx.strokeStyle='#8a9592';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-9,-9);ctx.lineTo(9,9);ctx.moveTo(9,-9);ctx.lineTo(-9,9);ctx.stroke();ctx.fillStyle='#2a3130';circ(ctx,0,0,6);for(const[a,b]of[[-9,-9],[9,9],[9,-9],[-9,9]]){ctx.strokeStyle='rgba(200,210,205,.5)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(a,b,6,t*20,t*20+2);ctx.stroke()}ctx.fillStyle=Math.sin(t*10)>0?'#ff3b30':'#501010';circ(ctx,0,0,2.5);ctx.restore()}
  if(P&&state==='play'){
   for(const o of M.objs){if(!M.explored[Math.floor(o.y/TS)*MW+Math.floor(o.x/TS)])continue;
    if(o.t==='puzzle'&&!o.solved){ctx.strokeStyle=`rgba(121,217,177,${.35+.25*Math.sin(t*3)})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(o.x,o.y,18+2*Math.sin(t*3),0,7);ctx.stroke()}
@@ -1483,7 +1487,7 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;try{update(dt
 function boot(){resize();toTitle();if(PLAT==='pc'||PLAT==='mobile')applyPlat(PLAT);else askPlat('title');requestAnimationFrame(loop)}
 const fontWait=document.fonts&&document.fonts.load?Promise.race([Promise.all([document.fonts.load('900 30px "Big Shoulders Stencil Display"'),document.fonts.load('600 16px "Barlow Condensed"')]),new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
 fontWait.then(boot,boot);
-window.__dbg={scr:()=>[(P.x-CAM.vx)*ZOOM,(P.y-CAM.vy)*ZOOM],get G(){return G},get D(){return D},get P(){return P},get M(){return M},get H(){return H},get state(){return state},FX:()=>FX,completeDay:()=>completeDay(),openPuzzle,openSab,openNote};
+window.__dbg={scr:()=>[(P.x-CAM.vx)*ZOOM,(P.y-CAM.vy)*ZOOM],get G(){return G},get D(){return D},get P(){return P},get M(){return M},get H(){return H},get DR(){return DR},get state(){return state},FX:()=>FX,completeDay:()=>completeDay(),openPuzzle,openSab,openNote};
 
 // ---------- réglages
 const SETK='collectionneur_set';const SET={vol:.8,shake:true,cb:false,sens:1,fade:true};
