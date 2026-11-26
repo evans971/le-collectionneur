@@ -12,7 +12,7 @@ const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'data', 'scores.
 const DATABASE_URL = process.env.DATABASE_URL || '';
 
 // ---------------------------------------------------------------- scores
-const CHARS = ['nadia', 'marcus', 'lea', 'okafor', 'victor'];
+const CHARS = ['nadia', 'marcus', 'lea', 'okafor', 'victor', 'ines', 'rosa', 'sam'];
 const MODES = ['solo', 'friend', 'online'];
 const cleanName = s => String(s == null ? '' : s).replace(/[^\p{L}\p{N} _.\-]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 16);
 function cleanScore(d) {
