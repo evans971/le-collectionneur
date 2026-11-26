@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
+<script>(function(){var cur='en',L={en:'index.html',fr:'fr.html',es:'es.html'},w;try{w=localStorage.getItem('valmont_lang')}catch(e){}if(!w){var n=((navigator.languages&&navigator.languages[0])||navigator.language||'en').slice(0,2).toLowerCase();w=L[n]?n:'en'}if(w!==cur&&L[w])location.replace(L[w])})();</script>
+
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Valmont: Last Door Out</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@700;900&family=Barlow+Condensed:wght@400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:'Big Shoulders Stencil Display';font-weight:700;font-style:normal;font-display:swap;src:url('fonts/bss-700.woff2') format('woff2')}
+@font-face{font-family:'Big Shoulders Stencil Display';font-weight:900;font-style:normal;font-display:swap;src:url('fonts/bss-900.woff2') format('woff2')}
+@font-face{font-family:'Barlow Condensed';font-weight:400;font-style:normal;font-display:swap;src:url('fonts/bc-400.woff2') format('woff2')}
+@font-face{font-family:'Barlow Condensed';font-weight:600;font-style:normal;font-display:swap;src:url('fonts/bc-600.woff2') format('woff2')}
+@font-face{font-family:'Barlow Condensed';font-weight:700;font-style:normal;font-display:swap;src:url('fonts/bc-700.woff2') format('woff2')}
+@font-face{font-family:'Special Elite';font-weight:400;font-style:normal;font-display:swap;src:url('fonts/se-400.woff2') format('woff2')}
+
 /* VOICE: menacing, clinical, a locked institute at night
    IDEA: a surveillance console of an abandoned asylum — stencilled labels, paper notes, CRT glow
    PICTURE: the live top-down wing itself, lit by your torch, fills the screen
@@ -250,6 +257,7 @@ body.mpgame .solo-only{display:none}
 .aform input:focus{outline:2px solid var(--mint);outline-offset:1px}
 .hosted-only{display:none}body.hosted .hosted-only{display:inline}
 .logosub{font-family:'Big Shoulders Stencil Display',Impact,sans-serif;font-weight:700;font-size:clamp(22px,3.6vw,36px);line-height:1;margin:6px 0 0;color:var(--mint);letter-spacing:.12em;text-transform:uppercase}
+.langs{display:flex;gap:6px;flex-wrap:wrap}.langs .sel{border-color:var(--mint);color:var(--mint)}
 .tok{font-size:19px;margin-bottom:8px}.tok b{color:var(--gold);font-size:24px}
 .mal{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-bottom:12px}
 .mal button{position:relative;text-align:left;padding:7px 36px 7px 10px;border-radius:10px;border:1px solid var(--line);background:#121d1a;color:var(--ink);cursor:pointer;min-height:44px}
@@ -342,188 +350,189 @@ body.mobile #tbtn button{height:62px;font-size:14px}
 
 <div id="hud" class="hide">
   <div id="tl">
-    <div class="row"><span id="hDay">Jour 1</span><span class="rgt"><span id="hPhase">Jour</span><button class="pe tgl" id="bTgl" aria-label="Réduire le panneau" title="Réduire / agrandir (H)">–</button></span></div>
-    <div class="row"><span id="hClock">0:00</span><span id="hNext">Nuit dans 2:30</span></div>
-    <div class="row"><span>Fragments</span><b id="hFrag">0/3</b></div>
-    <div class="row xr"><span>Jetons</span><b id="hTok">2</b></div>
+    <div class="row"><span id="hDay">Day 1</span><span class="rgt"><span id="hPhase">Day</span><button class="pe tgl" id="bTgl" aria-label="Collapse panel" title="Collapse / expand (H)">–</button></span></div>
+    <div class="row"><span id="hClock">0:00</span><span id="hNext">Night in 2:30</span></div>
+    <div class="row"><span>Shards</span><b id="hFrag">0/3</b></div>
+    <div class="row xr"><span>Tokens</span><b id="hTok">2</b></div>
     <div class="row xr"><span>Captures</span><b id="hStr">○○○</b></div>
-    <div class="meter"><span>Endurance</span><div class="bar"><i id="hSta"></i></div></div>
-    <div class="meter"><span>Bruit</span><div class="bar"><i id="hNoise"></i></div></div>
-    <div class="tlb"><button class="pe red" id="bSab">Saboter <kbd data-k="sab">R</kbd></button><button class="pe" id="bJour">Carnet <kbd data-k="journal">J</kbd></button><button class="pe" id="bPause" aria-label="Pause">II</button></div>
+    <div class="meter"><span>Stamina</span><div class="bar"><i id="hSta"></i></div></div>
+    <div class="meter"><span>Noise</span><div class="bar"><i id="hNoise"></i></div></div>
+    <div class="tlb"><button class="pe red" id="bSab">Sabotage <kbd data-k="sab">R</kbd></button><button class="pe" id="bJour">Notebook <kbd data-k="journal">J</kbd></button><button class="pe" id="bPause" aria-label="Pause">II</button></div>
   </div>
-  <div id="tr"><canvas id="mini" width="424" height="292"></canvas><div id="mleg"><span><i class="lt"></i>Terminal</span><span><i class="ls"></i>Sortie</span><span><i class="lc"></i>Caisse</span><span><i class="ln"></i>Note</span></div><div id="rivals" class="pe"></div><div id="tuto" class="hide pe"></div></div>
+  <div id="tr"><canvas id="mini" width="424" height="292"></canvas><div id="mleg"><span><i class="lt"></i>Terminal</span><span><i class="ls"></i>Exit</span><span><i class="lc"></i>Crate</span><span><i class="ln"></i>Note</span></div><div id="rivals" class="pe"></div><div id="tuto" class="hide pe"></div></div>
   <div id="feed"></div>
   <div id="big"></div>
   <div id="fx"></div>
   <div id="prompt" class="hide"></div>
   <div id="bot">
-    <div class="slot pe" id="sl1"><kbd data-k="item1">1</kbd><b id="n1">1</b>Leurre</div>
-    <div class="slot pe" id="sl2"><kbd data-k="item2">2</kbd><b id="n2">1</b>Fumigène</div>
-    <div class="slot pe solo-only" id="sl4"><kbd data-k="item3">3</kbd><b id="n4">0</b>Pétard</div>
-    <div class="slot" id="sl3"><b id="n3">0</b>Brouilleur</div>
-    <div class="slot pe" id="slF"><kbd data-k="flash">F</kbd><b id="nF">ON</b>Lampe</div>
-    <div class="slot pe" id="slC"><kbd data-k="crouch">C</kbd><b id="nC">—</b>Accroupi</div>
-    <div class="slot ab pe" id="slQ"><kbd data-k="ability">Espace</kbd><b id="nQ">★</b><span id="abName">Capacité</span><div class="cd hide" id="cdQ"></div></div>
+    <div class="slot pe" id="sl1"><kbd data-k="item1">1</kbd><b id="n1">1</b>Decoy</div>
+    <div class="slot pe" id="sl2"><kbd data-k="item2">2</kbd><b id="n2">1</b>Smoke bomb</div>
+    <div class="slot pe solo-only" id="sl4"><kbd data-k="item3">3</kbd><b id="n4">0</b>Firecracker</div>
+    <div class="slot" id="sl3"><b id="n3">0</b>Jammer</div>
+    <div class="slot pe" id="slF"><kbd data-k="flash">F</kbd><b id="nF">ON</b>Light</div>
+    <div class="slot pe" id="slC"><kbd data-k="crouch">C</kbd><b id="nC">—</b>Crouch</div>
+    <div class="slot ab pe" id="slQ"><kbd data-k="ability">Space</kbd><b id="nQ">★</b><span id="abName">Ability</span><div class="cd hide" id="cdQ"></div></div>
   </div>
   <div id="ally" class="hide pe"></div>
   <div id="touch" class="hide">
     <div id="joy"><i></i></div>
     <div id="tbtn">
-      <button data-a="i1">Leurre</button><button data-a="i2">Fumi.</button><button data-a="flash">Lampe</button>
-      <button data-a="i3" class="solo-only">Pétard</button>
-      <button data-a="crouch">Accroupi</button><button data-a="ab">Capacité</button><button data-a="run">Courir</button>
-      <button data-a="sab">Saboter</button><button data-a="act" class="big" style="grid-column:span 2;border-radius:30px">Action</button>
+      <button data-a="i1">Decoy</button><button data-a="i2">Smoke</button><button data-a="flash">Light</button>
+      <button data-a="i3" class="solo-only">Firecracker</button>
+      <button data-a="crouch">Crouch</button><button data-a="ab">Ability</button><button data-a="run">Run</button>
+      <button data-a="sab">Sabotage</button><button data-a="act" class="big" style="grid-column:span 2;border-radius:30px">Action</button>
     </div>
   </div>
 </div>
 
 <div id="modal" class="hide"></div>
-<div id="specbar" class="hide"><button class="btn sm" id="spPrev" aria-label="Joueur précédent">◀</button><div id="spInfo"></div><button class="btn sm" id="spNext" aria-label="Joueur suivant">▶</button><button class="btn sm main" id="spQuit">Quitter</button></div>
+<div id="specbar" class="hide"><button class="btn sm" id="spPrev" aria-label="Previous player">◀</button><div id="spInfo"></div><button class="btn sm" id="spNext" aria-label="Next player">▶</button><button class="btn sm main" id="spQuit">Quit</button></div>
 <div id="toast" role="status"></div>
 
 <section id="platform" class="screen hide">
   <div class="panel narrow">
-    <h2>Sur quoi joues-tu ?</h2>
-    <p class="tag">Le jeu s'adapte : contrôles, taille des boutons et affichage. Tu pourras changer plus tard depuis le menu.</p>
+    <h2>What are you playing on?</h2>
+    <p class="tag">The game adapts: controls, button size and display. You can change it later from the menu.</p>
     <div class="plats">
-      <button class="plat" id="pPC"><svg viewBox="0 0 120 80" aria-hidden="true"><rect x="14" y="6" width="92" height="56" rx="5" fill="#16231f" stroke="#79d9b1" stroke-width="3"/><rect x="22" y="14" width="76" height="40" rx="2" fill="#0b1412"/><circle cx="60" cy="34" r="6" fill="#79d9b1"/><path d="M60 34 L92 22 L92 46Z" fill="rgba(233,196,106,.35)"/><rect x="40" y="66" width="40" height="5" rx="2" fill="#26372f"/><rect x="30" y="72" width="60" height="4" rx="2" fill="#26372f"/></svg><b>PC</b><small>Clavier et souris. Raccourcis, lampe à la souris, affichage complet.</small><em id="recPC"></em></button>
-      <button class="plat" id="pMob"><svg viewBox="0 0 120 80" aria-hidden="true"><rect x="10" y="14" width="100" height="54" rx="10" fill="#16231f" stroke="#79d9b1" stroke-width="3"/><rect x="20" y="20" width="80" height="42" rx="3" fill="#0b1412"/><circle cx="36" cy="48" r="9" fill="none" stroke="#93a69d" stroke-width="2"/><circle cx="36" cy="48" r="4" fill="#93a69d"/><circle cx="84" cy="48" r="6" fill="#79d9b1"/><circle cx="72" cy="36" r="4" fill="#93a69d"/><circle cx="88" cy="32" r="4" fill="#93a69d"/></svg><b>Mobile / tablette</b><small>Écran tactile. Joystick, gros boutons, interface compacte.</small><em id="recMob"></em></button>
+      <button class="plat" id="pPC"><svg viewBox="0 0 120 80" aria-hidden="true"><rect x="14" y="6" width="92" height="56" rx="5" fill="#16231f" stroke="#79d9b1" stroke-width="3"/><rect x="22" y="14" width="76" height="40" rx="2" fill="#0b1412"/><circle cx="60" cy="34" r="6" fill="#79d9b1"/><path d="M60 34 L92 22 L92 46Z" fill="rgba(233,196,106,.35)"/><rect x="40" y="66" width="40" height="5" rx="2" fill="#26372f"/><rect x="30" y="72" width="60" height="4" rx="2" fill="#26372f"/></svg><b>PC</b><small>Keyboard and mouse. Shortcuts, mouse-aimed flashlight, full display.</small><em id="recPC"></em></button>
+      <button class="plat" id="pMob"><svg viewBox="0 0 120 80" aria-hidden="true"><rect x="10" y="14" width="100" height="54" rx="10" fill="#16231f" stroke="#79d9b1" stroke-width="3"/><rect x="20" y="20" width="80" height="42" rx="3" fill="#0b1412"/><circle cx="36" cy="48" r="9" fill="none" stroke="#93a69d" stroke-width="2"/><circle cx="36" cy="48" r="4" fill="#93a69d"/><circle cx="84" cy="48" r="6" fill="#79d9b1"/><circle cx="72" cy="36" r="4" fill="#93a69d"/><circle cx="88" cy="32" r="4" fill="#93a69d"/></svg><b>Mobile / tablet</b><small>Touch screen. Joystick, big buttons, compact interface.</small><em id="recMob"></em></button>
     </div>
   </div>
 </section>
 
 <section id="pseudo" class="screen hide"><div class="panel narrow">
-  <h2>Ton pseudo</h2><p class="tag">Il apparaît dans le classement et chez les autres joueurs en ligne.</p>
-  <form id="pForm" class="prow"><input id="pIn" maxlength="16" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ex. Ombre971" aria-label="Pseudo"><button class="btn main">Valider</button></form>
+  <h2>Your nickname</h2><p class="tag">It appears on the leaderboard and to other players online.</p>
+  <form id="pForm" class="prow"><input id="pIn" maxlength="16" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="e.g. Shadow971" aria-label="Nickname"><button class="btn main">Confirm</button></form>
   <p class="err" id="pErr"></p></div></section>
 <section id="friends" class="screen hide"><div class="panel narrow">
-  <h2>Avec des amis</h2><p class="tag">Crée un salon et envoie le code à tes amis, ou entre le code qu'on t'a donné. Jusqu'à 9 joueurs ; les places libres sont prises par des bots.</p>
-  <div class="actions"><button class="btn main" id="bCreate">Créer un salon</button></div>
-  <form id="jForm" class="prow"><input id="jIn" maxlength="5" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Code à 5 caractères" aria-label="Code d'accès"><button class="btn">Rejoindre</button></form>
+  <h2>With friends</h2><p class="tag">Create a room and send the code to your friends, or enter the code you were given. Up to 9 players; free slots are filled by bots.</p>
+  <div class="actions"><button class="btn main" id="bCreate">Create a room</button></div>
+  <form id="jForm" class="prow"><input id="jIn" maxlength="5" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="5-character code" aria-label="Access code"><button class="btn">Join</button></form>
   <p class="err" id="fErr"></p>
-  <p class="hint">Envoie simplement le lien du jeu à tes amis, puis le code du salon.</p>
-  <button class="btn" id="bFBack">Retour</button></div></section>
+  <p class="hint">Just send your friends the link to the game, then the room code.</p>
+  <button class="btn" id="bFBack">Back</button></div></section>
 <section id="lobby" class="screen hide"><div class="panel narrow">
-  <h2 id="lTitle">Salon</h2><div id="lCode" class="code hide"></div><p class="tag" id="lInfo"></p><div id="lCount" class="count"></div>
+  <h2 id="lTitle">Room</h2><div id="lCode" class="code hide"></div><p class="tag" id="lInfo"></p><div id="lCount" class="count"></div>
   <ul id="lList" class="plist"></ul>
-  <div class="actions"><button class="btn main hide" id="bLStart">Lancer la partie</button><button class="btn" id="bLQuit">Quitter</button></div></div></section>
-<section id="wait" class="screen hide"><div class="panel narrow"><h2>Salle d'attente</h2><p class="tag" id="wInfo"></p><ul id="wList" class="plist"></ul><div class="actions"><button class="btn" id="bWSpec">Regarder les autres joueurs</button></div><p class="hint" id="wSpecMsg"></p></div></section>
+  <div class="actions"><button class="btn main hide" id="bLStart">Start the game</button><button class="btn" id="bLQuit">Quit</button></div></div></section>
+<section id="wait" class="screen hide"><div class="panel narrow"><h2>Waiting room</h2><p class="tag" id="wInfo"></p><ul id="wList" class="plist"></ul><div class="actions"><button class="btn" id="bWSpec">Watch the other players</button></div><p class="hint" id="wSpecMsg"></p></div></section>
 <section id="board" class="screen hide"><div class="panel narrow">
-  <h2>Classement</h2><div class="tabs"><button class="tab sel" id="tOn">En ligne</button><button class="tab" id="tLoc">Sur cet appareil</button></div>
+  <h2>Leaderboard</h2><div class="tabs"><button class="tab sel" id="tOn">Online</button><button class="tab" id="tLoc">On this device</button></div>
   <p class="hint" id="bInfo"></p><table class="rank" id="bTable"></table>
-  <p class="hint">Score : 1 000 par jour survécu, 150 par fragment, 120 par dossier lu, 40 par sabotage, −75 par capture. Une victoire rapporte 5 000, plus un bonus de vitesse.</p>
-  <button class="btn main" id="bBBack">Retour</button></div></section>
+  <p class="hint">Score: 1,000 per day survived, 150 per shard, 120 per file read, 40 per sabotage, −75 per capture. A win gives 5,000 plus a speed bonus.</p>
+  <button class="btn main" id="bBBack">Back</button></div></section>
 
 <section id="settings" class="screen hide"><div class="panel narrow">
-  <h2>Réglages</h2>
+  <h2>Settings</h2>
   <div class="setg">
     <label class="sr"><span>Volume</span><input type="range" id="sVol" min="0" max="100" step="5"><b id="sVolV"></b></label>
-    <label class="sr"><span>Sensibilité du joystick <small>(mobile)</small></span><input type="range" id="sSens" min="60" max="160" step="10"><b id="sSensV"></b></label>
-    <label class="sc"><input type="checkbox" id="sShake"><span>Tremblements de l'écran</span></label>
-    <label class="sc"><input type="checkbox" id="sFade"><span>Panneaux qui s'effacent quand tu passes dessous</span></label>
-    <label class="sc"><input type="checkbox" id="sCb"><span>Mode daltonien : nom des couleurs écrit sur les missions</span></label>
+    <label class="sr"><span>Joystick sensitivity <small>(mobile)</small></span><input type="range" id="sSens" min="60" max="160" step="10"><b id="sSensV"></b></label>
+    <div class="sr"><span>Language</span><div class="langs"><button class="btn sm" data-lang="en">English</button><button class="btn sm" data-lang="fr">Français</button><button class="btn sm" data-lang="es">Español</button></div><b></b></div>
+    <label class="sc"><input type="checkbox" id="sShake"><span>Screen shake</span></label>
+    <label class="sc"><input type="checkbox" id="sFade"><span>Panels fade when you walk under them</span></label>
+    <label class="sc"><input type="checkbox" id="sCb"><span>Colour-blind mode: colour names written on missions</span></label>
   </div>
-  <button class="btn only-pc" id="bKeys">Touches du clavier</button>
-  <button class="btn main" id="bSetBack">Retour</button></div></section>
+  <button class="btn only-pc" id="bKeys">Keyboard controls</button>
+  <button class="btn main" id="bSetBack">Back</button></div></section>
 <section id="rate" class="screen hide"><div class="panel narrow">
-  <h2>Donner ton avis</h2>
-  <p class="hint">Ta note et tes idées aident à améliorer le jeu. Seul le développeur les lit.</p>
-  <div class="stars" id="rStars"><button aria-label="1 étoile">★</button><button aria-label="2 étoiles">★</button><button aria-label="3 étoiles">★</button><button aria-label="4 étoiles">★</button><button aria-label="5 étoiles">★</button></div>
+  <h2>Rate the game</h2>
+  <p class="hint">Your rating and ideas help improve the game. Only the developer reads them.</p>
+  <div class="stars" id="rStars"><button aria-label="1 star">★</button><button aria-label="2 stars">★</button><button aria-label="3 stars">★</button><button aria-label="4 stars">★</button><button aria-label="5 stars">★</button></div>
   <p class="rlab" id="rLab"></p>
-  <textarea id="rTxt" maxlength="500" rows="4" placeholder="Une idée, un bug, ce que tu as aimé ou pas… (facultatif)"></textarea>
+  <textarea id="rTxt" maxlength="500" rows="4" placeholder="An idea, a bug, what you liked or didn’t… (optional)"></textarea>
   <p class="hint" id="rMsg"></p>
-  <div class="kbtns"><button class="btn main" id="bRateSend">Envoyer</button><button class="btn" id="bRateBack">Retour</button></div></div></section>
+  <div class="kbtns"><button class="btn main" id="bRateSend">Send</button><button class="btn" id="bRateBack">Back</button></div></div></section>
 <section id="keys" class="screen hide"><div class="panel narrow">
-  <h2>Touches du clavier</h2>
-  <p class="hint">Clique sur une action, puis appuie sur la nouvelle touche. Échap pour annuler. Les flèches, Entrée et Échap marchent toujours en plus.</p>
+  <h2>Keyboard controls</h2>
+  <p class="hint">Click an action, then press the new key. Esc to cancel. Arrow keys, Enter and Esc always work too.</p>
   <div id="keyList" class="keyl"></div>
-  <div class="kbtns"><button class="btn main" id="bKeysBack">Retour</button><button class="btn" id="bKeysReset">Touches par défaut</button></div></div></section>
+  <div class="kbtns"><button class="btn main" id="bKeysBack">Back</button><button class="btn" id="bKeysReset">Default keys</button></div></div></section>
 <section id="achs" class="screen hide"><div class="panel narrow">
-  <h2>Succès</h2><p class="tag" id="achInfo"></p><ul id="achList" class="achl"></ul>
-  <button class="btn main" id="bAchBack">Retour</button></div></section>
+  <h2>Achievements</h2><p class="tag" id="achInfo"></p><ul id="achList" class="achl"></ul>
+  <button class="btn main" id="bAchBack">Back</button></div></section>
 <section id="tutoask" class="screen hide"><div class="panel narrow">
-  <h2>Première fois ?</h2><p class="tag">Un tutoriel de 2 minutes t'apprend à te cacher, à faire les missions et à sortir. Il n'est pas obligatoire, et tu pourras le refaire depuis le menu.</p>
-  <div class="actions"><button class="btn main" id="bTAYes">Faire le tutoriel</button><button class="btn" id="bTANo">Passer</button></div></div></section>
+  <h2>First time?</h2><p class="tag">A 2-minute tutorial teaches you to hide, do missions and get out. It is optional, and you can replay it from the menu.</p>
+  <div class="actions"><button class="btn main" id="bTAYes">Play the tutorial</button><button class="btn" id="bTANo">Skip</button></div></div></section>
 
 <section id="shop" class="screen hide"><div class="panel">
-  <h2>Boutique</h2><p class="tag" id="shopCoins"></p>
-  <h3 class="shh">Personnages</h3><div class="shopc" id="shopChars"></div>
-  <h3 class="shh">Leurres <small>réservés au solo, pour l'équité en ligne</small></h3><div class="shopi" id="shopItems"></div>
-  <p class="hint">Chaque partie terminée rapporte des pièces : 100 pièces pour 1 000 points de score.</p>
-  <button class="btn main" id="bShopBack">Retour</button></div></section>
+  <h2>Shop</h2><p class="tag" id="shopCoins"></p>
+  <h3 class="shh">Characters</h3><div class="shopc" id="shopChars"></div>
+  <h3 class="shh">Decoys <small>solo only, to keep online play fair</small></h3><div class="shopi" id="shopItems"></div>
+  <p class="hint">Every finished game earns coins: 100 coins per 1,000 points.</p>
+  <button class="btn main" id="bShopBack">Back</button></div></section>
 
 <section id="account" class="screen hide"><div class="panel narrow">
-  <h2>Ton compte</h2>
+  <h2>Your account</h2>
   <div id="aOut">
-    <p class="tag">Avec un compte, tes pièces, tes personnages, tes leurres et tes succès sont gardés sur le serveur. Tu les retrouves sur n'importe quel appareil, même après avoir vidé ton navigateur.</p>
-    <div class="tabs"><button class="tab sel" id="aTabL" type="button">Se connecter</button><button class="tab" id="aTabR" type="button">Créer un compte</button></div>
-    <form id="aForm" class="aform"><input id="aName" placeholder="Pseudo" autocomplete="username" maxlength="16" autocapitalize="off" spellcheck="false" aria-label="Pseudo"><input id="aPass" type="password" placeholder="Mot de passe (6 caractères minimum)" autocomplete="current-password" maxlength="100" aria-label="Mot de passe"><input id="aPass2" class="hide" type="password" placeholder="Confirme le mot de passe" autocomplete="new-password" maxlength="100" aria-label="Confirme le mot de passe"><button class="btn main" id="aSubmit">Se connecter</button></form>
+    <p class="tag">With an account, your coins, characters, decoys and achievements are saved on the server. You get them back on any device, even after clearing your browser.</p>
+    <div class="tabs"><button class="tab sel" id="aTabL" type="button">Log in</button><button class="tab" id="aTabR" type="button">Create an account</button></div>
+    <form id="aForm" class="aform"><input id="aName" placeholder="Nickname" autocomplete="username" maxlength="16" autocapitalize="off" spellcheck="false" aria-label="Nickname"><input id="aPass" type="password" placeholder="Password (at least 6 characters)" autocomplete="current-password" maxlength="100" aria-label="Password"><input id="aPass2" class="hide" type="password" placeholder="Confirm password" autocomplete="new-password" maxlength="100" aria-label="Confirm password"><button class="btn main" id="aSubmit">Log in</button></form>
     <p class="err" id="aErr"></p>
-    <p class="hint">À la création du compte, les pièces et achats déjà faits sur cet appareil y sont transférés (jusqu'à 3 000 pièces).</p>
-    <button class="lnk" id="aSkip" type="button">Jouer sans compte</button>
+    <p class="hint">When you create the account, coins and purchases already made on this device are transferred to it (up to 3,000 coins).</p>
+    <button class="lnk" id="aSkip" type="button">Play without an account</button>
   </div>
-  <div id="aIn" class="hide"><p class="tag" id="aInfo"></p><div class="actions"><button class="btn main" id="aBack">Retour</button><button class="btn" id="aLogout">Se déconnecter</button></div></div>
+  <div id="aIn" class="hide"><p class="tag" id="aInfo"></p><div class="actions"><button class="btn main" id="aBack">Back</button><button class="btn" id="aLogout">Log out</button></div></div>
 </div></section>
 
 <section id="title" class="screen">
   <div class="panel">
     <h1>Valmont<span>.</span></h1><p class="logosub">Last Door Out</p>
-    <p class="tag">Neuf prisonniers, neuf ailes, cinq jours. Trouve les fragments, cache-toi des traqueurs, sabote les autres. Une seule porte mène dehors.</p>
+    <p class="tag">Nine prisoners, nine wings, five days. Find the shards, hide from the hunters, sabotage the others. Only one door leads out.</p>
     <div class="chars" id="chars"></div>
     <div class="cdesc" id="cdesc"></div>
-    <div class="pline">Pseudo : <b id="tName">—</b> <button class="lnk" id="bName">modifier</button><button class="lnk hosted-only" id="bAcc">Se connecter</button> · Pièces : <b id="tCoins" class="coin">0</b></div>
+    <div class="pline">Nickname: <b id="tName">—</b> <button class="lnk" id="bName">change</button><button class="lnk hosted-only" id="bAcc">Log in</button> · Coins: <b id="tCoins" class="coin">0</b></div>
     <div class="modes">
-      <button class="mode main" id="bNew"><b>Solo</b><small>Toi contre 8 bots</small></button>
-      <button class="mode" id="bFriends"><b>Avec des amis</b><small>Salon privé avec un code</small></button>
-      <button class="mode" id="bOnline"><b>En ligne</b><small>Départ automatique en 30 s</small></button>
-      <button class="mode" id="bBoard"><b>Classement</b><small>Meilleurs scores</small></button>
-      <button class="mode" id="bShop"><b>Boutique</b><small>Personnages et leurres</small></button>
+      <button class="mode main" id="bNew"><b>Solo</b><small>You vs 8 bots</small></button>
+      <button class="mode" id="bFriends"><b>With friends</b><small>Private room with a code</small></button>
+      <button class="mode" id="bOnline"><b>Online</b><small>Auto start in 30 s</small></button>
+      <button class="mode" id="bBoard"><b>Leaderboard</b><small>Best scores</small></button>
+      <button class="mode" id="bShop"><b>Shop</b><small>Characters and decoys</small></button>
     </div>
     <p class="err" id="tErr"></p>
-    <div class="actions"><button class="btn" id="bCont">Continuer</button><button class="btn" id="bTuto">Tutoriel</button><button class="btn" id="bAchs">Succès</button><button class="btn" id="bSettings">Réglages</button><button class="btn rate-only" id="bRate">★ Donner ton avis</button><button class="btn" id="bHelp">Comment jouer</button><button class="btn" id="bPlat">Plateforme : PC</button></div>
+    <div class="actions"><button class="btn" id="bCont">Continue</button><button class="btn" id="bTuto">Tutorial</button><button class="btn" id="bAchs">Achievements</button><button class="btn" id="bSettings">Settings</button><button class="btn rate-only" id="bRate">★ Rate the game</button><button class="btn" id="bHelp">How to play</button><button class="btn" id="bPlat">Platform: PC</button></div>
   </div>
 </section>
 
 <section id="help" class="screen hide">
   <div class="panel">
-    <h2>Comment jouer</h2>
+    <h2>How to play</h2>
     <div class="help">
       <div>
-        <h3>Le but</h3>
-        <p>Chaque jour, trouve les terminaux de ton aile et résous leurs énigmes pour obtenir des fragments de code. Avec tous les fragments, la porte du sas s'ouvre.</p>
-        <p>Le dernier joueur à sortir de son aile est éliminé chaque soir. Le jour 5, seul le premier à franchir la porte est libre.</p>
-        <p>Si tous les autres terminent avant toi, tu perds. Surveille les barres des rivaux en haut à droite.</p>
-        <h3>Les indices</h3>
-        <p>Certains codes et protocoles sont écrits sur des notes dans d'autres salles. Elles restent dans ton carnet <kbd>J</kbd>. Les dossiers racontent pourquoi tu es là.</p>
+        <h3>The goal</h3>
+        <p>Each day, find the terminals in your wing and solve their puzzles to get code shards. With all the shards, the airlock door opens.</p>
+        <p>The last player out of their wing is eliminated every night. On day 5, only the first one through the door is free.</p>
+        <p>If everyone else finishes before you, you lose. Watch the rivals' bars at the top right.</p>
+        <h3>Clues</h3>
+        <p>Some codes and protocols are written on notes in other rooms. They stay in your notebook <kbd>J</kbd>. The files tell you why you are here.</p>
       </div>
       <div>
-        <h3>Se cacher, se faufiler</h3>
-        <p>Les traqueurs voient dans un cône devant eux et entendent tes pas. Marcher fait du bruit, courir beaucoup, s'accroupir presque pas.</p>
-        <p>Accroupi derrière un meuble (table, caisse, lit, piano…), tu deviens invisible pour un traqueur qui est de l'autre côté, même s'il te poursuit.</p><p>Cache-toi dans les casiers et sous les lits <kbd>E</kbd>, mais pas sous leurs yeux. Les conduits d'aération relient deux salles.</p>
-        <p>La nuit, coupe ta lampe <kbd>F</kbd> pour être moins visible. Les caméras déclenchent l'alarme.</p>
-        <p>En chasse, un traqueur va plus vite que toi quand tu marches : cours, coupe-lui la vue, cache-toi ou prends un conduit. Attrapé ? Retour en cellule, puis 5 s de protection à la sortie. Trois captures dans la journée et tu es éliminé.</p>
+        <h3>Hide and sneak</h3>
+        <p>Hunters see in a cone in front of them and hear your steps. Walking makes noise, running a lot, crouching almost none.</p>
+        <p>Crouched behind furniture (table, crate, bed, piano…), you become invisible to a hunter on the other side, even if he is chasing you.</p><p>Hide in lockers and under beds <kbd>E</kbd>, but not while they are watching. Air vents connect two rooms.</p>
+        <p>At night, switch off your flashlight <kbd>F</kbd> to be less visible. Cameras set off the alarm.</p>
+        <p>When chasing, a hunter is faster than you walking: run, break his line of sight, hide or take a vent. Caught? Back to your cell, then 5 s of protection when you come out. Three captures in one day and you are eliminated.</p>
       </div>
       <div>
-        <h3>Saboter</h3>
-        <p>Le premier jour, il n'y a qu'un traqueur et personne ne peut en envoyer d'autres. Ensuite, les traqueurs supplémentaires deviennent un malus.</p><p>Chaque fragment rapporte 2 jetons. Dépense-les <kbd>R</kbd> pour retarder les autres : coupure de courant, portes verrouillées, gaz, traqueur…</p>
-        <p>Les autres font pareil avec toi. Un brouilleur bloque automatiquement le prochain malus. Un drone espion se casse si tu restes 5 s juste en dessous : il recule, il faut le suivre.</p>
-        <p>Une fois vus, les terminaux et la porte de sortie restent marqués sur la carte en haut à droite.</p><p>Les rivaux peuvent proposer une alliance au talkie-walkie. Elle peut être sincère.</p>
-        <h3 class="only-pc">Touches (PC)</h3>
-        <p class="only-pc"><kbd data-k="move">ZQSD</kbd>/flèches bouger · <kbd data-k="run">Maj</kbd> courir · <kbd data-k="crouch">C</kbd> s'accroupir · <kbd data-k="act">E</kbd> action · <kbd data-k="ability">Espace</kbd> capacité · <kbd data-k="item1">1</kbd> leurre · <kbd data-k="item2">2</kbd> fumigène · <kbd data-k="flash">F</kbd> lampe · <kbd data-k="sab">R</kbd> saboter · <kbd data-k="journal">J</kbd> carnet · <kbd data-k="hud">H</kbd> réduire le panneau · <kbd>Échap</kbd> pause. La souris oriente la lampe. Tu peux changer les touches dans les réglages.</p>
-        <h3 class="only-mob">Contrôles (mobile)</h3>
-        <p class="only-mob">Pose le pouce n'importe où sur la moitié gauche de l'écran : un joystick apparaît. Ta lampe suit ta direction. À droite : <b>Action</b> (fouiller, se cacher, énigmes, porte), <b>Courir</b> (maintenir), <b>Accroupi</b>, <b>Lampe</b>, <b>Capacité</b>, <b>Leurre</b>, <b>Fumigène</b>, <b>Saboter</b>. Le téléphone en mode paysage donne plus de vue.</p>
+        <h3>Sabotage</h3>
+        <p>On the first day there is only one hunter and nobody can send more. After that, extra hunters become a penalty.</p><p>Each shard earns 2 tokens. Spend them <kbd>R</kbd> to slow the others down: power cut, locked doors, gas, hunter…</p>
+        <p>The others do the same to you. A jammer automatically blocks the next penalty. A spy drone breaks if you stay right under it for 5 s: it backs away, so follow it.</p>
+        <p>Once seen, terminals and the exit door stay marked on the map at the top right.</p><p>Rivals can offer an alliance over the walkie-talkie. It might be sincere.</p>
+        <h3 class="only-pc">Keys (PC)</h3>
+        <p class="only-pc"><kbd data-k="move">ZQSD</kbd>/arrows move · <kbd data-k="run">Shift</kbd> run · <kbd data-k="crouch">C</kbd> crouch · <kbd data-k="act">E</kbd> action · <kbd data-k="ability">Space</kbd> ability · <kbd data-k="item1">1</kbd> decoy · <kbd data-k="item2">2</kbd> smoke bomb · <kbd data-k="flash">F</kbd> flashlight · <kbd data-k="sab">R</kbd> sabotage · <kbd data-k="journal">J</kbd> notebook · <kbd data-k="hud">H</kbd> collapse panel · <kbd>Esc</kbd> pause. The mouse aims the flashlight. You can change the keys in Settings.</p>
+        <h3 class="only-mob">Controls (mobile)</h3>
+        <p class="only-mob">Put your thumb anywhere on the left half of the screen: a joystick appears. Your flashlight follows your direction. On the right: <b>Action</b> (search, hide, puzzles, door), <b>Run</b> (hold), <b>Crouch</b>, <b>Light</b>, <b>Ability</b>, <b>Decoy</b>, <b>Smoke bomb</b>, <b>Sabotage</b>. Holding your phone sideways gives you a wider view.</p>
       </div>
     </div>
-    <button class="btn main" id="bHelpBack">Retour</button>
+    <button class="btn main" id="bHelpBack">Back</button>
   </div>
 </section>
 
 <section id="intro" class="screen hide">
   <div class="panel narrow">
-    <div class="dayno" id="introDay">Jour 1</div>
+    <div class="dayno" id="introDay">Day 1</div>
     <p class="voice" id="introTxt"></p>
     <ul class="obj" id="introObj"></ul>
-    <button class="btn main" id="bEnter">Entrer dans l'aile <kbd>Entrée</kbd></button>
+    <button class="btn main" id="bEnter">Enter the wing <kbd>Enter</kbd></button>
   </div>
 </section>
 
@@ -534,7 +543,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   <div class="panel narrow">
     <h2>Pause</h2>
     <p class="tag" id="pauseInfo"></p>
-    <div class="actions"><button class="btn main" id="bResume">Reprendre</button><button class="btn" id="bPSet">Réglages</button><button class="btn" id="bPHelp">Comment jouer</button><button class="btn" id="bPPlat">Changer de plateforme</button><button class="btn" id="bQuit">Quitter vers le menu</button></div>
+    <div class="actions"><button class="btn main" id="bResume">Resume</button><button class="btn" id="bPSet">Settings</button><button class="btn" id="bPHelp">How to play</button><button class="btn" id="bPPlat">Change platform</button><button class="btn" id="bQuit">Quit to menu</button></div>
   </div>
 </section>
 
@@ -563,59 +572,59 @@ function circ(c,x,y,r){c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill()}
 
 // ---------- data
 const CHARS=[
- {id:'nadia',name:'Nadia',title:'La Hackeuse',body:'#2f8f86',skin:'#8a5a3c',hair:'#151515',passive:'Voit toutes les caméras sur la carte.',ab:'Piratage',abd:'12 s : caméras coupées, traqueurs visibles à travers les murs.',cd:45},
- {id:'marcus',name:'Marcus',title:"L'Athlète",body:'#d98a2b',skin:'#5a3a28',hair:'#0f0f0f',passive:'Endurance doublée, course plus discrète.',ab:'Sprint fantôme',abd:'4 s de course très rapide et silencieuse.',cd:25},
- {id:'lea',name:'Léa',title:'La Pickpocket',body:'#8e5bb5',skin:'#e7c3a3',hair:'#b5532f',passive:'Fouille les caisses deux fois plus vite.',ab:'Larcin',abd:'Vole 1 jeton au rival en tête et le retarde de 12 s.',cd:60},
- {id:'okafor',name:'Dr Okafor',title:'Le Médecin',body:'#d9ddd6',skin:'#3e2a1e',hair:'#2a2a2a',passive:'4 captures par jour au lieu de 3, cellule deux fois plus courte.',ab:'Sédatif',abd:'Endort 6 s les traqueurs proches.',cd:50},
- {id:'victor',name:'Victor',title:"L'Ancien gardien",body:'#5b6b4a',skin:'#d8b08c',hair:'#bdbdbd',passive:'Ouvre les portes verrouillées instantanément.',ab:'Mémoire des plans',abd:'15 s : toute la carte, les terminaux et la sortie révélés.',cd:60},
- {id:'ines',name:'Inès',title:'La Ventriloque',body:'#c2577a',skin:'#c99a74',hair:'#2b1a12',passive:'Ses leurres durent deux fois plus longtemps.',ab:'Voix lointaine',abd:'Fait entendre sa voix loin devant elle : les traqueurs y courent.',cd:30,price:300},
- {id:'rosa',name:'Rosa',title:'La Cheffe de gang',body:'#a33b2c',skin:'#9c6b4e',hair:'#101010',passive:'Commence chaque jour avec 2 jetons de plus.',ab:'Intimidation',abd:'Son prochain sabotage ne peut pas être bloqué.',cd:45,price:400},
- {id:'sam',name:'Sam',title:"L'Imitateur",body:'#3d4450',skin:'#e0b896',hair:'#6b4a2f',passive:'Les caméras mettent deux fois plus de temps à le repérer.',ab:'Déguisement',abd:'8 s : les traqueurs le prennent pour un des leurs.',cd:50,price:500},
+ {id:'nadia',name:'Nadia',title:'The Hacker',body:'#2f8f86',skin:'#8a5a3c',hair:'#151515',passive:'Sees every camera on the map.',ab:'Hack',abd:'12 s: cameras off, hunters visible through walls.',cd:45},
+ {id:'marcus',name:'Marcus',title:"The Athlete",body:'#d98a2b',skin:'#5a3a28',hair:'#0f0f0f',passive:'Double stamina, quieter running.',ab:'Ghost sprint',abd:'4 s of very fast, silent running.',cd:25},
+ {id:'lea',name:'Léa',title:'The Pickpocket',body:'#8e5bb5',skin:'#e7c3a3',hair:'#b5532f',passive:'Searches crates twice as fast.',ab:'Pilfer',abd:'Steals 1 token from the leading rival and delays them by 12 s.',cd:60},
+ {id:'okafor',name:'Dr Okafor',title:'The Doctor',body:'#d9ddd6',skin:'#3e2a1e',hair:'#2a2a2a',passive:'4 captures per day instead of 3, cell time halved.',ab:'Sedative',abd:'Puts nearby hunters to sleep for 6 s.',cd:50},
+ {id:'victor',name:'Victor',title:"The Old Guard",body:'#5b6b4a',skin:'#d8b08c',hair:'#bdbdbd',passive:'Opens locked doors instantly.',ab:'Blueprint memory',abd:'15 s: the whole map, terminals and exit revealed.',cd:60},
+ {id:'ines',name:'Inès',title:'The Ventriloquist',body:'#c2577a',skin:'#c99a74',hair:'#2b1a12',passive:'Her decoys last twice as long.',ab:'Distant voice',abd:'Throws her voice far ahead: hunters run there.',cd:30,price:300},
+ {id:'rosa',name:'Rosa',title:'The Gang Boss',body:'#a33b2c',skin:'#9c6b4e',hair:'#101010',passive:'Starts each day with 2 extra tokens.',ab:'Intimidation',abd:'Her next sabotage cannot be blocked.',cd:45,price:400},
+ {id:'sam',name:'Sam',title:"The Impersonator",body:'#3d4450',skin:'#e0b896',hair:'#6b4a2f',passive:'Cameras take twice as long to spot him.',ab:'Disguise',abd:'8 s: hunters take him for one of their own.',cd:50,price:500},
 ];
 const RIVALS=[
  {name:'Ilona',color:'#e76f51'},{name:'Sacha',color:'#9aa5b1',collector:true},{name:'Bastien',color:'#2a9d8f'},{name:'Yuki',color:'#f4a261'},
  {name:'Malik',color:'#8ab17d'},{name:'Noémie',color:'#c77d93'},{name:'Ruben',color:'#6d9dc5'},{name:'Oriane',color:'#e9c46a'}];
-const CHEM=[{n:'Rouge',c:'#d8443a'},{n:'Bleu',c:'#4a8fe0'},{n:'Jaune',c:'#e9c84a'},{n:'Vert',c:'#5cc178'},{n:'Violet',c:'#a070dc'},{n:'Orange',c:'#ee8a3a'}];
-const PZNAME={simon:'Terminal acoustique',digicode:'Coffre à digicode',cables:'Boîtier électrique',chimie:'Paillasse chimique',sequence:'Collecteurs à déverrouiller',calibre:'Calibreur de distribution',badge:'Lecteur de badge',moteur:'Alignement du moteur',filtre:'Filtre à oxygène',memoire:'Mémoire du serveur',tuyaux:'Circuit de refroidissement'};
+const CHEM=[{n:'Red',c:'#d8443a'},{n:'Blue',c:'#4a8fe0'},{n:'Yellow',c:'#e9c84a'},{n:'Green',c:'#5cc178'},{n:'Purple',c:'#a070dc'},{n:'Orange',c:'#ee8a3a'}];
+const PZNAME={simon:'Acoustic terminal',digicode:'Keypad safe',cables:'Fuse box',chimie:'Chemistry bench',sequence:'Unlock manifolds',calibre:'Distribution calibrator',badge:'Badge reader',moteur:'Engine alignment',filtre:'Oxygen filter',memoire:'Server memory',tuyaux:'Cooling circuit'};
 const STORY=[
- {title:"Fiche d'admission",text:"INSTITUT VALMONT — Admission n° 0417\nDate : 14 mars 2011\nPatiente : Clara V., 12 ans\nMotif : traitement expérimental, « protocole Lazare »\n\nHuit signatures au bas de la page.\nL'une d'elles ressemble beaucoup à la tienne."},
- {title:'Coupure de presse',text:"L'ÉCHO DU NORD — 3 novembre 2011\n\nIncendie dans l'aile Est de l'Institut Valmont. Une victime : une enfant de 12 ans.\nLes portes coupe-feu étaient verrouillées de l'extérieur.\nL'enquête est classée sans suite. Aucun témoin ne s'est présenté."},
- {title:'Liste du personnel',text:"Personnel présent la nuit du 2 novembre :\n\nhuit noms. Le tien est entouré au feutre rouge.\n\nEn marge, une écriture serrée :\n« Ils avaient les clés. Aucun n'a parlé. »"},
- {title:'Lettre jamais envoyée',text:"Vous étiez huit.\nVous aviez les clés.\nVous l'avez entendue frapper à la porte, et vous êtes partis.\n\nJe ne veux pas votre argent. Je veux que vous sachiez ce que c'est, d'attendre derrière une porte qui ne s'ouvre pas.\n\n— É. V."},
- {title:"Journal d'Élias Valmont",text:"Dernière page.\n\n« Je serai parmi eux. Une aile comme les autres, un faux nom. Ils ne m'ont jamais regardé quand j'étais le petit frère qui attendait dans le couloir. Ils ne me reconnaîtront pas.\nJe me ferai appeler Sacha. »"},
+ {title:"Admission form",text:"VALMONT INSTITUTE — Admission no. 0417\nDate: March 14, 2011\nPatient: Clara V., age 12\nReason: experimental treatment, \"Lazarus protocol\"\n\nEight signatures at the bottom of the page.\nOne of them looks a lot like yours."},
+ {title:'Press clipping',text:"THE NORTHERN ECHO — November 3, 2011\n\nFire in the East Wing of the Valmont Institute. One victim: a 12-year-old girl.\nThe fire doors were locked from the outside.\nThe investigation was closed. No witness came forward."},
+ {title:'Staff list',text:"Staff on duty on the night of November 2:\n\neight names. Yours is circled in red marker.\n\nIn the margin, in cramped handwriting:\n\"They had the keys. None of them spoke.\""},
+ {title:'Letter never sent',text:"There were eight of you.\nYou had the keys.\nYou heard her knocking on the door, and you left.\n\nI do not want your money. I want you to know what it is like to wait behind a door that does not open.\n\n— É. V."},
+ {title:"Élias Valmont's diary",text:"Last page.\n\n\"I will be among them. A wing like the others, a fake name. They never looked at me when I was the little brother waiting in the corridor. They will not recognise me.\nI will call myself Sacha.\""},
 ];
-const TAUNTS=["Tu entends ce bruit dans les conduits ? Ce n'est peut-être pas un rat.","Ton voisin de l'aile Est a déjà deux fragments. Je dis ça…","Les traqueurs n'ont pas d'yeux. Ils ont mieux.","Cache-toi si tu veux. Les casiers gardent très bien les secrets. Moins bien les gens.","Tu cours trop. On t'entend jusqu'ici.","Un jour, tu me remercieras de t'avoir appris à attendre.","Le code n'est jamais là où on le cherche. Il est là où on a peur d'aller."];
+const TAUNTS=["Do you hear that noise in the vents? It might not be a rat.","Your neighbour in the East Wing already has two shards. Just saying…","The hunters have no eyes. They have something better.","Hide if you want. Lockers keep secrets very well. People, not so much.","You run too much. We can hear you from here.","One day, you will thank me for teaching you to wait.","The code is never where you look for it. It is where you are afraid to go."];
 const INTRO=[
- "Bonjour.\nVous êtes neuf, chacun enfermé dans une aile du complexe. Dans cinq jours, une seule porte mènera dehors.\nAujourd'hui, trouvez les fragments de code de votre aile. Le dernier à sortir ne verra pas demain.\nChaque fragment vous rapporte des jetons. Les jetons servent à gêner les autres. Les autres feront de même.",
- "Vous êtes encore huit. Félicitations, ou condoléances.\nLes ailes ont été réaménagées pendant votre sommeil. Mes traqueurs, eux, n'ont pas dormi.",
- "Jour trois.\nLes codes sont désormais coupés en deux, comme vos certitudes.\nLisez tout ce que vous trouvez. Vous n'êtes pas ici par hasard.",
- "Jour quatre.\nVous commencez à comprendre pourquoi vous êtes là.\nCe soir, il ne restera plus que cinq d'entre vous.",
- "Dernier jour.\nIl n'y a qu'une porte, et elle ne s'ouvrira qu'une fois.\nLe premier à la franchir sera libre. Les autres resteront ici, avec moi.",
+ "Hello.\nThere are nine of you, each locked in a wing of the complex. In five days, only one door will lead outside.\nToday, find the code shards in your wing. The last one out will not see tomorrow.\nEach shard earns you tokens. Tokens are used to hinder the others. The others will do the same.",
+ "There are still eight of you. Congratulations, or condolences.\nThe wings were rearranged while you slept. My hunters did not sleep.",
+ "Day three.\nCodes are now cut in half, like your certainties.\nRead everything you find. You are not here by chance.",
+ "Day four.\nYou are starting to understand why you are here.\nTonight, only five of you will remain.",
+ "Last day.\nThere is only one door, and it will open only once.\nThe first one through will be free. The others will stay here, with me.",
 ];
 const SAB=[
- {id:'coupure',name:'Coupure de courant',desc:'Plonge son aile dans le noir.',cost:1,d:[12,18]},
- {id:'verrou',name:'Portes verrouillées',desc:'Bloque ses couloirs.',cost:2,d:[18,26]},
- {id:'faux',name:'Brouillage des sens',desc:'Inverse ses commandes un moment.',cost:2,d:[20,30]},
- {id:'gaz',name:'Gaz lacrymogène',desc:"L'aveugle un long moment.",cost:3,d:[28,38]},
- {id:'traqueur',name:'Envoyer un traqueur',desc:'Peut le capturer.',cost:3,d:[24,40]},
+ {id:'coupure',name:'Power cut',desc:'Plunges their wing into darkness.',cost:1,d:[12,18]},
+ {id:'verrou',name:'Locked doors',desc:'Blocks their corridors.',cost:2,d:[18,26]},
+ {id:'faux',name:'Scrambled senses',desc:'Reverses their controls for a while.',cost:2,d:[20,30]},
+ {id:'gaz',name:'Tear gas',desc:"Blinds them for a long time.",cost:3,d:[28,38]},
+ {id:'traqueur',name:'Send a hunter',desc:'May catch them.',cost:3,d:[24,40]},
 ];
 const RMAL=[
- {id:'blackout',n:'Coupure de courant',w:3,min:1},{id:'locks',n:'Portes verrouillées',w:3,min:1},{id:'gas',n:'Gaz lacrymogène',w:2,min:1},
- {id:'invert',n:'Brouillage des sens',w:2,min:1},{id:'alarm',n:'Alarme',w:2,min:1},{id:'hunter',n:'Traqueur supplémentaire',w:2,min:2},{id:'drone',n:'Drone espion',w:2,min:2}];
+ {id:'blackout',n:'Power cut',w:3,min:1},{id:'locks',n:'Locked doors',w:3,min:1},{id:'gas',n:'Tear gas',w:2,min:1},
+ {id:'invert',n:'Scrambled senses',w:2,min:1},{id:'alarm',n:'Alarm',w:2,min:1},{id:'hunter',n:'Extra hunter',w:2,min:2},{id:'drone',n:'Spy drone',w:2,min:2}];
 const ROOMT={
- cellule:{n:'Cellule',f:'#3b403d',a:'#363b38',p:'tile'},
- sas:{n:'Sas de sortie',f:'#30363a',a:'#2c3236',p:'grid'},
- biblio:{n:'Bibliothèque',f:'#4d3626',a:'#463121',p:'plank'},
- labo:{n:'Laboratoire',f:'#7f8d88',a:'#77857f',p:'tile'},
- serveurs:{n:'Salle des serveurs',f:'#1f2a32',a:'#1c262d',p:'grid'},
- musique:{n:'Salle de musique',f:'#5b2f36',a:'#552b31',p:'carpet'},
- bureau:{n:'Bureau du directeur',f:'#4e3c2b',a:'#473626',p:'plank'},
- froide:{n:'Chambre froide',f:'#6f97a5',a:'#688f9c',p:'tile'},
- dortoir:{n:'Dortoir',f:'#3d4858',a:'#384252',p:'carpet'},
- serre:{n:'Serre',f:'#3c4a2b',a:'#374427',p:'grid'},
- reserve:{n:'Réserve',f:'#4a4943',a:'#43423c',p:'tile'},
- infirmerie:{n:'Infirmerie',f:'#8a9893',a:'#818f8a',p:'tile'},
- controle:{n:'Salle de contrôle',f:'#26302e',a:'#222b29',p:'grid'},
+ cellule:{n:'Cell',f:'#3b403d',a:'#363b38',p:'tile'},
+ sas:{n:'Exit airlock',f:'#30363a',a:'#2c3236',p:'grid'},
+ biblio:{n:'Library',f:'#4d3626',a:'#463121',p:'plank'},
+ labo:{n:'Laboratory',f:'#7f8d88',a:'#77857f',p:'tile'},
+ serveurs:{n:'Server room',f:'#1f2a32',a:'#1c262d',p:'grid'},
+ musique:{n:'Music room',f:'#5b2f36',a:'#552b31',p:'carpet'},
+ bureau:{n:'Director\'s office',f:'#4e3c2b',a:'#473626',p:'plank'},
+ froide:{n:'Cold room',f:'#6f97a5',a:'#688f9c',p:'tile'},
+ dortoir:{n:'Dormitory',f:'#3d4858',a:'#384252',p:'carpet'},
+ serre:{n:'Greenhouse',f:'#3c4a2b',a:'#374427',p:'grid'},
+ reserve:{n:'Storeroom',f:'#4a4943',a:'#43423c',p:'tile'},
+ infirmerie:{n:'Infirmary',f:'#8a9893',a:'#818f8a',p:'tile'},
+ controle:{n:'Control room',f:'#26302e',a:'#222b29',p:'grid'},
 };
 const roomName=r=>r?ROOMT[r.type].n:'';
 
@@ -736,12 +745,12 @@ function genMap(day){
  for(const p of m.objs.filter(o=>o.t==='puzzle')){
   const rn=roomName(p.r);
   if(p.kind==='digicode'){const c=p.data.code;
-   if(day<3)notePut(p.r,{kind:'clue',title:'Post-it froissé',text:`Coffre — ${rn}\n\nCode : ${c.split('').join(' ')}`});
-   else{notePut(p.r,{kind:'clue',title:'Moitié de post-it',text:`… coffre, ${rn} …\n\nDeux premiers chiffres : ${c[0]} ${c[1]}`});notePut(p.r,{kind:'clue',title:'Autre moitié de post-it',text:`… ${rn} …\n\nDeux derniers chiffres : ${c[2]} ${c[3]}`})}}
-  if(p.kind==='chimie')notePut(p.r,{kind:'clue',title:'Protocole Lazare',text:`Mélange stabilisant — ${rn}\n\nVerser dans cet ordre :\n${p.data.order.map((c,i)=>`${i+1}. ${CHEM[c].n}`).join('\n')}`});
+   if(day<3)notePut(p.r,{kind:'clue',title:'Crumpled sticky note',text:`Safe — ${rn}\n\nCode: ${c.split('').join(' ')}`});
+   else{notePut(p.r,{kind:'clue',title:'Half of a sticky note',text:`… safe, ${rn} …\n\nFirst two digits: ${c[0]} ${c[1]}`});notePut(p.r,{kind:'clue',title:'Other half of a sticky note',text:`… ${rn} …\n\nLast two digits: ${c[2]} ${c[3]}`})}}
+  if(p.kind==='chimie')notePut(p.r,{kind:'clue',title:'Lazarus Protocol',text:`Stabilising mixture — ${rn}\n\nPour in this order:\n${p.data.order.map((c,i)=>`${i+1}. ${CHEM[c].n}`).join('\n')}`});
  }
  notePut(null,{kind:'story',title:STORY[day-1].title,text:STORY[day-1].text,story:day-1});
- const tl=shuffle(TAUNTS.slice());for(let k=0;k<2;k++)notePut(null,{kind:'taunt',title:'Message tapé à la machine',text:tl[k]});
+ const tl=shuffle(TAUNTS.slice());for(let k=0;k<2;k++)notePut(null,{kind:'taunt',title:'Typewritten message',text:tl[k]});
  // crates, lockers
  for(let k=0;k<5+day;k++){const r=pick(rooms);const f=putWall(r,'crate',T.LOW);if(f)m.objs.push({t:'crate',x:(f.x+.5)*TS,y:(f.y+.5)*TS,r,searched:false,f})}
  for(let k=0;k<6;k++){const r=pick(rooms.filter(x=>x!==exitR));const f=putWall(r,'locker',T.TALL);if(f)m.objs.push({t:'locker',x:(f.x+.5)*TS,y:(f.y+.5)*TS,r,f})}
@@ -907,7 +916,7 @@ function makeNoise(x,y,r,src){
  for(const h of H){if(h.stun>0||h.state==='chase')continue;const d=dst(h.x,h.y,x,y),eff=los(h.x,h.y,x,y)?r:r*.55;
   if(d<eff){h.state='inv';h.rush=false;setPath(h,x+rnd(-24,24),y+rnd(-24,24));h.a=turnTo(h.a,Math.atan2(y-h.y,x-h.x),.8)}}}
 function alarmAt(x,y,n){const hs=H.filter(h=>h.stun<=0).sort((a,b)=>dst(a.x,a.y,x,y)-dst(b.x,b.y,x,y)).slice(0,n);for(const h of hs){if(h.state==='chase')continue;h.state='inv';h.rush=true;setPath(h,x,y)}}
-function startChase(h){if(!H.some(o=>o.state==='chase')){SFX.spotted();big('REPÉRÉ !','red');G.stats.spotted++;G.stats.spotDay=(G.stats.spotDay||0)+1}h.state='chase';h.sus=1.2;h.repath=0;h.lost=0;h.rush=false}
+function startChase(h){if(!H.some(o=>o.state==='chase')){SFX.spotted();big('SPOTTED!','red');G.stats.spotted++;G.stats.spotDay=(G.stats.spotDay||0)+1}h.state='chase';h.sus=1.2;h.repath=0;h.lost=0;h.rush=false}
 
 function updateHunters(dt){
  const play=state==='play'&&P;
@@ -932,8 +941,8 @@ function updateHunters(dt){
    else{h.mv=true;const dx=p.x-h.x,dy=p.y-h.y,d=Math.hypot(dx,dy),st=spd*dt;if(d<=st){h.x=p.x;h.y=p.y;h.path.shift()}else{h.x+=dx/d*st;h.y+=dy/d*st;h.a=turnTo(h.a,Math.atan2(dy,dx),dt*8)}h.walk+=st}}
   h.cone=poly(h.x,h.y,h.a-h.fov,h.a+h.fov,14,h.range*(isDark()?.85:1),false);
   if(play&&!P.vent&&P.cell<=0){
-   if(P.hidden){if(h.sawHide&&h.state==='chase'&&dst(h.x,h.y,P.hidden.x,P.hidden.y)<40){capture("Il t'a vu te cacher et t'a tiré de là.");return}}
-   else if(!(P.grace>0)&&!on('disguise')&&dst(h.x,h.y,P.x,P.y)<19){capture('Un traqueur t\'a attrapé.');return}}
+   if(P.hidden){if(h.sawHide&&h.state==='chase'&&dst(h.x,h.y,P.hidden.x,P.hidden.y)<40){capture("He saw you hide and dragged you out.");return}}
+   else if(!(P.grace>0)&&!on('disguise')&&dst(h.x,h.y,P.x,P.y)<19){capture('A hunter caught you.');return}}
  }}
 
 function updateCams(dt){
@@ -941,18 +950,18 @@ function updateCams(dt){
   c.cone=poly(c.x,c.y,c.a-c.fov,c.a+c.fov,8,c.range,false);
   if(state!=='play'||on('hack')||!P||P.hidden||P.vent||P.cell>0||P.grace>0||inSmoke(P.x,P.y)){c.det=Math.max(0,c.det-dt);continue}
   const d=dst(c.x,c.y,P.x,P.y);const seen=d<c.range&&Math.abs(angDiff(c.a,Math.atan2(P.y-c.y,P.x-c.x)))<c.fov&&los(c.x,c.y,P.x,P.y);
-  if(seen&&!on('disguise')){c.det+=dt;if(c.det>(G.char.id==='sam'?1.3:.65)&&c.cd<=0){c.cd=8;c.det=0;SFX.alarm();say('Une caméra t\'a repéré : les traqueurs arrivent.','bad');alarmAt(P.x,P.y,2);shake=.3}}else c.det=Math.max(0,c.det-dt*.5)}}
+  if(seen&&!on('disguise')){c.det+=dt;if(c.det>(G.char.id==='sam'?1.3:.65)&&c.cd<=0){c.cd=8;c.det=0;SFX.alarm();say('A camera spotted you: hunters are coming.','bad');alarmAt(P.x,P.y,2);shake=.3}}else c.det=Math.max(0,c.det-dt*.5)}}
 function updateMisc(dt){
  for(const d of DR){d.t-=dt;d.brk=d.brk||0;const a=Math.atan2(P.y-d.y,P.x-d.x),dd=dst(d.x,d.y,P.x,P.y);
   if(dd>70){d.x+=Math.cos(a)*78*dt;d.y+=Math.sin(a)*78*dt}else if(dd<55){const nx=d.x-Math.cos(a)*52*dt,ny=d.y-Math.sin(a)*52*dt;if(!sightBlock(Math.floor(nx/TS),Math.floor(ny/TS))){d.x=nx;d.y=ny}}
   const under=dd<30&&!P.hidden&&!P.vent&&P.cell<=0;
-  if(under){if(!d.told){d.told=true;say('Reste sous le drone pour le casser !','good')}d.brk+=dt;if(Math.random()<dt*6)PF.push({x:d.x+rnd(-8,8),y:d.y+rnd(-8,8),t:.4})}else d.brk=Math.max(0,d.brk-dt*.5);
-  if(d.brk>=5){d.t=0;SFX.caught();noiseB(.4,.3,1800);for(let i=0;i<14;i++)PF.push({x:d.x+rnd(-18,18),y:d.y+rnd(-18,18),t:rnd(.4,.8)});say('Drone détruit !','good');shake=.3;continue}
+  if(under){if(!d.told){d.told=true;say('Stay under the drone to break it!','good')}d.brk+=dt;if(Math.random()<dt*6)PF.push({x:d.x+rnd(-8,8),y:d.y+rnd(-8,8),t:.4})}else d.brk=Math.max(0,d.brk-dt*.5);
+  if(d.brk>=5){d.t=0;SFX.caught();noiseB(.4,.3,1800);for(let i=0;i<14;i++)PF.push({x:d.x+rnd(-18,18),y:d.y+rnd(-18,18),t:rnd(.4,.8)});say('Drone destroyed!','good');shake=.3;continue}
   if(!(d.brk>0)&&dd<120&&!P.hidden&&!P.vent&&P.cell<=0&&!(P.grace>0)){d.ping-=dt;if(d.ping<=0){d.ping=3;SFX.beep();alarmAt(P.x,P.y,1)}}}
  DR=DR.filter(d=>d.t>0);
  if(D&&D.alarmT>0){const b0=Math.ceil(D.alarmT);D.alarmT-=dt;const b1=Math.ceil(D.alarmT);
-  if(D.alarmT<=0){D.alarmT=0;SFX.alarm();alarmAt(P.x,P.y,9);big('ALARME !','red');say('L\'alarme sonne : les traqueurs foncent là où tu es.','bad')}
-  else if(b1!==b0){SFX.beep();big('ALARME DANS '+b1+' S','red')}}
+  if(D.alarmT<=0){D.alarmT=0;SFX.alarm();alarmAt(P.x,P.y,9);big('ALARM!','red');say('The alarm goes off: hunters rush to where you are.','bad')}
+  else if(b1!==b0){SFX.beep();big('ALARM IN '+b1+' S','red')}}
  for(const s of SM)s.t-=dt;SM=SM.filter(s=>s.t>0);
  for(const c of DC){c.t-=dt;c.ping-=dt;if(c.ping<=0){const K=DCK[c.kind||'leurre'];c.ping=K.iv;K.snd();makeNoise(c.x,c.y,K.r)}}DC=DC.filter(c=>c.t>0);
  for(const f of PF)f.t-=dt;PF=PF.filter(f=>f.t>0);
@@ -962,7 +971,7 @@ function updateMisc(dt){
 // ---------- player
 const K={};let joy={on:false,x:0,y:0},touchRun=false,mouse={x:0,y:0,act:false};
 function updatePlayer(dt){
- if(P.cell>0){P.cell-=dt;P.noise=0;if(P.cell<=0){big('');P.grace=5;say('5 s de protection : les traqueurs ne peuvent pas t\'attraper.','good')}else big('CELLULE — '+Math.ceil(P.cell),'red');return}
+ if(P.cell>0){P.cell-=dt;P.noise=0;if(P.cell<=0){big('');P.grace=5;say('5 s of protection: hunters cannot catch you.','good')}else big('CELL — '+Math.ceil(P.cell),'red');return}
  if(P.grace>0)P.grace-=dt;
  if(P.vent){P.vent.t-=dt;P.noise=0;if(P.vent.t<=0){P.x=P.vent.to.x;P.y=P.vent.to.y;P.vent=null;SFX.vent();collide(P,10)}return}
  if(P.ab>0)P.ab-=dt;
@@ -994,14 +1003,14 @@ function screenToWorld(sx,sy){return{x:CAM.vx+sx/ZOOM,y:CAM.vy+sy/ZOOM}}
 // ---------- interaction
 function findTarget(){
  if(!P||P.cell>0||P.vent)return null;
- if(P.hidden)return{kind:'unhide',o:P.hidden,label:'Sortir de la cachette'};
+ if(P.hidden)return{kind:'unhide',o:P.hidden,label:'Leave the hiding spot'};
  let best=null,bd=48;
  for(const o of M.objs){const d=dst(P.x,P.y,o.x,o.y);let lim=o.t==='exit'?50:o.t==='bed'?40:46;if(d>lim||d>=bd+ (o.t==='puzzle'?6:0))continue;
   if(o.t==='crate'&&o.searched)continue;if(o.t==='puzzle'&&o.solved)continue;bd=d;best=o}
  for(const[k]of locked){const x=(k%MW+.5)*TS,y=(((k/MW)|0)+.5)*TS,d=dst(P.x,P.y,x,y);if(d<44&&d<bd){bd=d;best={t:'lock',x,y,k}}}
  if(!best)return null;
- const L={puzzle:`${PZNAME[best.kind]}`,note:best.read?`Relire : ${best.title}`:`Lire : ${best.title}`,crate:'Fouiller la caisse',locker:'Se cacher dans le casier',bed:'Se glisser sous le lit',vent:'Ramper dans le conduit',
-  exit:P.frag>=M.need?'Franchir la porte du sas':`Porte verrouillée (${P.frag}/${M.need} fragments)`,lock:G.char.id==='victor'?'Ouvrir la porte':'Crocheter la serrure'}[best.t];
+ const L={puzzle:`${PZNAME[best.kind]}`,note:best.read?`Read again: ${best.title}`:`Read: ${best.title}`,crate:'Search the crate',locker:'Hide in the locker',bed:'Slip under the bed',vent:'Crawl into the vent',
+  exit:P.frag>=M.need?'Go through the airlock door':`Door locked (${P.frag}/${M.need} shards)`,lock:G.char.id==='victor'?'Open the door':'Pick the lock'}[best.t];
  return{kind:best.t,o:best,label:L}}
 function act(){
  if(state!=='play'||UI.modal)return;const tg=findTarget();if(!tg)return;const o=tg.o;audioInit();
@@ -1009,44 +1018,44 @@ function act(){
   case'unhide':P.hidden=null;SFX.click();break;
   case'puzzle':openPuzzle(o);break;
   case'note':openNote(o);break;
-  case'crate':P.act={t:0,need:G.char.id==='lea'?.7:1.5,label:'Fouille…',done:()=>loot(o)};makeNoise(o.x,o.y,70);break;
+  case'crate':P.act={t:0,need:G.char.id==='lea'?.7:1.5,label:'Searching…',done:()=>loot(o)};makeNoise(o.x,o.y,70);break;
   case'locker':case'bed':hide(o);break;
   case'vent':P.vent={t:1.4,to:o.pair};G.stats.vents=(G.stats.vents||0)+1;if(G.stats.vents>=5)unlock('rat');SFX.vent();for(const h of H)if(h.state==='chase'){h.state='search';h.searchT=3}break;
-  case'exit':if(P.frag>=M.need)completeDay();else{SFX.bad();say(`Il te manque ${M.need-P.frag} fragment${M.need-P.frag>1?'s':''}.`,'')}break;
-  case'lock':if(G.char.id==='victor'){unlockAt(o.k);SFX.lock()}else P.act={t:0,need:2.4,label:'Crochetage…',done:()=>{unlockAt(o.k);SFX.lock()}};break;
+  case'exit':if(P.frag>=M.need)completeDay();else{SFX.bad();say(`You still need ${M.need-P.frag} shard${M.need-P.frag>1?'s':''}.`,'')}break;
+  case'lock':if(G.char.id==='victor'){unlockAt(o.k);SFX.lock()}else P.act={t:0,need:2.4,label:'Picking the lock…',done:()=>{unlockAt(o.k);SFX.lock()}};break;
  }}
 function unlockAt(k){for(const d of M.doors){const ks=d.tiles.map(([x,y])=>y*MW+x);if(ks.includes(k))ks.forEach(q=>locked.delete(q))}locked.delete(k)}
 function hide(o){
  for(const h of H){h.sawHide=h.stun<=0&&(hunterSees(h)||(h.state==='chase'&&dst(h.x,h.y,P.x,P.y)<180&&los(h.x,h.y,P.x,P.y)))}
  P.hidden=o;P.act=null;SFX.click();tutoStep('hide');
- if(H.some(h=>h.sawHide))say('Ils t\'ont vu te cacher…','bad');else say('Tu retiens ton souffle.','')}
+ if(H.some(h=>h.sawHide))say('They saw you hide…','bad');else say('You hold your breath.','')}
 function loot(o){o.searched=true;count('crates');const r=Math.random();let m=null;
- if(r<.3){G.items.leurre++;m='un leurre sonore'}else if(r<.52){G.items.fumigene++;m='une grenade fumigène'}else if(r<.68){G.items.brouilleur++;m='un brouilleur (bloque le prochain malus)'}else if(r<.9){G.tokens++;m='un jeton'}
- if(m){say('Tu trouves '+m+'.','good');SFX.ok()}else say('La caisse est vide.','')}
+ if(r<.3){G.items.leurre++;m='a sound decoy'}else if(r<.52){G.items.fumigene++;m='a smoke grenade'}else if(r<.68){G.items.brouilleur++;m='a jammer (blocks the next penalty)'}else if(r<.9){G.tokens++;m='a token'}
+ if(m){say('You find '+m+'.','good');SFX.ok()}else say('The crate is empty.','')}
 function useItem(n){
  if(state!=='play'||UI.modal||!P||P.cell>0||P.vent)return;
  if(n===1||n===3){if(P.hidden){SFX.bad();return}const kind=n===1?'leurre':'petard';
-  if(kind==='leurre'&&G.items.leurre>0)G.items.leurre--;else if(!MP&&!G.tuto&&STOCK[kind]>0){STOCK[kind]--;saveShop();accUse(kind)}else{SFX.bad();if(n!==1&&MP)say('Les leurres achetés sont réservés au solo.','');return}
-  const d=ray(P.x,P.y,P.a,190,(x,y)=>solidT(x,y))-14;const x=P.x+Math.cos(P.a)*Math.max(10,d),y=P.y+Math.sin(P.a)*Math.max(10,d);DC.push({x,y,t:DCK[kind].t*(G.char.id==='ines'?2:1),ping:0,kind});say({leurre:'Leurre lancé.',petard:'Pétard lancé !'}[kind],'good')}
- if(n===2){if(G.items.fumigene>0)G.items.fumigene--;else if(!MP&&!G.tuto&&STOCK.fumigene>0){STOCK.fumigene--;saveShop();accUse('fumigene')}else{SFX.bad();return}SM.push({x:P.x,y:P.y,r:100,t:8});SFX.smoke();for(const h of H)if(h.state==='chase'&&inSmoke(h.x,h.y)||h.state==='chase'){h.state='search';h.searchT=3;h.sus=.4}say('Écran de fumée !','good')}}
+  if(kind==='leurre'&&G.items.leurre>0)G.items.leurre--;else if(!MP&&!G.tuto&&STOCK[kind]>0){STOCK[kind]--;saveShop();accUse(kind)}else{SFX.bad();if(n!==1&&MP)say('Bought decoys are for solo games only.','');return}
+  const d=ray(P.x,P.y,P.a,190,(x,y)=>solidT(x,y))-14;const x=P.x+Math.cos(P.a)*Math.max(10,d),y=P.y+Math.sin(P.a)*Math.max(10,d);DC.push({x,y,t:DCK[kind].t*(G.char.id==='ines'?2:1),ping:0,kind});say({leurre:'Decoy thrown.',petard:'Firecracker thrown!'}[kind],'good')}
+ if(n===2){if(G.items.fumigene>0)G.items.fumigene--;else if(!MP&&!G.tuto&&STOCK.fumigene>0){STOCK.fumigene--;saveShop();accUse('fumigene')}else{SFX.bad();return}SM.push({x:P.x,y:P.y,r:100,t:8});SFX.smoke();for(const h of H)if(h.state==='chase'&&inSmoke(h.x,h.y)||h.state==='chase'){h.state='search';h.searchT=3;h.sus=.4}say('Smoke screen!','good')}}
 function ability(){
  if(state!=='play'||UI.modal||!P||P.cell>0||P.vent)return;if(P.ab>0){SFX.bad();return}
  const c=G.char;P.ab=c.cd;
- if(c.id==='nadia'){FX.hack=12;say('Piratage : caméras coupées, traqueurs repérés.','good')}
+ if(c.id==='nadia'){FX.hack=12;say('Hack: cameras off, hunters tracked.','good')}
  else if(c.id==='marcus'){FX.sprint=4}
- else if(c.id==='lea'){const t=G.rivals.filter(r=>r.alive&&!r.done).sort((a,b)=>prog(b)-prog(a))[0];if(t){t.finish+=12;G.tokens++;say(`Larcin : tu voles un jeton à ${t.name}, qui perd 12 s.`,'good')}else P.ab=0}
- else if(c.id==='okafor'){let n=0;for(const h of H)if(dst(h.x,h.y,P.x,P.y)<165){h.stun=6;h.state='search';h.searchT=1;h.path=[];h.sus=0;n++}say(n?`Sédatif : ${n} traqueur${n>1?'s':''} endormi${n>1?'s':''}.`:'Sédatif : personne à portée.',n?'good':'');if(!n)P.ab=6}
- else if(c.id==='ines'){const d=ray(P.x,P.y,P.a,270,(x,y)=>solidT(x,y))-14;DC.push({x:P.x+Math.cos(P.a)*Math.max(10,d),y:P.y+Math.sin(P.a)*Math.max(10,d),t:4,ping:0,kind:'voix'});say('Ta voix résonne plus loin…','good')}
- else if(c.id==='rosa'){G.intim=true;say('Intimidation : ton prochain sabotage ne pourra pas être bloqué.','good')}
- else if(c.id==='sam'){FX.disguise=8;say('Déguisé : les traqueurs te prennent pour un des leurs.','good')}
- else if(c.id==='victor'){FX.plan=15;M.objs.forEach(o=>{if(o.t==='puzzle'||o.t==='exit')o.revealed=true});say('Tu te souviens des plans de cette aile.','good')}
+ else if(c.id==='lea'){const t=G.rivals.filter(r=>r.alive&&!r.done).sort((a,b)=>prog(b)-prog(a))[0];if(t){t.finish+=12;G.tokens++;say(`Pilfer: you steal a token from ${t.name}, who loses 12 s.`,'good')}else P.ab=0}
+ else if(c.id==='okafor'){let n=0;for(const h of H)if(dst(h.x,h.y,P.x,P.y)<165){h.stun=6;h.state='search';h.searchT=1;h.path=[];h.sus=0;n++}say(n?`Sedative: ${n} hunter${n>1?'s':''} asleep.`:'Sedative: nobody in range.',n?'good':'');if(!n)P.ab=6}
+ else if(c.id==='ines'){const d=ray(P.x,P.y,P.a,270,(x,y)=>solidT(x,y))-14;DC.push({x:P.x+Math.cos(P.a)*Math.max(10,d),y:P.y+Math.sin(P.a)*Math.max(10,d),t:4,ping:0,kind:'voix'});say('Your voice echoes further away…','good')}
+ else if(c.id==='rosa'){G.intim=true;say('Intimidation: your next sabotage cannot be blocked.','good')}
+ else if(c.id==='sam'){FX.disguise=8;say('Disguised: hunters take you for one of their own.','good')}
+ else if(c.id==='victor'){FX.plan=15;M.objs.forEach(o=>{if(o.t==='puzzle'||o.t==='exit')o.revealed=true});say('You remember the blueprints of this wing.','good')}
  SFX.ok()}
 function capture(msg){
  if(state!=='play')return;SFX.caught();shake=.6;flashT=1;
- if(G.tuto){closeModal();P.act=null;P.hidden=null;say('Attrapé ! En vraie partie, cela compte comme une capture.','bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=3;for(const h of H){h.state='patrol';h.path=[];h.sus=0;h.sawHide=false;const w=randomWP();if(dst(w.x,w.y,P.x,P.y)>TS*9){h.x=w.x;h.y=w.y}}return}
+ if(G.tuto){closeModal();P.act=null;P.hidden=null;say('Caught! In a real game, this counts as a capture.','bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=3;for(const h of H){h.state='patrol';h.path=[];h.sus=0;h.sawHide=false;const w=randomWP();if(dst(w.x,w.y,P.x,P.y)>TS*9){h.x=w.x;h.y=w.y}}return}
  G.strikes++;G.stats.caught++;closeModal();P.act=null;P.hidden=null;
- const it=['leurre','fumigene','brouilleur'].filter(k=>G.items[k]>0);let lost='';if(it.length){const k=pick(it);G.items[k]--;lost={leurre:' Tu perds un leurre.',fumigene:' Tu perds un fumigène.',brouilleur:' Tu perds un brouilleur.'}[k]}
- if(G.strikes>=maxStrikes()){lose('Capturé '+G.strikes+' fois aujourd\'hui. Valmont te retire du jeu.');return}
+ const it=['leurre','fumigene','brouilleur'].filter(k=>G.items[k]>0);let lost='';if(it.length){const k=pick(it);G.items[k]--;lost={leurre:' You lose a decoy.',fumigene:' You lose a smoke bomb.',brouilleur:' You lose a jammer.'}[k]}
+ if(G.strikes>=maxStrikes()){lose('Caught '+G.strikes+' times today. Valmont removes you from the game.');return}
  say(msg+lost,'bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=G.char.id==='okafor'?4:8;
  for(const h of H){h.state='patrol';h.path=[];h.sus=0;h.sawHide=false;if(dst(h.x,h.y,P.x,P.y)<TS*8){const w=randomWP();if(dst(w.x,w.y,P.x,P.y)>TS*9){h.x=w.x;h.y=w.y}}}}
 const maxStrikes=()=>G.char.id==='okafor'?4:3;
@@ -1114,7 +1123,7 @@ function render(){
   const chase=H.some(h=>h.state==='chase');if(chase){const g=ctx.createRadialGradient(W/2,Hh/2,Math.min(W,Hh)*.3,W/2,Hh/2,Math.max(W,Hh)*.7);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(160,20,15,${.35+.15*Math.sin(t*8)})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,Hh)}
   if(flashT>0){ctx.fillStyle=`rgba(200,20,10,${flashT*.5})`;ctx.fillRect(0,0,W,Hh)}
   if(P&&P.cell>0){ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,W,Hh);ctx.fillStyle='rgba(60,70,68,.7)';const bw=18*DPR;for(let x=bw;x<W;x+=bw*5)ctx.fillRect(x,0,bw,Hh)}
-  if(P&&P.vent){ctx.fillStyle='rgba(0,0,0,.82)';ctx.fillRect(0,0,W,Hh);ctx.fillStyle='#93a69d';ctx.font=`600 ${22*DPR}px "Barlow Condensed",sans-serif`;ctx.textAlign='center';ctx.fillText('Tu rampes dans le conduit…',W/2,Hh/2)}
+  if(P&&P.vent){ctx.fillStyle='rgba(0,0,0,.82)';ctx.fillRect(0,0,W,Hh);ctx.fillStyle='#93a69d';ctx.font=`600 ${22*DPR}px "Barlow Condensed",sans-serif`;ctx.textAlign='center';ctx.fillText('You crawl through the vent…',W/2,Hh/2)}
   if(P&&P.hidden){const g=ctx.createRadialGradient(W/2,Hh/2,Math.min(W,Hh)*.15,W/2,Hh/2,Math.max(W,Hh)*.6);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.85)');ctx.fillStyle=g;ctx.fillRect(0,0,W,Hh)}
  }}
 
@@ -1147,31 +1156,31 @@ function scheduleRivals(){G.rivals.forEach((r,i)=>{if(!r.alive)return;r.done=fal
 function updateRivals(dt){
  if(G.tuto)return;
  const alive=G.rivals.filter(r=>r.alive);
- for(const r of alive)if(!r.human&&!r.done&&D.t>=r.finish){r.done=true;say(G.day===5?`${r.name} a franchi la porte.`:`${r.name} a quitté son aile.`,'rival');SFX.beep()}
+ for(const r of alive)if(!r.human&&!r.done&&D.t>=r.finish){r.done=true;say(G.day===5?`${r.name} went through the door.`:`${r.name} left their wing.`,'rival');SFX.beep()}
  const undone=alive.filter(r=>!r.done&&!r.out),outs=alive.filter(r=>r.out&&!r.done).length,ubots=undone.filter(r=>!r.human);
- if(G.day===5){const f=alive.find(r=>r.done);if(f){lose(`${f.name} a franchi la dernière porte avant toi. Elle s'est refermée.`);return}
-  const lead=undone.sort((a,b)=>prog(b)-prog(a))[0];if(lead&&prog(lead)>.85&&!D.warn1){D.warn1=true;big(`${lead.name.toUpperCase()} APPROCHE DE LA PORTE`,'red');say(`${lead.name} est presque sortie. Sabote-la !`,'bad')}}
- else{if(undone.length===0&&!outs){lose('Tous les autres ont quitté leur aile. Tu es le dernier : le gaz envahit la tienne.');return}
-  if(undone.length===1&&!D.warn1){D.warn1=true;big('PLUS QU\'UN SEUL JOUEUR DERRIÈRE TOI','red');say(`Seul ${undone[0].name} est encore derrière toi. Dépêche-toi ou sabote-le.`,'bad')}}
+ if(G.day===5){const f=alive.find(r=>r.done);if(f){lose(`${f.name} went through the last door before you. It has closed.`);return}
+  const lead=undone.sort((a,b)=>prog(b)-prog(a))[0];if(lead&&prog(lead)>.85&&!D.warn1){D.warn1=true;big(`${lead.name.toUpperCase()} IS NEARING THE DOOR`,'red');say(`${lead.name} is almost out. Sabotage them!`,'bad')}}
+ else{if(undone.length===0&&!outs){lose('Everyone else has left their wing. You are the last one: gas floods yours.');return}
+  if(undone.length===1&&!D.warn1){D.warn1=true;big('ONLY ONE PLAYER LEFT BEHIND YOU','red');say(`Only ${undone[0].name} is still behind you. Hurry up or sabotage them.`,'bad')}}
  // random events
  if(D.t>=D.nextEvent){D.nextEvent=D.t+rnd(14,26);const r=pick(ubots);if(r){const x=Math.random();
-  if(x<.45||MP)say(`${r.name} a trouvé un fragment.`,'rival');
-  else if(x<.75){const d=ri(14,24);r.finish+=d;say(`${r.name} s'est fait attraper par un traqueur (+${d} s).`,'rival')}
-  else{const o=pick(ubots.filter(q=>q!==r));if(o){o.finish+=14;say(`${r.name} a saboté ${o.name}.`,'rival')}}}}
+  if(x<.45||MP)say(`${r.name} found a shard.`,'rival');
+  else if(x<.75){const d=ri(14,24);r.finish+=d;say(`${r.name} got caught by a hunter (+${d} s).`,'rival')}
+  else{const o=pick(ubots.filter(q=>q!==r));if(o){o.finish+=14;say(`${r.name} sabotaged ${o.name}.`,'rival')}}}}
  // rival malus on player
  const ahead=P.frag/M.need>(undone.reduce((s,r)=>s+prog(r),0)/Math.max(1,undone.length));
  if(D.t>=D.nextMalus){D.nextMalus=D.t+(rnd(34,56)-G.day*3)*(ahead?.75:1);
   let s=D.revenge&&D.revenge.alive&&!D.revenge.human?D.revenge:pick(alive.filter(r=>r!==D.ally&&!r.human));D.revenge=null;
   if(s){const pool=RMAL.filter(m=>G.day>=m.min);let tw=pool.reduce((a,m)=>a+m.w,0),x=Math.random()*tw,m=pool[0];for(const q of pool){x-=q.w;if(x<=0){m=q;break}}receiveMalus(s,m)}}
- if(D.betrayAt&&D.t>=D.betrayAt&&D.ally){const r=D.ally;D.ally=null;D.betrayAt=0;big('TRAHISON !','red');say(`${r.name} a rompu l'alliance.`,'bad');receiveMalus(r,RMAL[0]);setTimeout(()=>{if(state==='play')receiveMalus(r,pick(RMAL.slice(1,5)))},1500)}
+ if(D.betrayAt&&D.t>=D.betrayAt&&D.ally){const r=D.ally;D.ally=null;D.betrayAt=0;big('BETRAYAL!','red');say(`${r.name} broke the alliance.`,'bad');receiveMalus(r,RMAL[0]);setTimeout(()=>{if(state==='play')receiveMalus(r,pick(RMAL.slice(1,5)))},1500)}
  // alliance
  if(!D.allyDone&&D.t>=D.allyAt){D.allyDone=true;const r=pick(ubots);if(r)offerAlliance(r)}
  if(D.allyOffer){D.allyOffer.t-=dt;if(D.allyOffer.t<=0)allyAnswer(false)}
 }
 function receiveMalus(r,m,nb){
  if(state!=='play')return;
- if(!nb&&G.items.brouilleur>0){G.items.brouilleur--;say(`Ton brouilleur bloque « ${m.n} » envoyé par ${r.name}.`,'good');SFX.ok();return}
- SFX.malus();G.stats.recv++;big(`${r.name.toUpperCase()} T'ENVOIE : ${m.n.toUpperCase()}`,'red');say(`${r.name} t'envoie : ${m.n}.`,'bad');
+ if(!nb&&G.items.brouilleur>0){G.items.brouilleur--;say(`Your jammer blocks " ${m.n} " sent by ${r.name}.`,'good');SFX.ok();return}
+ SFX.malus();G.stats.recv++;big(`${r.name.toUpperCase()} SENDS YOU: ${m.n.toUpperCase()}`,'red');say(`${r.name} sends you: ${m.n}.`,'bad');
  if(m.id==='blackout')FX.blackout=25;
  else if(m.id==='locks'){const ds=M.doors.slice().sort((a,b)=>dst(a.x*TS,a.y*TS,P.x,P.y)-dst(b.x*TS,b.y*TS,P.x,P.y));let n=0;for(const d of ds){if(n>=3)break;if(d.tiles.some(([x,y])=>dst((x+.5)*TS,(y+.5)*TS,P.x,P.y)<40))continue;d.tiles.forEach(([x,y])=>locked.set(y*MW+x,25));n++}SFX.lock()}
  else if(m.id==='gas')FX.gas=20;
@@ -1181,31 +1190,31 @@ function receiveMalus(r,m,nb){
  else if(m.id==='drone'){const a=rnd(0,6.28);DR.push({x:P.x+Math.cos(a)*520,y:P.y+Math.sin(a)*520,t:32,ping:2})}
 }
 function sabotage(r,s){
- if(state!=='play')return;if(s.id==='traqueur'&&G.day<2){SFX.bad();say('Envoyer un traqueur est scellé le premier jour.','bad');return}if(G.tokens<s.cost||r.done||!r.alive){SFX.bad();return}
- if(MP&&r.human){if(r.out){SFX.bad();return}G.tokens-=s.cost;G.stats.sab++;G.stats.sabDay=(G.stats.sabDay||0)+1;mpSab({to:r.peer,nb:G.intim?1:0,k:{coupure:'blackout',verrou:'locks',faux:'invert',gaz:'gas',traqueur:'hunter'}[s.id]});G.intim=false;say(`${s.name} envoyé à ${r.name}.`,'good');SFX.ok();return}
+ if(state!=='play')return;if(s.id==='traqueur'&&G.day<2){SFX.bad();say('Sending a hunter is locked on the first day.','bad');return}if(G.tokens<s.cost||r.done||!r.alive){SFX.bad();return}
+ if(MP&&r.human){if(r.out){SFX.bad();return}G.tokens-=s.cost;G.stats.sab++;G.stats.sabDay=(G.stats.sabDay||0)+1;mpSab({to:r.peer,nb:G.intim?1:0,k:{coupure:'blackout',verrou:'locks',faux:'invert',gaz:'gas',traqueur:'hunter'}[s.id]});G.intim=false;say(`${s.name} sent to ${r.name}.`,'good');SFX.ok();return}
  G.tokens-=s.cost;G.stats.sab++;G.stats.sabDay=(G.stats.sabDay||0)+1;
  if(G.stats.sab>=10)unlock('saboteur');
- if(D.ally===r){D.ally=null;D.betrayAt=0;say(`Tu as trahi ${r.name}.`,'bad');unlock('traitre')}
- if(G.intim){G.intim=false}else if(Math.random()<(r.collector?.4:.15)){say(`${r.name} avait un brouilleur : ton sabotage est bloqué.`,'bad');SFX.bad();return}
- let d=Math.round(rnd(s.d[0],s.d[1]));if(s.id==='traqueur'&&Math.random()<.3){d+=20;say(`Ton traqueur a attrapé ${r.name} !`,'good')}
- r.finish+=d;if(MP)mpSab({to:'bot:'+r.name,d});say(`${s.name} → ${r.name} : +${Math.round(d)} s de retard.`,'good');SFX.ok();
- if(Math.random()<.3){D.nextMalus=Math.min(D.nextMalus,D.t+rnd(6,12));D.revenge=r;say(`${r.name} : « Tu vas me le payer. »`,'rival')}}
+ if(D.ally===r){D.ally=null;D.betrayAt=0;say(`You betrayed ${r.name}.`,'bad');unlock('traitre')}
+ if(G.intim){G.intim=false}else if(Math.random()<(r.collector?.4:.15)){say(`${r.name} had a jammer: your sabotage is blocked.`,'bad');SFX.bad();return}
+ let d=Math.round(rnd(s.d[0],s.d[1]));if(s.id==='traqueur'&&Math.random()<.3){d+=20;say(`Your hunter caught ${r.name} !`,'good')}
+ r.finish+=d;if(MP)mpSab({to:'bot:'+r.name,d});say(`${s.name} → ${r.name} : +${Math.round(d)} s delay.`,'good');SFX.ok();
+ if(Math.random()<.3){D.nextMalus=Math.min(D.nextMalus,D.t+rnd(6,12));D.revenge=r;say(`${r.name} : "You'll pay for that."`,'rival')}}
 function offerAlliance(r){
  const el=$('#ally');el.classList.remove('hide');
- el.innerHTML=`<b>Talkie-walkie · ${esc(r.name)}</b><p>« On s'allie pour aujourd'hui ? Je te dis où est un terminal, et on ne se sabote pas. »</p><div><button class="btn sm main" id="aY">Accepter <kbd>O</kbd></button><button class="btn sm" id="aN">Refuser <kbd>N</kbd></button></div>`;
+ el.innerHTML=`<b>Walkie-talkie · ${esc(r.name)}</b><p>"Allies for today? I tell you where a terminal is, and we do not sabotage each other."</p><div><button class="btn sm main" id="aY">Accept <kbd>O</kbd></button><button class="btn sm" id="aN">Refuse <kbd>N</kbd></button></div>`;
  D.allyOffer={r,t:15};SFX.voice();$('#aY').onclick=()=>allyAnswer(true);$('#aN').onclick=()=>allyAnswer(false)}
 function allyAnswer(yes){
  if(!D||!D.allyOffer)return;const r=D.allyOffer.r;D.allyOffer=null;$('#ally').classList.add('hide');
  if(yes&&r.alive&&!r.done){D.ally=r;const p=M.objs.find(o=>o.t==='puzzle'&&!o.solved&&!o.revealed&&!M.explored[Math.floor(o.y/TS)*MW+Math.floor(o.x/TS)])||M.objs.find(o=>o.t==='puzzle'&&!o.solved);
-  if(p){p.revealed=true;say(`${r.name} : « Il y a un terminal dans la salle : ${roomName(p.r)}. » (ajouté à ta carte)`,'rival')}
+  if(p){p.revealed=true;say(`${r.name} : "There is a terminal in this room: ${roomName(p.r)}." (added to your map)`,'rival')}
   if(Math.random()<(r.collector?.7:.3))D.betrayAt=D.t+rnd(25,60)}
- else{say(`${r.name} : « Comme tu voudras. »`,'rival');if(Math.random()<.5)D.revenge=r}}
+ else{say(`${r.name} : "Suit yourself."`,'rival');if(Math.random()<.5)D.revenge=r}}
 
 function solve(o){
  closeModal();o.solved=true;P.frag++;count('missions');G.tokens+=2;G.stats.frags++;SFX.frag();
- say(`Fragment ${P.frag}/${M.need} récupéré · +2 jetons.`,'good');tutoStep('mission');
- if(P.frag>=M.need){big('SORTIE OUVERTE','mint');announce(`La porte du sas est ouverte. Elle est dans la salle : ${roomName(M.exitR)}.`);M.exit.revealed=true}}
-function pzFail(o){SFX.bad();makeNoise(o.x,o.y,300);say('Le terminal émet un bip strident…','bad')}
+ say(`Shard ${P.frag}/${M.need} recovered · +2 tokens.`,'good');tutoStep('mission');
+ if(P.frag>=M.need){big('EXIT OPEN','mint');announce(`The airlock door is open. It is in this room: ${roomName(M.exitR)}.`);M.exit.revealed=true}}
+function pzFail(o){SFX.bad();makeNoise(o.x,o.y,300);say('The terminal lets out a shrill beep…','bad')}
 
 function startDay(){
  if(!MP&&!G.tuto)save();feed.innerHTML='';bigEl.className='';locked.clear();if(MP)withSeed(MP.seed+G.day*7919,()=>genMap(G.day));else genMap(G.day);P=newPlayer();H=[];DR=[];SM=[];DC=[];FX={};target=null;
@@ -1214,15 +1223,15 @@ function startDay(){
  D={t:0,night:false,nextMalus:rnd(38,52),nextEvent:rnd(10,18),allyAt:rnd(40,80),allyDone:G.day===1&&Math.random()<.3,ally:null,allyOffer:null,betrayAt:0,revenge:null,notes:[],warn1:false,gasWarn:false,limit:LIMIT[G.day-1]};
  scheduleRivals();$('#ally').classList.add('hide');
  if(G.tuto){state='intro';beginDay()}else showIntro()}
-function beginDay(){if(state!=='intro')return;if(MP)MP.st='play';hideScreens();$('#hud').classList.remove('hide');state='play';TIME=0;
- $('#tuto').classList.toggle('hide',!G.tuto);$('#rivals').classList.toggle('hide',!!G.tuto);if(G.tuto){drawTuto();announce('Bienvenue dans ton aile d\'entraînement. Suis les étapes à droite : ici, rien ne compte.');return}announce(G.day===1?'Trouve les terminaux. Évite mes traqueurs. Bonne chance.':`Jour ${G.day}. ${M.need} fragments. Le dernier sorti sera éliminé.`)}
+function beginDay(){if(state!=='intro')return;pokiStart();if(MP)MP.st='play';hideScreens();$('#hud').classList.remove('hide');state='play';TIME=0;
+ $('#tuto').classList.toggle('hide',!G.tuto);$('#rivals').classList.toggle('hide',!!G.tuto);if(G.tuto){drawTuto();announce('Welcome to your training wing. Follow the steps on the right: nothing counts here.');return}announce(G.day===1?'Find the terminals. Avoid my hunters. Good luck.':`Day ${G.day}. ${M.need} shards. The last one out will be eliminated.`)}
 function updateDay(dt){
  D.t+=dt;G.stats.time+=dt;if(G.tuto)return;
- if(!D.night&&D.t>=NIGHT_AT){D.night=true;announce('La nuit tombe. Les lumières s\'éteignent. Mon traqueur voit mieux que toi dans le noir.');big('LA NUIT TOMBE','');SFX.malus()}
- if(!D.gasWarn&&D.t>=D.limit-60){D.gasWarn=true;big('LE GAZ ARRIVE DANS 60 S','red');announce('Il te reste une minute avant que le gaz ne remplisse ton aile.')}
- if(D.t>=D.limit){lose('Le gaz a envahi ton aile.');return}
+ if(!D.night&&D.t>=NIGHT_AT){D.night=true;announce('Night falls. The lights go out. My hunter sees better than you in the dark.');big('NIGHT FALLS','');SFX.malus()}
+ if(!D.gasWarn&&D.t>=D.limit-60){D.gasWarn=true;big('GAS IN 60 S','red');announce('You have one minute before gas fills your wing.')}
+ if(D.t>=D.limit){lose('Gas has flooded your wing.');return}
  updateRivals(dt)}
-function completeDay(){
+function completeDay(){pokiStop();
  const pt=D.t;closeModal();if(G.tuto){tutoStep('exit');tutoFinish();return}G.stats.days.push(Math.round(pt));
  if(!G.stats.spotDay)unlock('fantome');if(pt<120)unlock('eclair');if(D.night&&!P.flash)unlock('noctambule');if(!MP&&G.day===1)unlock('jour1');
  if(MP){MP.t=pt;MP.st='done';MP.tk=0;if(G.day===5){win(pt);return}state='wait';MP.waitT=0;$('#hud').classList.add('hide');showScreen('wait');renderWait();return}
@@ -1233,30 +1242,30 @@ function completeDay(){
 // ---------- messages
 const feed=$('#feed'),bigEl=$('#big');let bigT=0;
 function say(t,cls=''){const el=document.createElement('div');el.className='msg '+cls;el.textContent=t;feed.prepend(el);while(feed.children.length>4)feed.lastChild.remove();setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),650)},7000)}
-function announce(t){say('Valmont : '+t,'col');SFX.voice()}
-function big(t,cls=''){if(!t){if(bigEl.dataset.cell){bigEl.classList.remove('on');bigEl.dataset.cell=''}return}bigEl.textContent=t;bigEl.className='on '+cls;bigT=t.startsWith('CELLULE')?.3:3;bigEl.dataset.cell=t.startsWith('CELLULE')?'1':''}
+function announce(t){say('Valmont: '+t,'col');SFX.voice()}
+function big(t,cls=''){if(!t){if(bigEl.dataset.cell){bigEl.classList.remove('on');bigEl.dataset.cell=''}return}bigEl.textContent=t;bigEl.className='on '+cls;bigT=t.startsWith('CELL')?.3:3;bigEl.dataset.cell=t.startsWith('CELL')?'1':''}
 
 // ---------- HUD
 const hEl=id=>document.getElementById(id);let hudT=0,miniT=0,rivT=0,rivOpen=true;
 function hud(dt){
  hudT-=dt;if(hudT>0)return;hudT=.1;
- hEl('hDay').textContent='Jour '+G.day;const ph=hEl('hPhase');ph.textContent=D.night?'Nuit':'Jour';ph.className=D.night?'night':'';
- hEl('hClock').textContent=fmt(D.t);const nx=hEl('hNext');if(!D.night){nx.textContent='Nuit dans '+fmt(NIGHT_AT-D.t);nx.className=''}else{nx.textContent='Gaz dans '+fmt(D.limit-D.t);nx.className=D.limit-D.t<90?'warn':''}
+ hEl('hDay').textContent='Day '+G.day;const ph=hEl('hPhase');ph.textContent=D.night?'Night':'Day';ph.className=D.night?'night':'';
+ hEl('hClock').textContent=fmt(D.t);const nx=hEl('hNext');if(!D.night){nx.textContent='Night in '+fmt(NIGHT_AT-D.t);nx.className=''}else{nx.textContent='Gas in '+fmt(D.limit-D.t);nx.className=D.limit-D.t<90?'warn':''}
  const fr=hEl('hFrag');fr.textContent=P.frag+'/'+M.need;fr.className=P.frag>=M.need?'done':'';
  hEl('hTok').textContent=G.tokens;const ms=maxStrikes();hEl('hStr').textContent='●'.repeat(G.strikes)+'○'.repeat(Math.max(0,ms-G.strikes));
  hEl('hSta').style.width=(P.stam*100)+'%';hEl('hNoise').style.width=Math.min(100,P.noise/270*100)+'%';hEl('hNoise').style.background=P.noise>200?'#e0483d':P.noise>60?'#e9c46a':'#79d9b1';
  const solo=!MP&&!G.tuto;document.body.classList.toggle('mpgame',!solo);hEl('n1').textContent=G.items.leurre+(solo?STOCK.leurre:0);hEl('n4').textContent=STOCK.petard;hEl('sl4').classList.toggle('empty',!STOCK.petard);hEl('n2').textContent=G.items.fumigene+(solo?STOCK.fumigene:0);hEl('n3').textContent=G.items.brouilleur;
  hEl('sl1').classList.toggle('empty',!(G.items.leurre+(solo?STOCK.leurre:0)));hEl('sl2').classList.toggle('empty',!(G.items.fumigene+(solo?STOCK.fumigene:0)));hEl('sl3').classList.toggle('empty',!G.items.brouilleur);
- hEl('nF').textContent=P.flash?'ON':'OFF';hEl('slF').classList.toggle('on',P.flash);hEl('nC').textContent=P.crouch?'OUI':'—';hEl('slC').classList.toggle('on',P.crouch);
+ hEl('nF').textContent=P.flash?'ON':'OFF';hEl('slF').classList.toggle('on',P.flash);hEl('nC').textContent=P.crouch?'YES':'—';hEl('slC').classList.toggle('on',P.crouch);
  hEl('abName').textContent=G.char.ab;const cd=hEl('cdQ');if(P.ab>0){cd.classList.remove('hide');cd.textContent=Math.ceil(P.ab)}else cd.classList.add('hide');
  document.querySelectorAll('#tbtn [data-a="crouch"]').forEach(b=>b.classList.toggle('on',P.crouch));document.querySelectorAll('#tbtn [data-a="flash"]').forEach(b=>b.classList.toggle('on',P.flash));
  const ab=document.querySelector('#tbtn [data-a="ab"]');if(ab)ab.textContent=P.ab>0?Math.ceil(P.ab)+' s':G.char.ab;
- const fxs=[];const lab={blackout:'Coupure',gas:'Gaz',invert:'Sens brouillés',hack:'Piratage',plan:'Plans',sprint:'Sprint'};
- if(D.alarmT>0)fxs.push(`<span>Alarme dans ${Math.ceil(D.alarmT)} s</span>`);
- if(inCover())fxs.push('<span class="g">À couvert</span>');
+ const fxs=[];const lab={blackout:'Blackout',gas:'Gas',invert:'Senses scrambled',hack:'Hack',plan:'Blueprints',sprint:'Sprint'};
+ if(D.alarmT>0)fxs.push(`<span>Alarm in ${Math.ceil(D.alarmT)} s</span>`);
+ if(inCover())fxs.push('<span class="g">In cover</span>');
  if(P.grace>0)fxs.push(`<span class="g">Protection ${Math.ceil(P.grace)} s</span>`);
  for(const k in lab)if(on(k))fxs.push(`<span class="${['hack','plan','sprint'].includes(k)?'g':''}">${lab[k]} ${Math.ceil(FX[k])} s</span>`);
- if(locked.size)fxs.push(`<span>Portes verrouillées ${Math.ceil(Math.max(...locked.values()))} s</span>`);if(DR.length)fxs.push('<span>Drone espion</span>');if(P.hidden)fxs.push('<span class="g">Caché</span>');
+ if(locked.size)fxs.push(`<span>Locked doors ${Math.ceil(Math.max(...locked.values()))} s</span>`);if(DR.length)fxs.push('<span>Spy drone</span>');if(P.hidden)fxs.push('<span class="g">Hidden</span>');
  const fxEl=hEl('fx'),html=fxs.join('');if(fxEl.innerHTML!==html)fxEl.innerHTML=html;
  // prompt
  target=findTarget();const pr=hEl('prompt');
@@ -1268,16 +1277,16 @@ function hud(dt){
  if(bigT>0){bigT-=.1;if(bigT<=0)bigEl.classList.remove('on')}}
 function drawRivals(){
  const al=G.rivals.filter(r=>r.alive),und=al.filter(r=>!r.done).length;
- const list=al.map(r=>({n:r.name,c:r.color,p:prog(r),done:r.done,ally:D.ally===r}));list.push({n:'Toi',c:G.char.body,p:P.frag/M.need,me:true});list.sort((a,b)=>b.p-a.p);
+ const list=al.map(r=>({n:r.name,c:r.color,p:prog(r),done:r.done,ally:D.ally===r}));list.push({n:'You',c:G.char.body,p:P.frag/M.need,me:true});list.sort((a,b)=>b.p-a.p);
  $('#rivals').className='pe'+(rivOpen?'':' closed');
- $('#rivals').innerHTML=`<div class="rh" id="rh"><span>Rivaux ${rivOpen?'▾':'▸'}</span><span>${und} en jeu</span></div>`+list.map(r=>`<div class="rv${r.me?' me':''}${r.done?' done':''}${r.ally?' ally':''}"><i class="c" style="background:${r.c}"></i><span>${esc(r.n)}</span><div class="bar"><i style="width:${r.p*100}%"></i></div><em>${r.done?'sorti':Math.round(r.p*100)+'%'}</em></div>`).join('')}
+ $('#rivals').innerHTML=`<div class="rh" id="rh"><span>Rivals ${rivOpen?'▾':'▸'}</span><span>${und} in play</span></div>`+list.map(r=>`<div class="rv${r.me?' me':''}${r.done?' done':''}${r.ally?' ally':''}"><i class="c" style="background:${r.c}"></i><span>${esc(r.n)}</span><div class="bar"><i style="width:${r.p*100}%"></i></div><em>${r.done?'out':Math.round(r.p*100)+'%'}</em></div>`).join('')}
 $('#rivals').addEventListener('click',()=>{rivOpen=!rivOpen;drawRivals()});
 
 // ---------- modal
 const modalEl=$('#modal');const UI={modal:null,mid:0,keyHook:null};
 function openModal(title,sub,build,onClose){
  closeModal();const id=++UI.mid;UI.modal={id,onClose};UI.keyHook=null;modalEl.classList.remove('hide');
- modalEl.innerHTML=`<div class="card"><div class="mh"><div><h3>${esc(title)}</h3>${sub?`<small>${esc(sub)}</small>`:''}</div><button class="x">Fermer <kbd>Échap</kbd></button></div><div class="mb"></div></div>`;
+ modalEl.innerHTML=`<div class="card"><div class="mh"><div><h3>${esc(title)}</h3>${sub?`<small>${esc(sub)}</small>`:''}</div><button class="x">Close <kbd>Esc</kbd></button></div><div class="mb"></div></div>`;
  modalEl.querySelector('.x').onclick=closeModal;build(modalEl.querySelector('.mb'),()=>UI.modal&&UI.modal.id===id)}
 function closeModal(){if(!UI.modal)return;const m=UI.modal;UI.modal=null;UI.keyHook=null;modalEl.classList.add('hide');modalEl.innerHTML='';if(m.onClose)m.onClose()}
 modalEl.addEventListener('pointerdown',e=>{if(e.target===modalEl)closeModal()});
@@ -1286,23 +1295,23 @@ modalEl.addEventListener('pointerdown',e=>{if(e.target===modalEl)closeModal()});
 const PZ={};
 PZ.simon=(o,b,done,alive)=>{
  const cols=['#e0483d','#79d9b1','#e9c46a','#5a9be0'],fq=[262,330,392,523];
- b.innerHTML=`<p class="hint">Mémorise la séquence lumineuse puis reproduis-la. Une erreur fait du bruit.</p><div class="simon">${cols.map((c,i)=>`<button class="pad" data-i="${i}" style="--c:${c}" aria-label="Touche ${i+1}">${SET.cb?`<em>${['Rouge','Vert','Jaune','Bleu'][i]}</em>`:''}</button>`).join('')}</div><div class="pzs">Regarde…</div>`;
+ b.innerHTML=`<p class="hint">Memorise the light sequence, then repeat it. A mistake makes noise.</p><div class="simon">${cols.map((c,i)=>`<button class="pad" data-i="${i}" style="--c:${c}" aria-label="Key ${i+1}">${SET.cb?`<em>${['Red','Green','Yellow','Blue'][i]}</em>`:''}</button>`).join('')}</div><div class="pzs">Watch…</div>`;
  const pads=[...b.querySelectorAll('.pad')],st=b.querySelector('.pzs');let seq=[],inp=[],busy=true;
  const fl=(i,ms=380)=>{if(!alive())return;pads[i].classList.add('on');tone(fq[i],ms/1000,'triangle',.2);setTimeout(()=>pads[i].classList.remove('on'),ms)};
- const play=()=>{busy=true;inp=[];st.textContent='Regarde…';seq.forEach((v,k)=>setTimeout(()=>fl(v),600+k*560));setTimeout(()=>{if(!alive())return;busy=false;st.textContent=`À toi : ${seq.length} touches`},600+seq.length*560)};
+ const play=()=>{busy=true;inp=[];st.textContent='Watch…';seq.forEach((v,k)=>setTimeout(()=>fl(v),600+k*560));setTimeout(()=>{if(!alive())return;busy=false;st.textContent=`Your turn: ${seq.length} keys`},600+seq.length*560)};
  const ns=()=>{seq=Array.from({length:o.data.len},()=>ri(0,3));play()};
- const press=i=>{if(busy)return;fl(i,220);inp.push(i);const k=inp.length-1;if(inp[k]!==seq[k]){pzFail(o);st.textContent='Erreur. Nouvelle séquence…';busy=true;setTimeout(()=>alive()&&ns(),1000);return}
-  if(inp.length===seq.length){busy=true;st.textContent='Séquence validée.';setTimeout(done,500)}else st.textContent=`${inp.length}/${seq.length}`};
+ const press=i=>{if(busy)return;fl(i,220);inp.push(i);const k=inp.length-1;if(inp[k]!==seq[k]){pzFail(o);st.textContent='Wrong. New sequence…';busy=true;setTimeout(()=>alive()&&ns(),1000);return}
+  if(inp.length===seq.length){busy=true;st.textContent='Sequence accepted.';setTimeout(done,500)}else st.textContent=`${inp.length}/${seq.length}`};
  pads.forEach(p=>p.onclick=()=>press(+p.dataset.i));UI.keyHook=k=>{const n=+k;if(n>=1&&n<=4)press(n-1)};ns()};
 PZ.digicode=(o,b,done)=>{
- let v='';b.innerHTML=`<p class="hint">Saisis le code à 4 chiffres. Il est noté quelque part dans une autre salle.</p><div class="dc"><div class="scr">----</div><div class="keys">${[1,2,3,4,5,6,7,8,9,'C',0,'OK'].map(k=>`<button data-k="${k}">${k}</button>`).join('')}</div></div>`;
+ let v='';b.innerHTML=`<p class="hint">Enter the 4-digit code. It is written somewhere in another room.</p><div class="dc"><div class="scr">----</div><div class="keys">${[1,2,3,4,5,6,7,8,9,'C',0,'OK'].map(k=>`<button data-k="${k}">${k}</button>`).join('')}</div></div>`;
  const scr=b.querySelector('.scr'),show=()=>scr.textContent=(v+'----').slice(0,4);
  const key=k=>{SFX.click();if(k==='C')v='';else if(k==='OK'){if(v===o.data.code){scr.textContent='OK';setTimeout(done,350);return}pzFail(o);scr.classList.add('err');setTimeout(()=>scr.classList.remove('err'),450);v=''}else if(v.length<4)v+=k;show()};
  b.querySelectorAll('button').forEach(bt=>bt.onclick=()=>key(bt.dataset.k));
  UI.keyHook=k=>{if(/^[0-9]$/.test(k))key(k);else if(k==='Enter')key('OK');else if(k==='Backspace')key('C')}};
 PZ.cables=(o,b,done)=>{
  const n=o.data.n,cols=shuffle(CHEM.slice()).slice(0,n),right=shuffle(cols.map((c,i)=>i));let sel=null;const conn=new Set();
- b.innerHTML=`<p class="hint">${o.data.stroop?'Relie chaque fil au <b>mot</b> qui nomme sa couleur. Ne te fie pas à la couleur des lettres.':'Relie chaque fil à la prise de la même couleur.'}</p><div class="cab"><svg></svg><div class="col">${cols.map((c,i)=>`<button class="plug" data-i="${i}" style="--c:${c.c}" aria-label="${c.n}">${SET.cb?`<em>${c.n}</em>`:''}</button>`).join('')}</div><div class="col">${right.map(i=>{const c=cols[i];if(o.data.stroop){const w=pick(CHEM.filter(x=>x!==c));return`<button class="plug word" data-j="${i}" style="color:${w.c}">${c.n.toUpperCase()}</button>`}return`<button class="plug" data-j="${i}" style="--c:${c.c}" aria-label="${c.n}">${SET.cb?`<em>${c.n}</em>`:''}</button>`}).join('')}</div></div>`;
+ b.innerHTML=`<p class="hint">${o.data.stroop?'Connect each wire to the <b>word</b> that names its colour. Do not trust the colour of the letters.':'Connect each wire to the socket of the same colour.'}</p><div class="cab"><svg></svg><div class="col">${cols.map((c,i)=>`<button class="plug" data-i="${i}" style="--c:${c.c}" aria-label="${c.n}">${SET.cb?`<em>${c.n}</em>`:''}</button>`).join('')}</div><div class="col">${right.map(i=>{const c=cols[i];if(o.data.stroop){const w=pick(CHEM.filter(x=>x!==c));return`<button class="plug word" data-j="${i}" style="color:${w.c}">${c.n.toUpperCase()}</button>`}return`<button class="plug" data-j="${i}" style="--c:${c.c}" aria-label="${c.n}">${SET.cb?`<em>${c.n}</em>`:''}</button>`}).join('')}</div></div>`;
  const svg=b.querySelector('svg'),box=b.querySelector('.cab');
  const draw=()=>{const br=box.getBoundingClientRect();svg.setAttribute('viewBox',`0 0 ${br.width} ${br.height}`);svg.innerHTML=[...conn].map(i=>{const l=b.querySelector(`[data-i="${i}"]`).getBoundingClientRect(),r=b.querySelector(`[data-j="${i}"]`).getBoundingClientRect();const x1=l.right-br.left,y1=l.top+l.height/2-br.top,x2=r.left-br.left,y2=r.top+r.height/2-br.top;return`<path d="M${x1} ${y1} C${(x1+x2)/2} ${y1} ${(x1+x2)/2} ${y2} ${x2} ${y2}" stroke="${cols[i].c}" stroke-width="7" fill="none" stroke-linecap="round"/>`}).join('')};
  const L=[...b.querySelectorAll('[data-i]')];
@@ -1313,67 +1322,67 @@ PZ.cables=(o,b,done)=>{
   L.forEach(q=>q.classList.remove('sel'));sel=null})};
 PZ.chimie=(o,b,done)=>{
  const ord=o.data.order;let k=0;
- b.innerHTML=`<p class="hint">Verse les produits dans le bon ordre. Le protocole est écrit sur une note, ailleurs.</p><div class="chem"><div class="beaker"><div class="layers"></div></div><div class="flasks">${CHEM.map((c,i)=>`<button class="flask" data-i="${i}" style="--c:${c.c}"><span></span>${c.n}</button>`).join('')}</div></div><div class="pzs">0/${ord.length}</div>`;
+ b.innerHTML=`<p class="hint">Pour the chemicals in the right order. The protocol is written on a note somewhere else.</p><div class="chem"><div class="beaker"><div class="layers"></div></div><div class="flasks">${CHEM.map((c,i)=>`<button class="flask" data-i="${i}" style="--c:${c.c}"><span></span>${c.n}</button>`).join('')}</div></div><div class="pzs">0/${ord.length}</div>`;
  const lay=b.querySelector('.layers'),st=b.querySelector('.pzs');
  b.querySelectorAll('.flask').forEach(f=>f.onclick=()=>{const i=+f.dataset.i;
-  if(i===ord[k]){k++;lay.insertAdjacentHTML('beforeend',`<i style="background:${CHEM[i].c}"></i>`);tone(300+k*80,.15,'sine',.15);st.textContent=k+'/'+ord.length;if(k===ord.length){st.textContent='Mélange stable.';setTimeout(done,500)}}
-  else{pzFail(o);noiseB(.5,.2,2500);k=0;lay.innerHTML='';st.textContent='Réaction ! Le mélange est perdu. 0/'+ord.length}})};
+  if(i===ord[k]){k++;lay.insertAdjacentHTML('beforeend',`<i style="background:${CHEM[i].c}"></i>`);tone(300+k*80,.15,'sine',.15);st.textContent=k+'/'+ord.length;if(k===ord.length){st.textContent='Mixture stable.';setTimeout(done,500)}}
+  else{pzFail(o);noiseB(.5,.2,2500);k=0;lay.innerHTML='';st.textContent='Reaction! The mixture is ruined. 0/'+ord.length}})};
 PZ.sequence=(o,b,done)=>{
  const n=o.data.n,nums=shuffle(Array.from({length:n},(_,i)=>i+1));let next=1;
- b.innerHTML=`<p class="hint">Appuie sur les numéros dans l'ordre, de 1 à ${n}. Une erreur remet tout à zéro.</p><div class="seqg" style="--c:${n===10?5:4}">${nums.map(v=>`<button data-v="${v}">${v}</button>`).join('')}</div><div class="pzs">Prochain : 1</div>`;
+ b.innerHTML=`<p class="hint">Press the numbers in order, from 1 to ${n}. One mistake resets everything.</p><div class="seqg" style="--c:${n===10?5:4}">${nums.map(v=>`<button data-v="${v}">${v}</button>`).join('')}</div><div class="pzs">Next: 1</div>`;
  const bs=[...b.querySelectorAll('.seqg button')],st=b.querySelector('.pzs');
  bs.forEach(x=>x.onclick=()=>{const v=+x.dataset.v;
-  if(v===next){x.classList.add('on');x.disabled=true;tone(400+next*40,.08,'triangle',.12);next++;if(next>n){st.textContent='Collecteurs déverrouillés.';setTimeout(done,400)}else st.textContent='Prochain : '+next}
-  else{pzFail(o);next=1;bs.forEach(y=>{y.classList.remove('on');y.disabled=false});st.textContent='Erreur. On recommence à 1.'}})};
+  if(v===next){x.classList.add('on');x.disabled=true;tone(400+next*40,.08,'triangle',.12);next++;if(next>n){st.textContent='Manifolds unlocked.';setTimeout(done,400)}else st.textContent='Next: '+next}
+  else{pzFail(o);next=1;bs.forEach(y=>{y.classList.remove('on');y.disabled=false});st.textContent='Wrong. Back to 1.'}})};
 PZ.calibre=(o,b,done,alive)=>{
  const P=o.data;let i=0;const dials=Array.from({length:P.dials},()=>({z:rnd(.08,.92-P.zone),x:Math.random(),dir:Math.random()<.5?1:-1}));
- b.innerHTML=`<p class="hint">Arrête chaque curseur dans la zone verte avec « Arrêter » (ou Espace).</p><div class="cal">${dials.map(d=>`<div class="bar2"><i class="z" style="left:${d.z*100}%;width:${P.zone*100}%"></i><i class="c"></i></div>`).join('')}</div><div style="text-align:center"><button class="btn main" id="calB">Arrêter</button></div><div class="pzs">Curseur 1/${P.dials}</div>`;
+ b.innerHTML=`<p class="hint">Stop each cursor in the green zone with "Stop" (or Space).</p><div class="cal">${dials.map(d=>`<div class="bar2"><i class="z" style="left:${d.z*100}%;width:${P.zone*100}%"></i><i class="c"></i></div>`).join('')}</div><div style="text-align:center"><button class="btn main" id="calB">Stop</button></div><div class="pzs">Cursor 1/${P.dials}</div>`;
  const bars=[...b.querySelectorAll('.bar2')],st=b.querySelector('.pzs');let last=performance.now();
  const frame=t=>{if(!alive())return;const dt=Math.min(.05,(t-last)/1000);last=t;
   if(i<dials.length){const d=dials[i];d.x+=d.dir*dt*P.speed;if(d.x>1){d.x=1;d.dir=-1}if(d.x<0){d.x=0;d.dir=1}}
   bars.forEach((el,k)=>{el.classList.toggle('act',k===i);el.querySelector('.c').style.left=(dials[k].x*100)+'%'});requestAnimationFrame(frame)};
  requestAnimationFrame(frame);
  const stop=()=>{if(i>=dials.length)return;const d=dials[i];
-  if(d.x>=d.z&&d.x<=d.z+P.zone){bars[i].classList.add('ok');tone(600+i*120,.12,'triangle',.15);i++;if(i>=dials.length){st.textContent='Distribution calibrée.';setTimeout(done,400)}else st.textContent=`Curseur ${i+1}/${P.dials}`}
+  if(d.x>=d.z&&d.x<=d.z+P.zone){bars[i].classList.add('ok');tone(600+i*120,.12,'triangle',.15);i++;if(i>=dials.length){st.textContent='Distribution calibrated.';setTimeout(done,400)}else st.textContent=`Cursor ${i+1}/${P.dials}`}
   else{pzFail(o);const el=bars[i];el.classList.add('err');setTimeout(()=>el.classList.remove('err'),350)}};
  b.querySelector('#calB').onclick=stop;UI.keyHook=k=>{if(k===' '||k==='Enter')stop()}};
 PZ.badge=(o,b,done)=>{
- const P=o.data;b.innerHTML=`<p class="hint">Glisse le badge d'un seul trait jusqu'au bout du lecteur, ni trop vite ni trop lentement.</p><div class="swipe"><div class="track"><div class="card2">BADGE 0417</div></div><div class="led"></div></div><div class="pzs">Glisse le badge vers la droite</div>`;
+ const P=o.data;b.innerHTML=`<p class="hint">Swipe the badge in one go to the end of the reader, not too fast, not too slow.</p><div class="swipe"><div class="track"><div class="card2">BADGE 0417</div></div><div class="led"></div></div><div class="pzs">Swipe the badge to the right</div>`;
  const tr=b.querySelector('.track'),cd=b.querySelector('.card2'),st=b.querySelector('.pzs'),led=b.querySelector('.led');let drag=null;
  const maxX=()=>tr.clientWidth-16-cd.offsetWidth;
  cd.addEventListener('pointerdown',e=>{drag={x0:e.clientX,t0:performance.now(),x:0};led.className='led';try{cd.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
  cd.addEventListener('pointermove',e=>{if(!drag)return;drag.x=clamp(e.clientX-drag.x0,0,maxX());cd.style.transform=`translateX(${drag.x}px)`});
  const end=()=>{if(!drag)return;const dt=(performance.now()-drag.t0)/1000,full=drag.x>=maxX()-4,ts=dt.toFixed(1).replace('.',',')+' s';drag=null;cd.style.transform='';
-  if(!full){st.textContent='Lecture interrompue : va jusqu\'au bout.';led.className='led err';SFX.bad();return}
-  if(dt<P.lo){st.textContent=`Trop rapide (${ts}). Recommence.`;led.className='led err';pzFail(o);return}
-  if(dt>P.hi){st.textContent=`Trop lent (${ts}). Recommence.`;led.className='led err';pzFail(o);return}
-  led.className='led ok';st.textContent=`Badge accepté (${ts}).`;SFX.ok();setTimeout(done,450)};
+  if(!full){st.textContent='Read interrupted: go all the way.';led.className='led err';SFX.bad();return}
+  if(dt<P.lo){st.textContent=`Too fast (${ts}). Try again.`;led.className='led err';pzFail(o);return}
+  if(dt>P.hi){st.textContent=`Too slow (${ts}). Try again.`;led.className='led err';pzFail(o);return}
+  led.className='led ok';st.textContent=`Badge accepted (${ts}).`;SFX.ok();setTimeout(done,450)};
  cd.addEventListener('pointerup',end);cd.addEventListener('pointercancel',end)};
 PZ.moteur=(o,b,done,alive)=>{
  const P=o.data;let ph=Math.random()*6,hold=0,fin=false;
- b.innerHTML=`<p class="hint">Garde l'aiguille sur la ligne rouge pendant 2 secondes avec le curseur. La ligne bouge.</p><div class="eng"><i class="tl"></i><i class="nd"></i></div><input type="range" min="0" max="1000" value="0" class="rng" aria-label="Sortie du moteur"><div class="pzs">Alignement : 0 %</div>`;
+ b.innerHTML=`<p class="hint">Keep the needle on the red line for 2 seconds with the slider. The line moves.</p><div class="eng"><i class="tl"></i><i class="nd"></i></div><input type="range" min="0" max="1000" value="0" class="rng" aria-label="Sortie du moteur"><div class="pzs">Alignment: 0%</div>`;
  const tl=b.querySelector('.tl'),nd=b.querySelector('.nd'),rg=b.querySelector('.rng'),st=b.querySelector('.pzs');let last=performance.now();
  const frame=t=>{if(!alive()||fin)return;const dt=Math.min(.05,(t-last)/1000);last=t;ph+=dt*P.drift;
   const tg=clamp(.5+Math.sin(ph)*.32+Math.sin(ph*2.3)*.08,.05,.95),v=rg.value/1000;tl.style.left=(tg*100)+'%';nd.style.left=(v*100)+'%';
-  const ok=Math.abs(v-tg)<P.tol;nd.classList.toggle('ok',ok);hold=ok?hold+dt:Math.max(0,hold-dt*1.5);st.textContent='Alignement : '+Math.round(Math.min(1,hold/2)*100)+' %';
-  if(hold>=2){fin=true;st.textContent='Moteur aligné.';SFX.ok();setTimeout(done,400);return}requestAnimationFrame(frame)};
+  const ok=Math.abs(v-tg)<P.tol;nd.classList.toggle('ok',ok);hold=ok?hold+dt:Math.max(0,hold-dt*1.5);st.textContent='Alignment: '+Math.round(Math.min(1,hold/2)*100)+' %';
+  if(hold>=2){fin=true;st.textContent='Engine aligned.';SFX.ok();setTimeout(done,400);return}requestAnimationFrame(frame)};
  requestAnimationFrame(frame)};
 function openPuzzle(o){openModal(PZNAME[o.kind],roomName(o.r),(b,alive)=>PZ[o.kind](o,b,()=>{if(alive())solve(o)},alive))}
 function openNote(o){
  const first=!o.read;o.read=true;if(!D.notes.includes(o))D.notes.push(o);
- tutoStep('note');if(o.kind==='story'&&!G.story.includes(o.story)){G.story.push(o.story);if(G.story.length>=5)unlock('archiviste');G.tokens++;setTimeout(()=>say('Dossier retrouvé · +1 jeton. Il est rangé dans ton carnet.','good'),50)}
- openModal(o.title,roomName(o.r)+(first?'':' · relu'),b=>{b.innerHTML=`<div class="paper">${esc(o.text)}</div>`});SFX.click()}
+ tutoStep('note');if(o.kind==='story'&&!G.story.includes(o.story)){G.story.push(o.story);if(G.story.length>=5)unlock('archiviste');G.tokens++;setTimeout(()=>say('File found · +1 token. It is stored in your notebook.','good'),50)}
+ openModal(o.title,roomName(o.r)+(first?'':' · read again'),b=>{b.innerHTML=`<div class="paper">${esc(o.text)}</div>`});SFX.click()}
 function openJournal(){
  if(state!=='play')return;
  const day=D.notes.filter(n=>n.kind==='clue'),st=G.story.slice().sort();
- openModal('Carnet','Notes du jour et dossiers retrouvés',b=>{b.innerHTML=`<div class="notes">${day.length?day.map(n=>`<div><h4>${esc(n.title)} · ${esc(roomName(n.r))}</h4><div class="paper">${esc(n.text)}</div></div>`).join(''):'<p class="hint">Aucun indice trouvé aujourd\'hui. Les codes et protocoles sont écrits sur des notes jaunes, au sol.</p>'}
-  ${st.length?`<h4 style="margin-top:6px">Dossiers sur l'Institut Valmont (${st.length}/5)</h4>`+st.map(i=>`<div class="paper">${esc(STORY[i].title+'\n\n'+STORY[i].text)}</div>`).join(''):''}</div>`})}
+ openModal('Notebook','Today\'s notes and files found',b=>{b.innerHTML=`<div class="notes">${day.length?day.map(n=>`<div><h4>${esc(n.title)} · ${esc(roomName(n.r))}</h4><div class="paper">${esc(n.text)}</div></div>`).join(''):'<p class="hint">No clues found today. Codes and protocols are written on yellow notes on the floor.</p>'}
+  ${st.length?`<h4 style="margin-top:6px">Files on the Valmont Institute (${st.length}/5)</h4>`+st.map(i=>`<div class="paper">${esc(STORY[i].title+'\n\n'+STORY[i].text)}</div>`).join(''):''}</div>`})}
 function openSab(){
  if(state!=='play'||!P)return;tutoStep('sab');let sel=SAB[0];
- openModal('Saboter un rival','Le jeu continue pendant que tu choisis',(b,alive)=>{
+ openModal('Sabotage a rival','The game keeps running while you choose',(b,alive)=>{
   const draw=()=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));
-   b.innerHTML=`<div class="tok">Tu as <b>${G.tokens}</b> jeton${G.tokens>1?'s':''}.</div><div class="mal">${SAB.map(s=>{const lk=s.id==='traqueur'&&G.day<2;return`<button class="${s===sel?'sel':''}" data-m="${s.id}" ${lk?'disabled':''}><b>${s.name}</b><small>${lk?'Scellé le premier jour.':s.desc+' +'+s.d[0]+'–'+s.d[1]+' s'}</small><span class="cost">${s.cost}</span></button>`}).join('')}</div>
-   <div class="tg">${al.map(r=>`<div class="trow"><i class="c" style="background:${r.color}"></i><span>${esc(r.name)}${D.ally===r?' (allié)':''}</span><div class="bar"><i style="width:${prog(r)*100}%"></i></div>${r.done?'<em>sorti</em>':`<button class="btn sm" data-r="${esc(r.name)}" ${G.tokens<sel.cost?'disabled':''}>Cibler</button>`}</div>`).join('')}</div>`;
+   b.innerHTML=`<div class="tok">You have <b>${G.tokens}</b> token${G.tokens>1?'s':''}.</div><div class="mal">${SAB.map(s=>{const lk=s.id==='traqueur'&&G.day<2;return`<button class="${s===sel?'sel':''}" data-m="${s.id}" ${lk?'disabled':''}><b>${s.name}</b><small>${lk?'Locked on the first day.':s.desc+' +'+s.d[0]+'–'+s.d[1]+' s'}</small><span class="cost">${s.cost}</span></button>`}).join('')}</div>
+   <div class="tg">${al.map(r=>`<div class="trow"><i class="c" style="background:${r.color}"></i><span>${esc(r.name)}${D.ally===r?' (ally)':''}</span><div class="bar"><i style="width:${prog(r)*100}%"></i></div>${r.done?'<em>out</em>':`<button class="btn sm" data-r="${esc(r.name)}" ${G.tokens<sel.cost?'disabled':''}>Target</button>`}</div>`).join('')}</div>`;
    b.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>{sel=SAB.find(s=>s.id===x.dataset.m);SFX.click();draw()});
    b.querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>{const r=G.rivals.find(q=>q.name===x.dataset.r);sabotage(r,sel);draw()})};
   draw();const iv=setInterval(()=>{if(!alive()){clearInterval(iv);return}b.querySelectorAll('.trow .bar i').forEach((el,i)=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));if(al[i])el.style.width=prog(al[i])*100+'%'})},800)})}
@@ -1384,14 +1393,14 @@ function hideScreens(){screens.forEach(s=>$('#'+s).classList.add('hide'))}
 function showScreen(s){hideScreens();$('#'+s).classList.remove('hide')}
 let selChar=CHARS[0],helpBack='title';
 function buildTitle(){
- $('#chars').innerHTML=CHARS.map((c,i)=>`<button class="char${c===selChar?' sel':''}${owns(c)?'':' lock'}" data-i="${i}"><canvas width="300" height="160"></canvas><b>${c.name}</b><small>${owns(c)?c.title:c.price+' pièces · boutique'}</small></button>`).join('');
+ $('#chars').innerHTML=CHARS.map((c,i)=>`<button class="char${c===selChar?' sel':''}${owns(c)?'':' lock'}" data-i="${i}"><canvas width="300" height="160"></canvas><b>${c.name}</b><small>${owns(c)?c.title:c.price+' coins · shop'}</small></button>`).join('');
  $('#chars').querySelectorAll('.char').forEach(el=>{const c=CHARS[+el.dataset.i],cn=el.querySelector('canvas'),x=cn.getContext('2d');
   x.fillStyle='#0f1a17';x.fillRect(0,0,300,160);x.fillStyle='rgba(255,255,255,.04)';for(let i=0;i<300;i+=32)x.fillRect(i,0,1,160);for(let j=0;j<160;j+=32)x.fillRect(0,j,300,1);
   const g=x.createRadialGradient(150,80,10,150,80,120);g.addColorStop(0,'rgba(255,240,200,.18)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,300,160);
   drawPerson(x,150,84,-Math.PI/2,c,0,3.1);el.onclick=()=>{if(!owns(c)){SFX.click();openShop(c.id);return}selChar=c;SFX.click();buildTitle()}});
- if(!owns(selChar))selChar=CHARS[0];$('#tCoins').textContent=COINS.toLocaleString('fr-FR');
- $('#cdesc').innerHTML=`<b>${selChar.name}, ${selChar.title.toLowerCase()}.</b> ${selChar.passive}<br><b>${selChar.ab}</b> (<kbd>${esc(kn('ability'))}</kbd>, recharge ${selChar.cd} s) : ${selChar.abd}`;
- $('#tName').textContent=PSEUDO||'—';$('#bAcc').textContent=ACC?'Compte':'Se connecter';$('#bName').classList.toggle('hide',!!ACC);$('#tErr').textContent='';const s=load();$('#bCont').disabled=!s;$('#bCont').textContent=s?`Continuer · Jour ${s.day} (${(CHARS.find(c=>c.id===s.char)||CHARS[0]).name})`:'Continuer'}
+ if(!owns(selChar))selChar=CHARS[0];$('#tCoins').textContent=COINS.toLocaleString('en-US');
+ $('#cdesc').innerHTML=`<b>${selChar.name}, ${selChar.title.toLowerCase()}.</b> ${selChar.passive}<br><b>${selChar.ab}</b> (<kbd>${esc(kn('ability'))}</kbd>, cooldown ${selChar.cd} s) : ${selChar.abd}`;
+ $('#tName').textContent=PSEUDO||'—';$('#bAcc').textContent=ACC?'Account':'Log in';$('#bName').classList.toggle('hide',!!ACC);$('#tErr').textContent='';const s=load();$('#bCont').disabled=!s;$('#bCont').textContent=s?`Continue · Day ${s.day} (${(CHARS.find(c=>c.id===s.char)||CHARS[0]).name})`:'Continue'}
 function newGame(){
  audioInit();G={char:selChar,day:1,tokens:2,items:{leurre:1,fumigene:1,brouilleur:0},strikes:0,story:[],desig:false,
   stats:{time:0,caught:0,frags:0,sab:0,recv:0,spotted:0,days:[]},rivals:RIVALS.map(r=>({...r,skill:r.collector?.86:rnd(.88,1.16),alive:true,pen:0}))};
@@ -1406,53 +1415,53 @@ function load(){try{const s=JSON.parse(localStorage.getItem(SKEY)||'null');retur
 function clearSave(){try{localStorage.removeItem(SKEY)}catch(e){}}
 let introTyping=null;
 function showIntro(){
- state='intro';$('#hud').classList.add('hide');showScreen('intro');$('#introDay').textContent='Jour '+G.day;
+ state='intro';$('#hud').classList.add('hide');showScreen('intro');$('#introDay').textContent='Day '+G.day;
  const alive=G.rivals.filter(r=>r.alive).length;
- $('#introObj').innerHTML=`<li><b>${M.need} fragments</b> à trouver dans ${M.rooms.length} salles, puis la porte du sas.</li><li><b>1 traqueur</b> dans ton aile${G.day===1?'. Aujourd\'hui, personne ne peut en ajouter':'. Les rivaux peuvent en envoyer d\'autres'}. La nuit tombe à ${fmt(NIGHT_AT)}.</li><li>${G.day<5?`<b>${alive} rivaux</b> en jeu : ne sois pas le dernier à sortir.`:`<b>${alive} rivaux</b> restants : sois le premier à franchir la porte.`}</li>${G.story.length?`<li>Dossiers retrouvés : ${G.story.length}/5.</li>`:''}`;
+ $('#introObj').innerHTML=`<li><b>${M.need} shards</b> to find in ${M.rooms.length} rooms, then the airlock door.</li><li><b>1 hunter</b> in your wing${G.day===1?'. Today, nobody can add more':'. Rivals can send more'}. Night falls at ${fmt(NIGHT_AT)}.</li><li>${G.day<5?`<b>${alive} rivals</b> in play: do not be the last one out.`:`<b>${alive} rivals</b> left: be the first one through the door.`}</li>${G.story.length?`<li>Files found: ${G.story.length}/5.</li>`:''}`;
  const txt=INTRO[G.day-1],el=$('#introTxt');el.textContent='';let i=0;clearInterval(introTyping);
  introTyping=setInterval(()=>{i+=2;el.textContent=txt.slice(0,i);if(i%8===0)SFX.voice&&tone(150+Math.random()*50,.04,'square',.015);if(i>=txt.length)clearInterval(introTyping)},22);
- const be=$('#bEnter');clearInterval(window.__iv);be.innerHTML='Entrer dans l\'aile <kbd>Entrée</kbd>';
- if(MP){let n=8;be.textContent=`Entrer dans l'aile (${n})`;window.__iv=setInterval(()=>{if(state!=='intro'){clearInterval(window.__iv);return}n--;be.textContent=`Entrer dans l'aile (${n})`;if(n<=0){clearInterval(window.__iv);beginDay()}},1000)}
+ const be=$('#bEnter');clearInterval(window.__iv);be.innerHTML='Enter the wing <kbd>Enter</kbd>';
+ if(MP){let n=8;be.textContent=`Enter the wing (${n})`;window.__iv=setInterval(()=>{if(state!=='intro'){clearInterval(window.__iv);return}n--;be.textContent=`Enter the wing (${n})`;if(n<=0){clearInterval(window.__iv);beginDay()}},1000)}
  be.focus()}
 function showEndDay(pt,alive,slow){
  showScreen('endday');
- const rows=alive.map(r=>({n:r.name,c:r.color,t:r.finish,dead:r===slow})).concat([{n:'Toi',c:G.char.body,t:pt,me:true}]).sort((a,b)=>a.t-b.t);
+ const rows=alive.map(r=>({n:r.name,c:r.color,t:r.finish,dead:r===slow})).concat([{n:'You',c:G.char.body,t:pt,me:true}]).sort((a,b)=>a.t-b.t);
  const rank=rows.findIndex(r=>r.me)+1;
  const voters=G.rivals.filter(r=>r.alive);
- $('#enddayIn').innerHTML=`<div class="dayno">Fin du jour ${G.day}</div><p class="tag">Tu sors en ${fmt(pt)}, ${rank}<sup>e</sup> sur ${rows.length}. ${esc(slow.name)} était le dernier : le gaz a rempli son aile.</p>
+ $('#enddayIn').innerHTML=`<div class="dayno">End of day ${G.day}</div><p class="tag">You get out in ${fmt(pt)}, #${rank} of ${rows.length}. ${esc(slow.name)} was the last one: gas filled their wing.</p>
  <table class="rank">${rows.map((r,i)=>`<tr class="${r.me?'me':''}${r.dead?' dead':''}"><td>${i+1}.</td><td><i class="dot" style="background:${r.c}"></i>${esc(r.n)}</td><td class="t">${fmt(r.t)}</td></tr>`).join('')}</table>
- <h2 style="font-size:30px">Le vote du soir</h2><p class="hint">Désigne un rival : le plus désigné aura un handicap demain. Les autres votent aussi… peut-être contre toi.</p>
+ <h2 style="font-size:30px">The evening vote</h2><p class="hint">Pick a rival: the most picked one gets a handicap tomorrow. The others vote too… maybe against you.</p>
  <div class="votes" id="votes">${voters.map(r=>`<button class="btn sm" data-v="${esc(r.name)}"><i class="dot" style="background:${r.color}"></i>${esc(r.name)}</button>`).join('')}</div><div id="voteRes"></div>`;
  $('#votes').querySelectorAll('button').forEach(bt=>bt.onclick=()=>doVote(bt.dataset.v,rank))}
 function doVote(name,rank){
- const voters=G.rivals.filter(r=>r.alive),tally=new Map([['Toi',0]]);voters.forEach(r=>tally.set(r.name,0));tally.set(name,tally.get(name)+1);
+ const voters=G.rivals.filter(r=>r.alive),tally=new Map([['You',0]]);voters.forEach(r=>tally.set(r.name,0));tally.set(name,tally.get(name)+1);
  const pMe=.1+(rank<=2?.22:0)+(G.stats.sabDay>2?.12:0);
- for(const r of voters){let v;if(Math.random()<pMe)v='Toi';else v=pick(voters.filter(q=>q!==r)).name;tally.set(v,tally.get(v)+1)}
+ for(const r of voters){let v;if(Math.random()<pMe)v='You';else v=pick(voters.filter(q=>q!==r)).name;tally.set(v,tally.get(v)+1)}
  const sorted=[...tally.entries()].sort((a,b)=>b[1]-a[1]||Math.random()-.5),[who,n]=sorted[0];
- let res;if(who==='Toi'){G.desig=true;res=`Désigné : <b>toi</b> (${n} voix). Un traqueur de plus te suivra demain.`}else{const r=G.rivals.find(q=>q.name===who);r.pen=30;res=`Désigné : <b>${esc(who)}</b> (${n} voix). Il ou elle partira avec 30 s de retard demain.`}
+ let res;if(who==='You'){G.desig=true;res=`Picked: <b>you</b> (${n} votes). One more hunter will follow you tomorrow.`}else{const r=G.rivals.find(q=>q.name===who);r.pen=30;res=`Picked: <b>${esc(who)}</b> (${n} votes). They will start 30 s late tomorrow.`}
  $('#votes').querySelectorAll('button').forEach(b=>b.disabled=true);
- $('#voteRes').innerHTML=`<p class="tag" style="font-size:18px">${sorted.filter(e=>e[1]>0).map(([k,v])=>`${esc(k)} : ${v}`).join(' · ')}<br>${res}</p><button class="btn main" id="bNext">Passer au jour ${G.day+1}</button>`;
- $('#bNext').onclick=()=>{G.day++;startDay()};$('#bNext').focus();SFX.ok()}
-function statsHTML(){const s=G.stats;return`<div class="stats"><div><b>${fmt(s.time)}</b><small>temps total</small></div><div><b>${s.frags}</b><small>fragments</small></div><div><b>${s.sab}</b><small>sabotages envoyés</small></div><div><b>${s.recv}</b><small>malus subis</small></div><div><b>${s.caught}</b><small>captures</small></div><div><b>${G.story.length}/5</b><small>dossiers lus</small></div></div>`}
-function lose(reason,force){
+ $('#voteRes').innerHTML=`<p class="tag" style="font-size:18px">${sorted.filter(e=>e[1]>0).map(([k,v])=>`${esc(k)} : ${v}`).join(' · ')}<br>${res}</p><button class="btn main" id="bNext">Go to day ${G.day+1}</button>`;
+ $('#bNext').onclick=()=>{pokiBreak().then(()=>{G.day++;startDay()})};$('#bNext').focus();SFX.ok()}
+function statsHTML(){const s=G.stats;return`<div class="stats"><div><b>${fmt(s.time)}</b><small>total time</small></div><div><b>${s.frags}</b><small>shards</small></div><div><b>${s.sab}</b><small>sabotages sent</small></div><div><b>${s.recv}</b><small>penalties taken</small></div><div><b>${s.caught}</b><small>captures</small></div><div><b>${G.story.length}/5</b><small>files read</small></div></div>`}
+function lose(reason,force){pokiStop();
  if(state!=='play'&&!force)return;SPEC=null;$('#specbar').classList.add('hide');if(MP){MP.alive=false;MP.st='out';MP.tk=0}state='over';closeModal();$('#hud').classList.add('hide');SFX.caught();
- $('#overIn').innerHTML=`<div class="dayno">Éliminé</div><p class="tag">${esc(reason)}</p><p class="voice" style="min-height:0">« Dommage. Tu étais presque intéressant. »</p>${scoreBlock(false)}${statsHTML()}<div class="actions">${MP?'':`<button class="btn main" id="bRetry">Rejouer le jour ${G.day}</button>`}${MP?'<button class="btn main" id="bSpec">Regarder la partie</button>':''}<button class="btn" id="bMenu">Menu</button><button class="btn" id="bOBoard">Classement</button><button class="btn rate-only" id="bORate">★ Donner ton avis</button></div>`;
+ $('#overIn').innerHTML=`<div class="dayno">Eliminated</div><p class="tag">${esc(reason)}</p><p class="voice" style="min-height:0">"Too bad. You were almost interesting."</p>${scoreBlock(false)}${statsHTML()}<div class="actions">${MP?'':`<button class="btn main" id="bRetry">Replay day ${G.day}</button>`}${MP?'<button class="btn main" id="bSpec">Watch the game</button>':''}<button class="btn" id="bMenu">Menu</button><button class="btn" id="bOBoard">Leaderboard</button><button class="btn rate-only" id="bORate">★ Rate the game</button></div>`;
  showScreen('over');if(!MP)$('#bRetry').onclick=resume;else{$('#bSpec').onclick=()=>startSpec('over');$('#overIn').insertAdjacentHTML('beforeend','<p class="hint" id="oSpecMsg" style="margin-top:8px"></p>')}$('#bMenu').onclick=toTitle;$('#bOBoard').onclick=()=>{toTitle();openBoard()};$('#bORate').onclick=()=>openRate('over')}
 function win(pt){
- unlock('libre');if(!G.stats.caught)unlock('intouchable');if(!G.stats.sab)unlock('pacifiste');
+ pokiStop();unlock('libre');if(!G.stats.caught)unlock('intouchable');if(!G.stats.sab)unlock('pacifiste');
  state='win';$('#hud').classList.add('hide');if(MP){MP.st='done';MP.t=pt;MP.tk=0}else clearSave();SFX.frag();
  const full=G.story.length>=5;
- $('#winIn').innerHTML=`<div class="dayno" style="color:var(--mint)">Libre</div><p class="tag">Tu franchis la dernière porte en ${fmt(pt)}. Dehors, l'air est froid et il pleut. Derrière toi, la porte se referme sur les autres.</p>
- <div class="reveal">${full?esc("Dans ta poche, les cinq dossiers de l'Institut Valmont.\n\nSacha n'était pas une prisonnière. Sacha, c'était Élias Valmont, le petit frère de Clara. Il a joué avec vous jusqu'au bout, dans sa propre aile, pour vous regarder attendre derrière une porte.\n\nIl t'a laissé sortir. Peut-être parce que tu as été le seul à lire toute l'histoire."):esc(`Tu as retrouvé ${G.story.length} dossier${G.story.length>1?'s':''} sur 5.\n\nUne question te suit sous la pluie : qui était vraiment Sacha, et pourquoi ses brouilleurs semblaient-ils toujours prêts ?\n\nRejoue et lis tous les dossiers pour connaître la vérité.`)}</div>
- ${scoreBlock(true)}${statsHTML()}<div class="actions"><button class="btn main" id="bAgain">Menu</button><button class="btn" id="bWBoard">Classement</button><button class="btn rate-only" id="bWRate">★ Donner ton avis</button></div>`;
+ $('#winIn').innerHTML=`<div class="dayno" style="color:var(--mint)">Free</div><p class="tag">You go through the last door in ${fmt(pt)}. Outside, the air is cold and it is raining. Behind you, the door closes on the others.</p>
+ <div class="reveal">${full?esc("In your pocket, the five files of the Valmont Institute.\n\nSacha was not a prisoner. Sacha was Élias Valmont, Clara's little brother. He played with you to the end, in his own wing, to watch you wait behind a door.\n\nHe let you out. Maybe because you were the only one who read the whole story."):esc(`You found ${G.story.length} file${G.story.length>1?'s':''} out of 5.\n\nOne question follows you into the rain: who was Sacha really, and why were their jammers always ready?\n\nPlay again and read every file to learn the truth.`)}</div>
+ ${scoreBlock(true)}${statsHTML()}<div class="actions"><button class="btn main" id="bAgain">Menu</button><button class="btn" id="bWBoard">Leaderboard</button><button class="btn rate-only" id="bWRate">★ Rate the game</button></div>`;
  showScreen('win');$('#bAgain').onclick=toTitle;$('#bWBoard').onclick=()=>{toTitle();openBoard()};$('#bWRate').onclick=()=>openRate('win')}
-function toTitle(){closeModal();SPEC=null;$('#specbar').classList.add('hide');$('#tuto').classList.add('hide');$('#rivals').classList.remove('hide');if(state==='spec')state='over';if(MP){const m=MP;if(state==='over'||state==='win')setTimeout(()=>{if(MP===m)leaveMP()},1500);else leaveMP()}leaveLobby();state='title';P=null;D=null;$('#hud').classList.add('hide');genMap(1);H=[];for(let i=0;i<3;i++)spawnHunter();CAM.x=MW*TS/2;CAM.y=MH*TS/2;buildTitle();showScreen('title')}
-function pauseGame(){if(state!=='play')return;if(MP){say('Pas de pause en ligne : la partie continue pour les autres.','bad');return}closeModal();state='pause';$('#pauseInfo').textContent=`Jour ${G.day} · ${fmt(D.t)} · ${P.frag}/${M.need} fragments`;showScreen('pause')}
-function resumeGame(){if(state!=='pause')return;hideScreens();state='play'}
+function toTitle(){pokiStop();closeModal();SPEC=null;$('#specbar').classList.add('hide');$('#tuto').classList.add('hide');$('#rivals').classList.remove('hide');if(state==='spec')state='over';if(MP){const m=MP;if(state==='over'||state==='win')setTimeout(()=>{if(MP===m)leaveMP()},1500);else leaveMP()}leaveLobby();state='title';P=null;D=null;$('#hud').classList.add('hide');genMap(1);H=[];for(let i=0;i<3;i++)spawnHunter();CAM.x=MW*TS/2;CAM.y=MH*TS/2;buildTitle();showScreen('title')}
+function pauseGame(){if(state!=='play')return;if(MP){say('No pause online: the game goes on for the others.','bad');return}closeModal();state='pause';pokiStop();$('#pauseInfo').textContent=`Day ${G.day} · ${fmt(D.t)} · ${P.frag}/${M.need} shards`;showScreen('pause')}
+function resumeGame(){if(state!=='pause')return;hideScreens();pokiBreak().then(()=>{state='play';pokiStart()})}
 
 // ---------- input
 let hudMini=false;try{hudMini=localStorage.getItem('collectionneur_hudmini')==='1'}catch(_){}
-function applyHudMini(){$('#tl').classList.toggle('compact',hudMini);$('#bTgl').textContent=hudMini?'+':'–';$('#bTgl').setAttribute('aria-label',hudMini?'Agrandir le panneau':'Réduire le panneau')}
+function applyHudMini(){$('#tl').classList.toggle('compact',hudMini);$('#bTgl').textContent=hudMini?'+':'–';$('#bTgl').setAttribute('aria-label',hudMini?'Expand the panel':'Collapse panel')}
 function toggleHud(){hudMini=!hudMini;try{localStorage.setItem('collectionneur_hudmini',hudMini?'1':'0')}catch(_){}applyHudMini()}
 $('#bTgl').onclick=toggleHud;applyHudMini();
 const toggleFlash=()=>{if(!P||state!=='play')return;P.flash=!P.flash;SFX.click()},toggleCrouch=()=>{if(!P||state!=='play')return;P.crouch=!P.crouch;if(P.crouch)tutoStep('crouch');SFX.click()};
@@ -1463,7 +1472,7 @@ addEventListener('keydown',e=>{
  if(UI.modal){if(c==='Escape'){closeModal();return}if(UI.keyHook){e.preventDefault();UI.keyHook(e.key);return}if(a==='sab'||a==='journal'){closeModal();return}}
  if(e.repeat&&!c.startsWith('Key')&&!c.startsWith('Arrow'))return;
  K[c]=true;
- if(state==='intro'&&(c==='Enter'||c==='Space')){beginDay();return}
+ if(state==='intro'&&(c==='Enter'||c==='Space')){e.preventDefault();if(MP)beginDay();else pokiBreak().then(beginDay);return}
  if(state==='pause'&&(c==='Escape'||a==='pause')){resumeGame();return}
  if(state!=='play'||e.repeat)return;
  if(D.allyOffer&&(c==='KeyO'||c==='KeyY')){allyAnswer(true);return}if(D.allyOffer&&c==='KeyN'){allyAnswer(false);return}
@@ -1477,9 +1486,9 @@ cv.addEventListener('mousedown',e=>{audioInit();if(e.button===0&&state==='play'&
 let joyId=null,joyO={x:0,y:0};const joyEl=$('#joy'),joyK=joyEl.querySelector('i');
 const PKEY='collectionneur_plat';let PLAT=null;try{PLAT=localStorage.getItem(PKEY)}catch(e){}
 const coarse=matchMedia('(pointer:coarse)').matches;
-function applyPlat(p){PLAT=p;try{localStorage.setItem(PKEY,p)}catch(e){}const mob=p==='mobile';document.body.classList.toggle('mobile',mob);document.body.classList.toggle('touch',mob);$('#touch').classList.toggle('hide',!mob);mouse.act=false;rivOpen=!mob;$('#bPlat').textContent='Plateforme : '+(mob?'Mobile':'PC');resize()}
+function applyPlat(p){PLAT=p;try{localStorage.setItem(PKEY,p)}catch(e){}const mob=p==='mobile';document.body.classList.toggle('mobile',mob);document.body.classList.toggle('touch',mob);$('#touch').classList.toggle('hide',!mob);mouse.act=false;rivOpen=!mob;$('#bPlat').textContent='Platform: '+(mob?'Mobile':'PC');resize()}
 let platBack='title';
-function askPlat(back){platBack=back;$('#recPC').textContent=coarse?'':'Recommandé pour cet appareil';$('#recMob').textContent=coarse?'Recommandé pour cet appareil':'';showScreen('platform');(coarse?$('#pMob'):$('#pPC')).focus()}
+function askPlat(back){platBack=back;$('#recPC').textContent=coarse?'':'Recommended for this device';$('#recMob').textContent=coarse?'Recommended for this device':'';showScreen('platform');(coarse?$('#pMob'):$('#pPC')).focus()}
 $('#pPC').onclick=()=>{applyPlat('pc');SFX.click();platDone()};$('#pMob').onclick=()=>{applyPlat('mobile');SFX.click();platDone()};
 function platDone(){if(platBack==='pause'){showScreen('pause')}else if(!PSEUDO){if(window.GAMENET)openAccount('first');else askPseudo('title')}else{buildTitle();showScreen('title')}}
 $('#bPlat').onclick=()=>askPlat('title');$('#bPPlat').onclick=()=>askPlat('pause');
@@ -1493,7 +1502,7 @@ document.querySelectorAll('#tbtn button').forEach(b=>{const a=b.dataset.a;
 $('#sl1').onclick=()=>useItem(1);$('#sl4').onclick=()=>useItem(3);$('#sl2').onclick=()=>useItem(2);$('#slF').onclick=toggleFlash;$('#slC').onclick=toggleCrouch;$('#slQ').onclick=ability;
 $('#bSab').onclick=openSab;$('#bJour').onclick=openJournal;$('#bPause').onclick=pauseGame;
 $('#bNew').onclick=()=>{if(!PSEUDO){askPseudo('title');return}if(!owns(selChar))selChar=CHARS[0];newGame()};$('#bCont').onclick=resume;$('#bHelp').onclick=()=>{helpBack='title';showScreen('help')};$('#bHelpBack').onclick=()=>showScreen(helpBack);
-$('#bEnter').onclick=beginDay;$('#bResume').onclick=resumeGame;$('#bPHelp').onclick=()=>{helpBack='pause';showScreen('help')};$('#bQuit').onclick=()=>{state='title';toTitle()};
+$('#bEnter').onclick=()=>{if(MP)beginDay();else pokiBreak().then(beginDay)};$('#bResume').onclick=resumeGame;$('#bPHelp').onclick=()=>{helpBack='pause';showScreen('help')};$('#bQuit').onclick=()=>{state='title';toTitle()};
 
 // ---------- loop
 let last=performance.now();
@@ -1511,18 +1520,18 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;try{update(dt
 function boot(){resize();toTitle();if(PLAT==='pc'||PLAT==='mobile')applyPlat(PLAT);else askPlat('title');requestAnimationFrame(loop)}
 const fontWait=document.fonts&&document.fonts.load?Promise.race([Promise.all([document.fonts.load('900 30px "Big Shoulders Stencil Display"'),document.fonts.load('600 16px "Barlow Condensed"')]),new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
 fontWait.then(boot,boot);
-window.__dbg={scr:()=>[(P.x-CAM.vx)*ZOOM,(P.y-CAM.vy)*ZOOM],get G(){return G},get D(){return D},get P(){return P},get M(){return M},get H(){return H},get DR(){return DR},get state(){return state},FX:()=>FX,completeDay:()=>completeDay(),openPuzzle,openSab,openNote};
+
 
 
 // ---------- touches du clavier (modifiables)
 const KBK='valmont_keys';
-const KACT=[['up','Avancer'],['down','Reculer'],['left','Aller à gauche'],['right','Aller à droite'],['run','Courir'],['crouch',"S'accroupir"],['act','Action'],['ability','Capacité'],['flash','Lampe'],['item1','Leurre'],['item2','Fumigène'],['item3','Pétard'],['sab','Saboter'],['journal','Carnet'],['hud','Réduire le panneau'],['pause','Pause']];
+const KACT=[['up','Move up'],['down','Move down'],['left','Move left'],['right','Move right'],['run','Run'],['crouch',"Crouch"],['act','Action'],['ability','Ability'],['flash','Light'],['item1','Decoy'],['item2','Smoke bomb'],['item3','Firecracker'],['sab','Sabotage'],['journal','Notebook'],['hud','Collapse panel'],['pause','Pause']];
 const KDEF={up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD',run:'ShiftLeft',crouch:'KeyC',act:'KeyE',ability:'Space',flash:'KeyF',item1:'Digit1',item2:'Digit2',item3:'Digit3',sab:'KeyR',journal:'KeyJ',hud:'KeyH',pause:'KeyP'};
 const KALT={up:['ArrowUp'],down:['ArrowDown'],left:['ArrowLeft'],right:['ArrowRight'],run:['ShiftRight'],crouch:['ControlLeft'],act:['Enter'],item1:['Numpad1'],item2:['Numpad2'],item3:['Numpad3'],sab:['Tab'],pause:['Escape']};
 const KB={...KDEF},KBL={};
 try{const o=JSON.parse(localStorage.getItem(KBK)||'{}');if(o&&o.k){for(const a in o.k)if(a in KDEF&&typeof o.k[a]==='string')KB[a]=o.k[a];Object.assign(KBL,o.l||{})}}catch(_){}
 const KLAY={};
-const KNAMES={Space:'Espace',ShiftLeft:'Maj',ShiftRight:'Maj droite',ControlLeft:'Ctrl',ControlRight:'Ctrl droite',AltLeft:'Alt',AltRight:'Alt Gr',Enter:'Entrée',Tab:'Tab',Backspace:'Retour arrière',CapsLock:'Verr. maj',ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→',MetaLeft:'Win',MetaRight:'Win'};
+const KNAMES={Space:'Space',ShiftLeft:'Shift',ShiftRight:'Right Shift',ControlLeft:'Ctrl',ControlRight:'Right Ctrl',AltLeft:'Alt',AltRight:'Alt Gr',Enter:'Enter',Tab:'Tab',Backspace:'Backspace',CapsLock:'Caps Lock',ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→',MetaLeft:'Win',MetaRight:'Win'};
 function codeName(c,lab){if(!c)return '?';if(KNAMES[c])return KNAMES[c];if(KLAY[c])return KLAY[c].toUpperCase();if(lab)return lab;if(c.startsWith('Key'))return c.slice(3);if(c.startsWith('Digit'))return c.slice(5);if(c.startsWith('Numpad'))return 'Pavé '+c.slice(6);return c}
 function kn(a){return codeName(KB[a],KBL[a])}
 function kMove(){const d=['up','left','down','right'].every(a=>KB[a]===KDEF[a]);if(d&&!KLAY.KeyW)return 'ZQSD/WASD';return ['up','left','down','right'].map(kn).join('')}
@@ -1535,7 +1544,7 @@ function refreshKeys(){document.querySelectorAll('[data-k]').forEach(el=>{const 
 try{navigator.keyboard&&navigator.keyboard.getLayoutMap&&navigator.keyboard.getLayoutMap().then(m=>{m.forEach((v,k)=>{KLAY[k]=v});refreshKeys()}).catch(()=>{})}catch(_){}
 let KCAP=null;
 function drawKeys(){
- $('#keyList').innerHTML=KACT.map(([a,n])=>`<div class="kr"><span>${esc(n)}</span><button class="btn sm kb${KCAP===a?' wait':''}" data-bind="${a}">${KCAP===a?esc('Appuie sur une touche…'):esc(kn(a))}</button></div>`).join('');
+ $('#keyList').innerHTML=KACT.map(([a,n])=>`<div class="kr"><span>${esc(n)}</span><button class="btn sm kb${KCAP===a?' wait':''}" data-bind="${a}">${KCAP===a?esc('Press a key…'):esc(kn(a))}</button></div>`).join('');
  $('#keyList').querySelectorAll('[data-bind]').forEach(b=>b.onclick=()=>{KCAP=KCAP===b.dataset.bind?null:b.dataset.bind;SFX.click();drawKeys()})}
 function openKeys(){KCAP=null;showScreen('keys');drawKeys()}
 addEventListener('keydown',e=>{if(!KCAP)return;e.preventDefault();e.stopImmediatePropagation();
@@ -1552,17 +1561,17 @@ refreshKeys();
 // ---------- avis des joueurs
 const RATEK='valmont_rate';let rateBack='title',rateStars=0;
 if(window.GAMENET&&window.GAMENET.call)document.body.classList.add('canrate');
-function drawStars(){$('#rStars').querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i<rateStars));$('#rLab').textContent=rateStars?['Pas aimé','Bof','Correct','Bien','Génial !'][rateStars-1]:'Choisis une note'}
-function openRate(back){rateBack=back||'title';let o={};try{o=JSON.parse(localStorage.getItem(RATEK)||'{}')||{}}catch(_){}rateStars=o.s||0;$('#rTxt').value=o.txt||'';$('#rMsg').textContent=o.s?'Tu as déjà donné ton avis. Tu peux le modifier.':'';$('#bRateSend').disabled=false;drawStars();showScreen('rate')}
+function drawStars(){$('#rStars').querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i<rateStars));$('#rLab').textContent=rateStars?['Didn’t like it','Meh','OK','Good','Awesome!'][rateStars-1]:'Pick a rating'}
+function openRate(back){rateBack=back||'title';let o={};try{o=JSON.parse(localStorage.getItem(RATEK)||'{}')||{}}catch(_){}rateStars=o.s||0;$('#rTxt').value=o.txt||'';$('#rMsg').textContent=o.s?'You already rated the game. You can change your rating.':'';$('#bRateSend').disabled=false;drawStars();showScreen('rate')}
 $('#rStars').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{rateStars=i+1;SFX.click();drawStars()});
 $('#bRate').onclick=()=>openRate('title');
 $('#bRateBack').onclick=()=>showScreen(rateBack);
 $('#bRateSend').onclick=async()=>{
- if(!rateStars){$('#rMsg').textContent="Choisis d'abord une note.";SFX.bad();return}
- const txt=$('#rTxt').value.trim().slice(0,500),b=$('#bRateSend');b.disabled=true;$('#rMsg').textContent='Envoi…';
+ if(!rateStars){$('#rMsg').textContent="Pick a rating first.";SFX.bad();return}
+ const txt=$('#rTxt').value.trim().slice(0,500),b=$('#bRateSend');b.disabled=true;$('#rMsg').textContent='Sending…';
  try{await window.GAMENET.call({t:'rate',uid:window.GAMENET.uid,stars:rateStars,text:txt,lang:document.documentElement.lang||'fr',plat:document.body.classList.contains('mobile')?'mobile':'pc',site:location.hostname,day:(G&&G.day)||0});
-  try{localStorage.setItem(RATEK,JSON.stringify({s:rateStars,txt}))}catch(_){}$('#rMsg').textContent='Merci pour ton avis !';SFX.ok();setTimeout(()=>{if(!$('#rate').classList.contains('hide'))showScreen(rateBack)},1400)}
- catch(e){$('#rMsg').textContent='Envoi impossible. Réessaie dans un instant.';SFX.bad();b.disabled=false}};
+  try{localStorage.setItem(RATEK,JSON.stringify({s:rateStars,txt}))}catch(_){}$('#rMsg').textContent='Thanks for your feedback!';SFX.ok();setTimeout(()=>{if(!$('#rate').classList.contains('hide'))showScreen(rateBack)},1400)}
+ catch(e){$('#rMsg').textContent='Could not send. Try again in a moment.';SFX.bad();b.disabled=false}};
 
 // ---------- réglages
 const SETK='collectionneur_set';const SET={vol:.8,shake:true,cb:false,sens:1,fade:true};
@@ -1585,59 +1594,59 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='p
 
 // ---------- succès
 const ACH=[
- {id:'apprenti',n:'Apprenti',d:'Terminer le tutoriel.'},
- {id:'jour1',n:'Première évasion',d:'Survivre au premier jour.'},
- {id:'libre',n:'Libre',d:'Gagner une partie.'},
- {id:'intouchable',n:'Intouchable',d:'Gagner sans jamais être capturé.'},
- {id:'pacifiste',n:'Pacifiste',d:'Gagner sans saboter personne.'},
- {id:'fantome',n:'Fantôme',d:'Finir un jour sans être repéré une seule fois.'},
- {id:'eclair',n:'Éclair',d:'Finir un jour en moins de 2 minutes.'},
- {id:'noctambule',n:'Noctambule',d:'Sortir de ton aile la nuit, lampe éteinte.'},
- {id:'archiviste',n:'Archiviste',d:"Lire les 5 dossiers de l'Institut Valmont."},
- {id:'saboteur',n:'Saboteur',d:'Envoyer 10 sabotages dans une même partie.'},
- {id:'traitre',n:'Traître',d:'Saboter un rival avec qui tu es allié.'},
- {id:'rat',n:'Rat des conduits',d:'Utiliser 5 conduits dans une même partie.'},
- {id:'fouilleur',n:'Fouilleur',d:'Fouiller 25 caisses au total.'},
- {id:'technicien',n:'Technicien',d:'Réussir 40 missions au total.'},
- {id:'social',n:'En bonne compagnie',d:"Jouer une partie avec d'autres joueurs."},
- {id:'spectateur',n:'Œil de Valmont',d:'Regarder un autre joueur en mode spectateur.'},
+ {id:'apprenti',n:'Apprentice',d:'Finish the tutorial.'},
+ {id:'jour1',n:'First escape',d:'Survive the first day.'},
+ {id:'libre',n:'Free',d:'Win a game.'},
+ {id:'intouchable',n:'Untouchable',d:'Win without ever being caught.'},
+ {id:'pacifiste',n:'Pacifist',d:'Win without sabotaging anyone.'},
+ {id:'fantome',n:'Ghost',d:'Finish a day without being spotted once.'},
+ {id:'eclair',n:'Lightning',d:'Finish a day in under 2 minutes.'},
+ {id:'noctambule',n:'Night owl',d:'Leave your wing at night with your flashlight off.'},
+ {id:'archiviste',n:'Archivist',d:"Read the 5 files of the Valmont Institute."},
+ {id:'saboteur',n:'Saboteur',d:'Send 10 sabotages in a single game.'},
+ {id:'traitre',n:'Traitor',d:'Sabotage a rival you are allied with.'},
+ {id:'rat',n:'Vent rat',d:'Use 5 vents in a single game.'},
+ {id:'fouilleur',n:'Scavenger',d:'Search 25 crates in total.'},
+ {id:'technicien',n:'Technician',d:'Complete 40 missions in total.'},
+ {id:'social',n:'Good company',d:"Play a game with other players."},
+ {id:'spectateur',n:'Eye of Valmont',d:'Watch another player in spectator mode.'},
 ];
 const ACHK='collectionneur_ach',CNTK='collectionneur_cnt';let ACHS={},CNT={missions:0,crates:0};
 try{ACHS=JSON.parse(localStorage.getItem(ACHK)||'{}')||{}}catch(_){}try{Object.assign(CNT,JSON.parse(localStorage.getItem(CNTK)||'{}'))}catch(_){}
 const toastEl=$('#toast');let toastQ=[],toastOn=false;
-function showToast(){if(toastOn||!toastQ.length)return;toastOn=true;const a=toastQ.shift();toastEl.innerHTML=`<small>Succès débloqué</small><b>${esc(a.n)}</b><span>${esc(a.d)}</span>`;toastEl.classList.add('on');SFX.frag();setTimeout(()=>{toastEl.classList.remove('on');setTimeout(()=>{toastOn=false;showToast()},400)},3200)}
+function showToast(){if(toastOn||!toastQ.length)return;toastOn=true;const a=toastQ.shift();toastEl.innerHTML=`<small>Achievement unlocked</small><b>${esc(a.n)}</b><span>${esc(a.d)}</span>`;toastEl.classList.add('on');SFX.frag();setTimeout(()=>{toastEl.classList.remove('on');setTimeout(()=>{toastOn=false;showToast()},400)},3200)}
 function unlock(id){if(ACHS[id])return;const a=ACH.find(x=>x.id===id);if(!a)return;ACHS[id]=Date.now();try{localStorage.setItem(ACHK,JSON.stringify(ACHS))}catch(_){}toastQ.push(a);showToast();accMeta()}
 function count(k,n=1){CNT[k]=(CNT[k]||0)+n;try{localStorage.setItem(CNTK,JSON.stringify(CNT))}catch(_){}
  accMeta();if(CNT.missions>=40)unlock('technicien');if(CNT.crates>=25)unlock('fouilleur')}
 function openAchs(){showScreen('achs');const n=ACH.filter(a=>ACHS[a.id]).length;
- $('#achInfo').textContent=`${n} sur ${ACH.length} débloqués · ${CNT.missions||0} missions et ${CNT.crates||0} caisses au total.`;
+ $('#achInfo').textContent=`${n} of ${ACH.length} unlocked · ${CNT.missions||0} missions and ${CNT.crates||0} crates in total.`;
  $('#achList').innerHTML=ACH.map(a=>`<li class="${ACHS[a.id]?'ok':''}"><b>${esc(a.n)}</b><span>${esc(a.d)}</span></li>`).join('')}
 $('#bAchs').onclick=openAchs;$('#bAchBack').onclick=()=>{buildTitle();showScreen('title')};
 
 // ---------- tutoriel
 const TSTEPS=[
- {id:'move',t:'Déplace-toi',pc:'{move} ou les flèches.',mob:"Pose le pouce sur la moitié gauche de l'écran."},
- {id:'run',t:'Cours un instant',pc:'Maintiens {run}. La jauge de bruit monte : les traqueurs entendent.',mob:'Maintiens « Courir ». La jauge de bruit monte.'},
- {id:'crouch',t:'Accroupis-toi',pc:'Touche {crouch} : presque aucun bruit, et derrière un meuble les traqueurs ne te voient plus.',mob:'Bouton « Accroupi » : presque aucun bruit, et derrière un meuble les traqueurs ne te voient plus.'},
- {id:'hide',t:'Cache-toi',pc:"Va près d'un casier bleu ou d'un lit, puis {act}. {act} encore pour sortir.",mob:"Va près d'un casier bleu ou d'un lit, puis « Action »."},
- {id:'note',t:'Lis une note',pc:'Les feuilles jaunes au sol cachent des codes. {act} pour lire.',mob:'Les feuilles jaunes au sol cachent des codes.'},
- {id:'mission',t:'Réussis 2 missions',pc:'Les terminaux verts (ronds verts sur la carte) donnent des fragments.',mob:'Les terminaux verts (ronds verts sur la carte) donnent des fragments.'},
- {id:'sab',t:'Ouvre le menu Saboter',pc:'Touche {sab}. En vraie partie, tu y dépenses tes jetons.',mob:'Bouton « Saboter ». En vraie partie, tu y dépenses tes jetons.'},
- {id:'exit',t:'Sors par la porte du sas',pc:'Avec les fragments, la porte devient verte. {act} pour sortir.',mob:'Avec les fragments, la porte devient verte.'},
+ {id:'move',t:'Move around',pc:'{move} or the arrow keys.',mob:"Put your thumb on the left half of the screen."},
+ {id:'run',t:'Run for a moment',pc:'Hold {run}. The noise meter rises: hunters can hear.',mob:'Hold "Run". The noise meter rises.'},
+ {id:'crouch',t:'Crouch down',pc:'Key {crouch}: almost no noise, and behind furniture hunters can no longer see you.',mob:'"Crouch" button: almost no noise, and behind furniture hunters can no longer see you.'},
+ {id:'hide',t:'Hide',pc:"Go next to a blue locker or a bed, then {act}. {act} again to come out.",mob:"Go next to a blue locker or a bed, then \"Action\"."},
+ {id:'note',t:'Read a note',pc:'Yellow sheets on the floor hide codes. {act} to read.',mob:'Yellow sheets on the floor hide codes.'},
+ {id:'mission',t:'Complete 2 missions',pc:'Green terminals (green circles on the map) give shards.',mob:'Green terminals (green circles on the map) give shards.'},
+ {id:'sab',t:'Open the Sabotage menu',pc:'Key {sab}. In a real game, you spend your tokens there.',mob:'"Sabotage" button. In a real game, you spend your tokens there.'},
+ {id:'exit',t:'Leave through the airlock door',pc:'With the shards, the door turns green. {act} to get out.',mob:'With the shards, the door turns green.'},
 ];
 const TUK='collectionneur_tuto_seen';
 function tutoStep(id){if(!G||!G.tuto||G.tutoDone[id])return;if(id==='mission'&&(P?P.frag:0)<2)return;G.tutoDone[id]=true;SFX.ok();drawTuto()}
 function drawTuto(){if(!G||!G.tuto)return;const mob=document.body.classList.contains('mobile');const cur=TSTEPS.find(s=>!G.tutoDone[s.id]);
- $('#tuto').innerHTML=`<div class="rh"><span>Tutoriel</span><span>${TSTEPS.filter(s=>G.tutoDone[s.id]).length}/${TSTEPS.length}</span></div>`+TSTEPS.map(s=>`<div class="ts${G.tutoDone[s.id]?' ok':''}${s===cur?' cur':''}"><b>${esc(s.t)}</b>${s===cur?`<span>${esc(mob?s.mob:kFill(s.pc))}</span>`:''}</div>`).join('')+`<button class="btn sm pe" id="bTutoQuit">Quitter le tutoriel</button>`;
+ $('#tuto').innerHTML=`<div class="rh"><span>Tutorial</span><span>${TSTEPS.filter(s=>G.tutoDone[s.id]).length}/${TSTEPS.length}</span></div>`+TSTEPS.map(s=>`<div class="ts${G.tutoDone[s.id]?' ok':''}${s===cur?' cur':''}"><b>${esc(s.t)}</b>${s===cur?`<span>${esc(mob?s.mob:kFill(s.pc))}</span>`:''}</div>`).join('')+`<button class="btn sm pe" id="bTutoQuit">Quit the tutorial</button>`;
  $('#bTutoQuit').onclick=()=>{toTitle()}}
 function startTutorial(){
  audioInit();try{localStorage.setItem(TUK,'1')}catch(_){}
  G={char:selChar,day:1,tokens:3,items:{leurre:1,fumigene:1,brouilleur:1},strikes:0,story:[],desig:false,tuto:true,tutoDone:{},
   stats:{time:0,caught:0,frags:0,sab:0,recv:0,spotted:0,days:[]},rivals:[]};
  startDay()}
-function tutoFinish(){
+function tutoFinish(){pokiStop();
  state='win';$('#hud').classList.add('hide');unlock('apprenti');SFX.frag();
- $('#winIn').innerHTML=`<div class="dayno" style="color:var(--mint)">Bien joué</div><p class="tag">Tu connais les bases : avancer sans bruit, te cacher, lire les indices, réussir les missions et sortir. En vraie partie, 8 rivaux font la course contre toi et le dernier sorti est éliminé chaque soir.</p><div class="actions"><button class="btn main" id="bTSolo">Lancer une partie solo</button><button class="btn" id="bTMenu">Menu</button></div>`;
+ $('#winIn').innerHTML=`<div class="dayno" style="color:var(--mint)">Well done</div><p class="tag">You know the basics: move silently, hide, read clues, complete missions and get out. In a real game, 8 rivals race against you and the last one out is eliminated every night.</p><div class="actions"><button class="btn main" id="bTSolo">Start a solo game</button><button class="btn" id="bTMenu">Menu</button></div>`;
  showScreen('win');$('#bTSolo').onclick=()=>{state='title';newGame()};$('#bTMenu').onclick=toTitle}
 $('#bTuto').onclick=()=>{if(!PSEUDO){askPseudo('title');return}startTutorial()};
 $('#bTAYes').onclick=()=>startTutorial();$('#bTANo').onclick=()=>{try{localStorage.setItem(TUK,'1')}catch(_){}buildTitle();showScreen('title')};
@@ -1645,14 +1654,14 @@ function maybeAskTuto(){let seen=false;try{seen=localStorage.getItem(TUK)==='1'}
 
 // ---------- nouvelles missions
 PZ.filtre=(o,b,done,alive)=>{
- const n=o.data.n;b.innerHTML=`<p class="hint">Fais glisser chaque déchet jusqu'à la grille d'évacuation, à gauche.</p><div class="filt"><div class="vent2">ÉVACUATION</div></div><div class="pzs">Déchets restants : ${n}</div>`;
+ const n=o.data.n;b.innerHTML=`<p class="hint">Drag each piece of debris to the exhaust grate on the left.</p><div class="filt"><div class="vent2">EXHAUST</div></div><div class="pzs">Debris left: ${n}</div>`;
  const box=b.querySelector('.filt'),st=b.querySelector('.pzs');let left=n;const items=[],sp=1+G.day*.35;
  for(let i=0;i<n;i++){const el=document.createElement('div');el.className='leaf';el.style.setProperty('--h',ri(25,110));el.style.setProperty('--r',ri(0,360)+'deg');
   const it={el,x:rnd(.4,.9),y:rnd(.12,.85),vx:rnd(-.06,.06),vy:rnd(-.06,.06),drag:false,gone:false};box.appendChild(el);items.push(it);
   el.addEventListener('pointerdown',e=>{it.drag=true;el.classList.add('drag');try{el.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
   el.addEventListener('pointermove',e=>{if(!it.drag)return;const r=box.getBoundingClientRect();it.x=clamp((e.clientX-r.left)/r.width,0,1);it.y=clamp((e.clientY-r.top)/r.height,0,1)});
   const up=()=>{if(!it.drag)return;it.drag=false;el.classList.remove('drag');
-   if(it.x<.17&&!it.gone){it.gone=true;el.remove();left--;tone(300+left*30,.1,'triangle',.12);st.textContent='Déchets restants : '+left;if(!left){st.textContent='Filtre propre.';setTimeout(done,400)}}};
+   if(it.x<.17&&!it.gone){it.gone=true;el.remove();left--;tone(300+left*30,.1,'triangle',.12);st.textContent='Debris left: '+left;if(!left){st.textContent='Filter clean.';setTimeout(done,400)}}};
   el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)}
  let last=performance.now();
  const fr=t=>{if(!alive())return;const dt=Math.min(.05,(t-last)/1000);last=t;
@@ -1660,10 +1669,10 @@ PZ.filtre=(o,b,done,alive)=>{
   requestAnimationFrame(fr)};requestAnimationFrame(fr)};
 PZ.memoire=(o,b,done)=>{
  const SY=['▲','●','■','◆','★','✚','☾','♣'],p=o.data.pairs,deck=shuffle(SY.slice(0,p).flatMap(s=>[s,s]));let open=[],found=0,miss=0,busy=false;
- b.innerHTML=`<p class="hint">Retourne les cartes deux par deux et retrouve les paires. Trop d'erreurs font du bruit.</p><div class="mem" style="grid-template-columns:repeat(${p===5?5:4},1fr)">${deck.map((s,i)=>`<button data-i="${i}" aria-label="Carte ${i+1}"><span>${s}</span></button>`).join('')}</div><div class="pzs">Paires : 0/${p}</div>`;
+ b.innerHTML=`<p class="hint">Flip the cards two at a time and find the pairs. Too many mistakes make noise.</p><div class="mem" style="grid-template-columns:repeat(${p===5?5:4},1fr)">${deck.map((s,i)=>`<button data-i="${i}" aria-label="Card ${i+1}"><span>${s}</span></button>`).join('')}</div><div class="pzs">Pairs: 0/${p}</div>`;
  const bs=[...b.querySelectorAll('.mem button')],st=b.querySelector('.pzs');
  bs.forEach(x=>x.onclick=()=>{if(busy||x.classList.contains('up'))return;x.classList.add('up');SFX.click();open.push(x);if(open.length<2)return;const[a,c]=open;open=[];
-  if(deck[+a.dataset.i]===deck[+c.dataset.i]){a.classList.add('ok');c.classList.add('ok');a.disabled=c.disabled=true;found++;tone(500+found*60,.12,'triangle',.14);st.textContent=`Paires : ${found}/${p}`;if(found===p){st.textContent='Mémoire restaurée.';setTimeout(done,400)}}
+  if(deck[+a.dataset.i]===deck[+c.dataset.i]){a.classList.add('ok');c.classList.add('ok');a.disabled=c.disabled=true;found++;tone(500+found*60,.12,'triangle',.14);st.textContent=`Pairs: ${found}/${p}`;if(found===p){st.textContent='Memory restored.';setTimeout(done,400)}}
   else{busy=true;miss++;if(miss%4===0)pzFail(o);setTimeout(()=>{a.classList.remove('up');c.classList.remove('up');busy=false},650)}})};
 PZ.tuyaux=(o,b,done)=>{
  const n=o.data.n,OUT={I:[[3,1],[0,2],[3,1],[0,2]],L:[[0,1],[1,2],[2,3],[3,0]]},DX=[0,1,0,-1],DY=[-1,0,1,0];
@@ -1680,7 +1689,7 @@ PZ.tuyaux=(o,b,done)=>{
  for(const c of grid)c.r=c.sol?(c.r+ri(1,3))%4:ri(0,3);
  const r0=path[0][1],r1=path[path.length-1][1];
  const SVG={I:'<path d="M0 15h40v10H0z"/>',L:'<path d="M15 0h10v15h15v10H15z"/>'};
- b.innerHTML=`<p class="hint">Tourne les tuyaux (clic) pour relier l'entrée à gauche à la sortie à droite.</p><div class="pipew"><div class="pside" style="--n:${n}">${Array.from({length:n},(_,i)=>`<i class="${i===r0?'on':''}"></i>`).join('')}</div><div class="pipes" style="--n:${n}">${grid.map((c,i)=>`<button data-i="${i}" aria-label="Tuyau"><svg viewBox="0 0 40 40">${SVG[c.t]}</svg></button>`).join('')}</div><div class="pside" style="--n:${n}">${Array.from({length:n},(_,i)=>`<i class="${i===r1?'on':''}"></i>`).join('')}</div></div><div class="pzs">Circuit coupé</div>`;
+ b.innerHTML=`<p class="hint">Rotate the pipes (click) to connect the inlet on the left to the outlet on the right.</p><div class="pipew"><div class="pside" style="--n:${n}">${Array.from({length:n},(_,i)=>`<i class="${i===r0?'on':''}"></i>`).join('')}</div><div class="pipes" style="--n:${n}">${grid.map((c,i)=>`<button data-i="${i}" aria-label="Pipe"><svg viewBox="0 0 40 40">${SVG[c.t]}</svg></button>`).join('')}</div><div class="pside" style="--n:${n}">${Array.from({length:n},(_,i)=>`<i class="${i===r1?'on':''}"></i>`).join('')}</div></div><div class="pzs">Circuit broken</div>`;
  const bs=[...b.querySelectorAll('.pipes button')],st=b.querySelector('.pzs');let fin=false;
  const flow=()=>{const lit=new Set();let x=0,y=r0,din=3,ok=false;
   for(let s=0;s<n*n+2;s++){if(x<0||y<0||x>=n||y>=n)break;const c=grid[y*n+x],cn=OUT[c.t][c.r];if(!cn.includes(din))break;lit.add(y*n+x);const out=cn[0]===din?cn[1]:cn[0];
@@ -1688,7 +1697,7 @@ PZ.tuyaux=(o,b,done)=>{
   return{lit,ok}};
  const paint=()=>{const f=flow();bs.forEach((x,i)=>{x.querySelector('svg').style.transform=`rotate(${grid[i].r*90}deg)`;x.classList.toggle('lit',f.lit.has(i))});return f};
  bs.forEach(x=>x.onclick=()=>{if(fin)return;const c=grid[+x.dataset.i];c.r=(c.r+1)%4;SFX.click();const f=paint();
-  st.textContent=f.ok?'Circuit rétabli.':`Circuit : ${f.lit.size} tuyau${f.lit.size>1?'x':''} reliés`;if(f.ok){fin=true;tone(700,.2,'triangle',.15);setTimeout(done,450)}});
+  st.textContent=f.ok?'Circuit restored.':`Circuit: ${f.lit.size} pipe${f.lit.size>1?'s':''} connected`;if(f.ok){fin=true;tone(700,.2,'triangle',.15);setTimeout(done,450)}});
  if(paint().ok){const c=grid[path[0][1]*n];c.r=(c.r+1)%4;paint()}};
 
 // ---------- mode spectateur
@@ -1697,7 +1706,7 @@ const isSpecWait=()=>state==='spec'&&SPEC&&SPEC.back==='wait';
 function specTargets(){if(!MP)return[];return MP.room.peers().filter(p=>!p.sameTab&&p.presence&&p.presence.st==='play'&&Array.isArray(p.presence.pos))}
 function startSpec(back){
  const ts=specTargets();const msgEl=back==='wait'?$('#wSpecMsg'):$('#oSpecMsg');
- if(!ts.length){if(msgEl)msgEl.textContent='Personne à regarder pour l\'instant : aucun autre joueur n\'est dans son aile.';return}
+ if(!ts.length){if(msgEl)msgEl.textContent='Nobody to watch right now: no other player is in their wing.';return}
  SPEC={back,peer:ts[0].peer,day:0,x:0,y:0,a:0,first:true};state='spec';hideScreens();$('#specbar').classList.remove('hide');unlock('spectateur')}
 function stopSpec(){const b=SPEC&&SPEC.back;SPEC=null;$('#specbar').classList.add('hide');
  if(b==='wait'){state='wait';showScreen('wait');renderWait()}else{state='over';showScreen('over')}}
@@ -1706,11 +1715,11 @@ $('#spPrev').onclick=()=>specNext(-1);$('#spNext').onclick=()=>specNext(1);$('#s
 function specUpdate(dt){
  if(!MP){stopSpec();return}
  let p=MP.room.peers().find(x=>x.peer===SPEC.peer);
- if(!p||!p.presence||p.presence.st!=='play'||!Array.isArray(p.presence.pos)){const alt=specTargets()[0];if(alt){SPEC.peer=alt.peer;SPEC.first=true;p=alt}else{$('#spInfo').textContent='Plus personne en jeu pour le moment.';SPEC.pr=null;return}}
+ if(!p||!p.presence||p.presence.st!=='play'||!Array.isArray(p.presence.pos)){const alt=specTargets()[0];if(alt){SPEC.peer=alt.peer;SPEC.first=true;p=alt}else{$('#spInfo').textContent='Nobody left in play right now.';SPEC.pr=null;return}}
  const pr=p.presence,day=+pr.day||1;SPEC.pr=pr;
  if(SPEC.day!==day){SPEC.day=day;withSeed(MP.seed+day*7919,()=>genMap(day));SPEC.first=true}
  const[x,y,a]=pr.pos.map(Number);if(SPEC.first){SPEC.x=x;SPEC.y=y;SPEC.first=false}const k=Math.min(1,dt*10);SPEC.x+=(x-SPEC.x)*k;SPEC.y+=(y-SPEC.y)*k;SPEC.a=a;SPEC.walk=(SPEC.walk||0)+Math.hypot(x-SPEC.x,y-SPEC.y)*.1;
- const ts=specTargets();$('#spInfo').innerHTML=`Tu regardes <b>${esc(cleanName(pr.n)||'Joueur')}</b> · Jour ${day} · ${+pr.frag||0}/${+pr.need||'?'} fragments${ts.length>1?` · ${ts.length} joueurs en jeu`:''}`}
+ const ts=specTargets();$('#spInfo').innerHTML=`You are watching <b>${esc(cleanName(pr.n)||'Player')}</b> · Day ${day} · ${+pr.frag||0}/${+pr.need||'?'} shards${ts.length>1?` · ${ts.length} players in play`:''}`}
 function renderSpec(){
  const W=cv.width,Hh=cv.height;ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#050807';ctx.fillRect(0,0,W,Hh);if(!M||!SPEC||!SPEC.pr)return;
  const vw=VW/ZOOM,vh=VH/ZOOM,cx=SPEC.x-vw/2,cy=SPEC.y-vh/2,S=DPR*ZOOM,t=TIME,pr=SPEC.pr;ctx.setTransform(S,0,0,S,-cx*S,-cy*S);
@@ -1726,8 +1735,8 @@ function renderSpec(){
  for(const h of hunters){const cone=poly(h.x,h.y,h.a-h.fov,h.a+h.fov,12,h.range,false);dctx.fillStyle='rgba(0,0,0,.6)';fillPoly(dctx,cone,h.x,h.y);h.cone=cone}
  dctx.globalCompositeOperation='source-over';ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(dark,0,0);ctx.setTransform(S,0,0,S,-cx*S,-cy*S);
  for(const h of hunters){ctx.fillStyle=h.state==='chase'?'rgba(224,72,61,.2)':'rgba(255,236,180,.08)';fillPoly(ctx,h.cone,h.x,h.y)}
- ctx.font='700 15px "Barlow Condensed",sans-serif';ctx.textAlign='center';ctx.fillStyle='#e8e2d4';ctx.fillText(cleanName(pr.n)||'Joueur',SPEC.x,SPEC.y-24);
- if(hidden){ctx.fillStyle='#79d9b1';ctx.fillText('caché',SPEC.x,SPEC.y-8)}
+ ctx.font='700 15px "Barlow Condensed",sans-serif';ctx.textAlign='center';ctx.fillStyle='#e8e2d4';ctx.fillText(cleanName(pr.n)||'Player',SPEC.x,SPEC.y-24);
+ if(hidden){ctx.fillStyle='#79d9b1';ctx.fillText('hidden',SPEC.x,SPEC.y-8)}
  ctx.setTransform(1,0,0,1,0,0)}
 $('#bWSpec').onclick=()=>startSpec('wait');
 
@@ -1744,18 +1753,18 @@ try{COINS=Math.max(0,+localStorage.getItem(WK)||0);OWNED=JSON.parse(localStorage
 function saveShop(){try{localStorage.setItem(WK,String(COINS));localStorage.setItem(OWK,JSON.stringify(OWNED));localStorage.setItem(STK,JSON.stringify(STOCK))}catch(_){}}
 const owns=c=>!c.price||OWNED.includes(c.id);
 const SHOPI=[
- {id:'leurre',n:'Leurre sonore',d:'Bipe 6 s pour attirer les traqueurs. Touche 1.',p:20},
- {id:'petard',n:'Pétard',d:'Très bruyant mais court : attire les traqueurs de loin. Touche 3.',p:20},
- {id:'fumigene',n:'Fumigène',d:'Écran de fumée 8 s : les traqueurs ne te voient plus. Touche 2.',p:20},
+ {id:'leurre',n:'Sound decoy',d:'Beeps for 6 s to lure hunters. Key 1.',p:20},
+ {id:'petard',n:'Firecracker',d:'Very loud but short: lures hunters from far away. Key 3.',p:20},
+ {id:'fumigene',n:'Smoke bomb',d:'8 s smoke screen: hunters can no longer see you. Key 2.',p:20},
 ];
 let shopBack='title';
 function openShop(focus){shopBack='title';showScreen('shop');renderShop();if(focus){const el=document.querySelector(`[data-buy="${focus}"]`);if(el)el.closest('.shc').scrollIntoView({block:'center'})}}
 function renderShop(){
- $('#shopCoins').innerHTML=`Tu as <b>${COINS.toLocaleString('fr-FR')}</b> pièces.`+(NET&&!ACC?' <span style="color:var(--dim);font-size:16px">Sans compte, tes achats restent sur cet appareil.</span>':'');
+ $('#shopCoins').innerHTML=`You have <b>${COINS.toLocaleString('en-US')}</b> coins.`+(NET&&!ACC?' <span style="color:var(--dim);font-size:16px">Without an account, your purchases stay on this device.</span>':'');
  const paid=CHARS.filter(c=>c.price);
- $('#shopChars').innerHTML=paid.map(c=>`<div class="shc${owns(c)?' own':''}"><canvas width="240" height="120"></canvas><div><b>${esc(c.name)}</b> <small>${esc(c.title)}</small><p>${esc(c.passive)}<br><em>${esc(c.ab)} :</em> ${esc(c.abd)}</p>${owns(c)?'<span class="owned">Débloqué</span>':`<button class="btn sm main" data-buy="${c.id}" ${COINS<c.price?'disabled':''}>Acheter · ${c.price} pièces</button>`}</div></div>`).join('');
+ $('#shopChars').innerHTML=paid.map(c=>`<div class="shc${owns(c)?' own':''}"><canvas width="240" height="120"></canvas><div><b>${esc(c.name)}</b> <small>${esc(c.title)}</small><p>${esc(c.passive)}<br><em>${esc(c.ab)} :</em> ${esc(c.abd)}</p>${owns(c)?'<span class="owned">Unlocked</span>':`<button class="btn sm main" data-buy="${c.id}" ${COINS<c.price?'disabled':''}>Buy · ${c.price} coins</button>`}</div></div>`).join('');
  $('#shopChars').querySelectorAll('canvas').forEach((cn,i)=>{const x=cn.getContext('2d');x.fillStyle='#0f1a17';x.fillRect(0,0,240,120);drawPerson(x,120,64,-Math.PI/2,paid[i],0,2.6)});
- $('#shopItems').innerHTML=SHOPI.map(it=>`<div class="shi"><div><b>${esc(it.n)}</b><p>${esc(it.d)}</p><small>En réserve : ${STOCK[it.id]||0}</small></div><button class="btn sm" data-item="${it.id}" ${COINS<it.p?'disabled':''}>Acheter · ${it.p}</button></div>`).join('');
+ $('#shopItems').innerHTML=SHOPI.map(it=>`<div class="shi"><div><b>${esc(it.n)}</b><p>${esc(it.d)}</p><small>In stock: ${STOCK[it.id]||0}</small></div><button class="btn sm" data-item="${it.id}" ${COINS<it.p?'disabled':''}>Buy · ${it.p}</button></div>`).join('');
  $('#shopChars').querySelectorAll('[data-buy]').forEach(bt=>bt.onclick=()=>{const c=CHARS.find(x=>x.id===bt.dataset.buy);if(!c||owns(c)||COINS<c.price){SFX.bad();return}if(ACC){selChar=c;accBuy(c.id);return}COINS-=c.price;OWNED.push(c.id);saveShop();selChar=c;SFX.frag();renderShop()});
  $('#shopItems').querySelectorAll('[data-item]').forEach(bt=>bt.onclick=()=>{const it=SHOPI.find(x=>x.id===bt.dataset.item);if(!it||COINS<it.p){SFX.bad();return}if(ACC){accBuy(it.id);return}COINS-=it.p;STOCK[it.id]=(STOCK[it.id]||0)+1;saveShop();SFX.ok();renderShop()})}
 $('#bShop').onclick=()=>{audioInit();openShop()};$('#bShopBack').onclick=()=>{buildTitle();showScreen('title')};
@@ -1772,10 +1781,10 @@ const capP=(async()=>{try{if(!(window.claude&&window.claude.use))return;const r=
 
 // ---------- pseudo
 const NKEY='collectionneur_pseudo';let PSEUDO='';try{PSEUDO=localStorage.getItem(NKEY)||''}catch(e){}
-const cleanName=s=>String(s==null?'':s).replace(/[^\p{L}\p{N} _.\-]/gu,'').replace(/\s+/g,' ').trim().slice(0,16);
+const cleanName=s=>pokiFilter(cleanName0(s)),cleanName0=s=>String(s==null?'':s).replace(/[^\p{L}\p{N} _.\-]/gu,'').replace(/\s+/g,' ').trim().slice(0,16);
 let pseudoBack='title';
 function askPseudo(back){pseudoBack=back||'title';showScreen('pseudo');const i=$('#pIn');i.value=PSEUDO;$('#pErr').textContent='';setTimeout(()=>{try{i.focus()}catch(_){}},60)}
-$('#pForm').addEventListener('submit',e=>{e.preventDefault();const v=cleanName($('#pIn').value);if(v.length<2){$('#pErr').textContent='Au moins 2 caractères : lettres, chiffres, espace, _ . -';return}
+$('#pForm').addEventListener('submit',e=>{e.preventDefault();const v=cleanName($('#pIn').value);if(v.length>=2&&!pokiFilter(v)){$('#pErr').textContent='This nickname is not allowed.';return}if(v.length<2){$('#pErr').textContent='At least 2 characters: letters, digits, space, _ . -';return}
  PSEUDO=v;try{localStorage.setItem(NKEY,v)}catch(_){}SFX.click();buildTitle();if(pseudoBack==='title'&&maybeAskTuto())return;showScreen(pseudoBack)});
 
 // ---------- scores
@@ -1783,7 +1792,7 @@ const LKEY='collectionneur_scores';
 function calcScore(won){const s=G.stats,days=won?5:G.day-1;return Math.max(0,Math.round(days*1000+s.frags*150+G.story.length*120+s.sab*40-s.caught*75+(won?5000+Math.max(0,2400-s.time):0)))}
 async function submitScore(won){
  if(!G||G.submitted)return null;G.submitted=true;
- const e={name:PSEUDO||'Anonyme',score:calcScore(won),day:won?5:G.day,win:!!won,char:G.char.id,mode:MP?MP.kind:'solo',at:Date.now()};
+ const e={name:PSEUDO||'Anonymous',score:calcScore(won),day:won?5:G.day,win:!!won,char:G.char.id,mode:MP?MP.kind:'solo',at:Date.now()};
  try{const L=JSON.parse(localStorage.getItem(LKEY)||'[]');L.push(e);L.sort((a,b)=>b.score-a.score);localStorage.setItem(LKEY,JSON.stringify(L.slice(0,30)))}catch(_){}
  let online='off';
  if(ACC&&NET){try{const p=await accCall({t:'award',data:e});applyProfile(p);return{e,online:'ok'}}catch(_){return{e,online:'denied'}}}
@@ -1793,68 +1802,68 @@ async function submitScore(won){
  return{e,online}}
 function scoreBlock(won){
  const sc=calcScore(won);
- setTimeout(()=>{submitScore(won).then(r=>{const el=$('#scoreNet');const cl=document.querySelector('.coinL');if(cl)cl.textContent=`+${gain} pièces · total ${COINS.toLocaleString('fr-FR')}`;if(!el||!r)return;
-  el.textContent=r.online==='ok'?'Score envoyé au classement en ligne. Seul ton meilleur score y est gardé.':r.online==='denied'?'Score gardé sur cet appareil : le serveur n\'a pas répondu.':'Score gardé sur cet appareil.'})},50);
+ setTimeout(()=>{submitScore(won).then(r=>{const el=$('#scoreNet');const cl=document.querySelector('.coinL');if(cl)cl.textContent=`+${gain} coins · total ${COINS.toLocaleString('en-US')}`;if(!el||!r)return;
+  el.textContent=r.online==='ok'?'Score sent to the online leaderboard. Only your best score is kept.':r.online==='denied'?'Score saved on this device: the server did not respond.':'Score saved on this device.'})},50);
  const gain=payCoins(won);
- return`<p class="scoreL">Score : <b>${sc.toLocaleString('fr-FR')}</b> <small>${esc(PSEUDO||'Anonyme')}</small></p><p class="coinL">+${gain} pièces · total ${COINS.toLocaleString('fr-FR')}</p><p class="hint" id="scoreNet">Enregistrement du score…</p>`}
+ return`<p class="scoreL">Score: <b>${sc.toLocaleString('en-US')}</b> <small>${esc(PSEUDO||'Anonymous')}</small></p><p class="coinL">+${gain} coins · total ${COINS.toLocaleString('en-US')}</p><p class="hint" id="scoreNet">Saving score…</p>`}
 let boardTab='on';
 function openBoard(){showScreen('board');renderBoard()}
 async function renderBoard(){
  $('#tOn').classList.toggle('sel',boardTab==='on');$('#tLoc').classList.toggle('sel',boardTab==='loc');
  const tb=$('#bTable'),info=$('#bInfo');
- const row=(e,i)=>{const c=CHARS.find(x=>x.id===e.char);return`<tr class="${cleanName(e.name)===PSEUDO?'me':''}"><td>${i+1}.</td><td>${esc(cleanName(e.name)||'Anonyme')}${c?` <small style="color:var(--dim)">${esc(c.name)}</small>`:''}</td><td class="t">${e.win?'Libre':'Jour '+(+e.day||1)}</td><td class="t"><b>${(+e.score||0).toLocaleString('fr-FR')}</b></td></tr>`};
- if(boardTab==='loc'){let L=[];try{L=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(_){}info.textContent=L.length?'Tes meilleures parties sur cet appareil.':'Aucune partie terminée sur cet appareil.';tb.innerHTML=L.slice(0,20).map(row).join('');return}
- info.textContent='Chargement…';tb.innerHTML='';await capP;
+ const row=(e,i)=>{const c=CHARS.find(x=>x.id===e.char);return`<tr class="${cleanName(e.name)===PSEUDO?'me':''}"><td>${i+1}.</td><td>${esc(cleanName(e.name)||'Anonymous')}${c?` <small style="color:var(--dim)">${esc(c.name)}</small>`:''}</td><td class="t">${e.win?'Free':'Day '+(+e.day||1)}</td><td class="t"><b>${(+e.score||0).toLocaleString('en-US')}</b></td></tr>`};
+ if(boardTab==='loc'){let L=[];try{L=JSON.parse(localStorage.getItem(LKEY)||'[]')}catch(_){}info.textContent=L.length?'Your best games on this device.':'No finished games on this device.';tb.innerHTML=L.slice(0,20).map(row).join('');return}
+ info.textContent='Loading…';tb.innerHTML='';await capP;
  if(boardTab!=='on')return;
- if(!DB){info.textContent="Serveur du jeu introuvable.";return}
- const timer=setTimeout(()=>{info.textContent='Le classement ne répond pas pour l\'instant.'},10000);
+ if(!DB){info.textContent="Game server not found.";return}
+ const timer=setTimeout(()=>{info.textContent='The leaderboard is not responding right now.'},10000);
  try{const q=await DB.collection('scores').orderBy('score','desc').limit(50).get();clearTimeout(timer);if(boardTab!=='on')return;const docs=q.docs.map(d=>d.data()).filter(Boolean);
-  info.textContent=docs.length?'Le meilleur score de chaque joueur.':'Personne n\'a encore de score en ligne. Termine une partie pour être le premier.';tb.innerHTML=docs.map(row).join('')}
- catch(e){clearTimeout(timer);info.textContent='Impossible de lire le classement pour le moment.'}}
+  info.textContent=docs.length?'Each player\'s best score.':'Nobody has an online score yet. Finish a game to be the first.';tb.innerHTML=docs.map(row).join('')}
+ catch(e){clearTimeout(timer);info.textContent='Cannot load the leaderboard right now.'}}
 $('#tOn').onclick=()=>{boardTab='on';renderBoard()};$('#tLoc').onclick=()=>{boardTab='loc';renderBoard()};$('#bBBack').onclick=()=>{buildTitle();showScreen('title')};
 
 // ---------- lobbies
 const CODECH='abcdefghjkmnpqrstuvwxyz23456789';
 const newCode=n=>Array.from({length:n||5},()=>CODECH[Math.floor(Math.random()*CODECH.length)]).join('');
-async function needRoom(el){await capP;if(ROOM)return true;el.textContent="Serveur du jeu introuvable. Vérifie l'adresse dans config.js.";return false}
+async function needRoom(el){await capP;if(ROOM)return true;el.textContent="Game server not found.";return false}
 async function openLobby(kind,code,creator){
- const el=kind==='friend'?$('#fErr'):$('#tErr');el.textContent='Connexion…';if(!await needRoom(el))return;
+ const el=kind==='friend'?$('#fErr'):$('#tErr');el.textContent='Connecting…';if(!await needRoom(el))return;
  if(!PSEUDO){askPseudo('title');return}
- let room;try{room=await ROOM.join(kind==='friend'?'ami-'+code:'file-attente')}catch(e){el.textContent='Connexion impossible ('+((e&&e.code)||'erreur')+'). Réessaie dans un instant.';return}
+ let room;try{room=await ROOM.join(kind==='friend'?'ami-'+code:'file-attente')}catch(e){el.textContent='Cannot connect ('+((e&&e.code)||'error')+'). Try again in a moment.';return}
  el.textContent='';leaveLobby();
  LOBBY={kind,code,room,jt:Date.now(),creator:!!creator,started:false,base:0};
  room.presence({n:PSEUDO,c:selChar.id,jt:LOBBY.jt,st:'lobby',h:creator?1:0,start:null}).catch(()=>{});
  LOBBY.unsub=room.onPeers(()=>renderLobby(),()=>{});
- $('#lTitle').textContent=kind==='friend'?'Salon privé':'Recherche de joueurs';
+ $('#lTitle').textContent=kind==='friend'?'Private room':'Finding players';
  const lc=$('#lCode');lc.classList.toggle('hide',kind!=='friend');
- if(kind==='friend'){lc.innerHTML=`<span>${esc(code.toUpperCase())}</span><button class="btn sm" id="bCopy">Copier le code</button>`;$('#bCopy').onclick=()=>{try{navigator.clipboard.writeText(code.toUpperCase()).then(()=>{$('#bCopy').textContent='Copié'},()=>{})}catch(_){}}}
+ if(kind==='friend'){lc.innerHTML=`<span>${esc(code.toUpperCase())}</span><button class="btn sm" id="bCopy">Copy code</button>`;$('#bCopy').onclick=()=>{try{navigator.clipboard.writeText(code.toUpperCase()).then(()=>{$('#bCopy').textContent='Copied'},()=>{})}catch(_){}}}
  $('#lCount').textContent='';showScreen('lobby');LOBBY.iv=setInterval(lobbyTick,250);renderLobby()}
 function leaveLobby(){if(!LOBBY)return;clearInterval(LOBBY.iv);try{LOBBY.unsub&&LOBBY.unsub()}catch(_){}const r=LOBBY.room;LOBBY=null;try{r.leave().catch(()=>{})}catch(_){}}
 function lobbyPeers(){return LOBBY.room.peers().filter(p=>p.kind==='viewer'&&p.presence&&p.presence.st==='lobby')}
 function lobbyHost(ps){const byJ=(a,b)=>((+a.presence.jt||0)-(+b.presence.jt||0))||(a.peer<b.peer?-1:1);return ps.filter(p=>p.presence.h).sort(byJ)[0]||ps.slice().sort(byJ)[0]}
 function renderLobby(){
  if(!LOBBY||LOBBY.started)return;const ps=lobbyPeers(),host=lobbyHost(ps),n=ps.length;
- $('#lList').innerHTML=ps.slice(0,12).map(p=>{const c=CHARS.find(x=>x.id===p.presence.c)||CHARS[0];return`<li><i class="dot" style="background:${c.body}"></i><b>${esc(cleanName(p.presence.n)||'Joueur')}</b> <small>${esc(c.name)}</small>${p===host?' <em>hôte</em>':''}${p.sameTab?' <em class="me">toi</em>':''}</li>`}).join('')||'<li>Connexion…</li>';
- if(LOBBY.kind==='friend'){$('#lInfo').textContent=`${n} joueur${n>1?'s':''} dans le salon, ${Math.max(0,9-n)} place${9-n>1?'s':''} pour des bots. Tes amis choisissent « Avec des amis », puis entrent ce code.`;
-  $('#bLStart').classList.toggle('hide',!(host&&host.sameTab));if(host&&!host.sameTab)$('#lCount').textContent='En attente du lancement par l\'hôte…'}
- else{$('#bLStart').classList.add('hide');$('#lInfo').textContent=`${n} joueur${n>1?'s':''} dans la file. La partie démarre 30 s après l'arrivée du premier, ou dès que 9 joueurs sont là. Les places libres sont prises par des bots.`}}
+ $('#lList').innerHTML=ps.slice(0,12).map(p=>{const c=CHARS.find(x=>x.id===p.presence.c)||CHARS[0];return`<li><i class="dot" style="background:${c.body}"></i><b>${esc(cleanName(p.presence.n)||'Player')}</b> <small>${esc(c.name)}</small>${p===host?' <em>host</em>':''}${p.sameTab?' <em class="me">you</em>':''}</li>`}).join('')||'<li>Connecting…</li>';
+ if(LOBBY.kind==='friend'){$('#lInfo').textContent=`${n} player${n>1?'s':''} in the room, ${Math.max(0,9-n)} slot${9-n>1?'s':''} for bots. Your friends choose "With friends", then enter this code.`;
+  $('#bLStart').classList.toggle('hide',!(host&&host.sameTab));if(host&&!host.sameTab)$('#lCount').textContent='Waiting for the host to start…'}
+ else{$('#bLStart').classList.add('hide');$('#lInfo').textContent=`${n} player${n>1?'s':''} in the queue. The game starts 30 s after the first player arrives, or as soon as 9 players are here. Free slots are filled by bots.`}}
 function lobbyTick(){
  if(!LOBBY||LOBBY.started)return;const all=LOBBY.room.peers(),me=all.find(p=>p.sameTab);if(!me)return;
  for(const p of all){const s=p.presence&&p.presence.start;if(!s||typeof s!=='object'||!Array.isArray(s.ids))continue;
   if(s.ids.some(x=>x&&x.p===me.peer)){beginMP(s,p.sameTab);return}
   if(!LOBBY.seenStart||LOBBY.seenStart!==s.gid){LOBBY.seenStart=s.gid;LOBBY.base=Date.now()}}
  const ps=lobbyPeers(),host=lobbyHost(ps);
- if(LOBBY.kind==='online'&&host){const left=Math.max(0,30000-(Date.now()-Math.max(+host.presence.jt||Date.now(),LOBBY.base)));$('#lCount').textContent='Départ dans '+Math.ceil(left/1000)+' s';if(host.sameTab&&(left<=0||ps.length>=9))hostStart(ps)}}
+ if(LOBBY.kind==='online'&&host){const left=Math.max(0,30000-(Date.now()-Math.max(+host.presence.jt||Date.now(),LOBBY.base)));$('#lCount').textContent='Starting in '+Math.ceil(left/1000)+' s';if(host.sameTab&&(left<=0||ps.length>=9))hostStart(ps)}}
 function hostStart(ps){
  if(!LOBBY||LOBBY.started)return;
- const ids=ps.slice().sort((a,b)=>(+a.presence.jt||0)-(+b.presence.jt||0)).slice(0,9).map(p=>({p:p.peer,n:cleanName(p.presence.n)||'Joueur',c:CHARS.some(c=>c.id===p.presence.c)?p.presence.c:'nadia'}));
+ const ids=ps.slice().sort((a,b)=>(+a.presence.jt||0)-(+b.presence.jt||0)).slice(0,9).map(p=>({p:p.peer,n:cleanName(p.presence.n)||'Player',c:CHARS.some(c=>c.id===p.presence.c)?p.presence.c:'nadia'}));
  const s={gid:newCode(8),seed:Math.floor(Math.random()*2147483646)+1,ids};LOBBY.room.presence({start:s}).catch(()=>{});beginMP(s,true)}
 async function beginMP(s,isHost){
  if(!LOBBY||LOBBY.started)return;LOBBY.started=true;clearInterval(LOBBY.iv);const lob=LOBBY;
  lob.room.presence({st:'started'}).catch(()=>{});
  const me=lob.room.peers().find(p=>p.sameTab),myPeer=me&&me.peer;
- $('#lCount').textContent='Lancement…';
- let game;try{game=await ROOM.join('g-'+String(s.gid).replace(/[^a-z0-9]/g,'').slice(0,20))}catch(e){$('#lCount').textContent='Impossible de rejoindre la partie. Réessaie.';LOBBY.started=false;LOBBY.iv=setInterval(lobbyTick,250);return}
+ $('#lCount').textContent='Starting…';
+ let game;try{game=await ROOM.join('g-'+String(s.gid).replace(/[^a-z0-9]/g,'').slice(0,20))}catch(e){$('#lCount').textContent='Cannot join the game. Try again.';LOBBY.started=false;LOBBY.iv=setInterval(lobbyTick,250);return}
  setTimeout(()=>{if(LOBBY===lob)leaveLobby()},isHost?6000:400);
  const humans=s.ids.filter(x=>x&&x.p!==myPeer).slice(0,8);
  MP={kind:lob.kind,room:game,seed:(+s.seed>>>0)||1,me:myPeer,alive:true,st:'intro',t:0,seen:new Set(),everSeen:new Set(),sabOut:[],resDone:new Set(),tk:0,pubLast:'',waitT:0,resAge:0,rdy:0,nextSent:false,total:s.ids.length};
@@ -1863,7 +1872,7 @@ async function beginMP(s,isHost){
 const HCOL=['#ff7a59','#59c3ff','#c9ff59','#ff59c9','#ffd359','#59ffb4','#b089ff','#ff9f40'];
 function newGameMP(humans){
  audioInit();const rg=mulberry(MP.seed);
- const hum=humans.map((h,i)=>({name:cleanName(h.n)||'Joueur',color:HCOL[i%8],human:true,peer:String(h.p),alive:true,skill:1,pen:0,frag:0,need:3}));
+ const hum=humans.map((h,i)=>({name:cleanName(h.n)||'Player',color:HCOL[i%8],human:true,peer:String(h.p),alive:true,skill:1,pen:0,frag:0,need:3}));
  const pool=RIVALS.filter(r=>!r.collector),sacha=RIVALS.find(r=>r.collector),nb=Math.max(0,8-hum.length);
  const bots=[sacha].concat(sShuffle(pool,rg)).slice(0,nb).map(r=>({...r,skill:r.collector?.86:.88+rg()*.28,alive:true,pen:0}));
  G={char:selChar,day:1,tokens:2,items:{leurre:1,fumigene:1,brouilleur:0},strikes:0,story:[],desig:false,
@@ -1878,11 +1887,11 @@ function mpSync(){
  if(!MP||!G)return;const ps=MP.room.peers(),me=ps.find(p=>p.sameTab);if(me)MP.me=me.peer;const by=new Map(ps.map(p=>[p.peer,p]));
  const live=state==='play'||state==='wait';
  for(const r of G.rivals){if(!r.human)continue;const p=by.get(r.peer);r.present=!!p;
-  if(!p){if(r.alive&&!r.done&&!r.out&&MP.everSeen.has(r.peer)){r.out=true;if(live)say(`${r.name} a quitté la partie.`,'rival')}continue}
+  if(!p){if(r.alive&&!r.done&&!r.out&&MP.everSeen.has(r.peer)){r.out=true;if(live)say(`${r.name} left the game.`,'rival')}continue}
   MP.everSeen.add(r.peer);const pr=p.presence||{};
   if(+pr.day===G.day&&r.alive){r.frag=+pr.frag||0;r.need=+pr.need||r.need;
-   if(pr.st==='done'&&!r.done){r.done=true;r.t=+pr.t||0;if(live)say(G.day===5?`${r.name} a franchi la porte.`:`${r.name} a quitté son aile en ${fmt(r.t)}.`,'rival')}
-   if(pr.st==='out'&&!r.out&&!r.done){r.out=true;if(live)say(`${r.name} est hors jeu.`,'rival')}}
+   if(pr.st==='done'&&!r.done){r.done=true;r.t=+pr.t||0;if(live)say(G.day===5?`${r.name} went through the door.`:`${r.name} left their wing in ${fmt(r.t)}.`,'rival')}
+   if(pr.st==='out'&&!r.out&&!r.done){r.out=true;if(live)say(`${r.name} is out.`,'rival')}}
   for(const sb of(Array.isArray(pr.sabs)?pr.sabs.slice(0,10):[])){
    if(!sb||typeof sb.id!=='string'||MP.seen.has(sb.id))continue;MP.seen.add(sb.id);if(+sb.day!==G.day)continue;
    if(sb.to===MP.me){if(state==='play'&&MP.alive){const m=RMAL.find(x=>x.id===sb.k);if(m)receiveMalus(r,m,+sb.nb===1)}}
@@ -1913,22 +1922,22 @@ function applyRes(res){
  if(MP.resDone.has(G.day))return;MP.resDone.add(G.day);MP.resAge=0;MP.nextSent=false;
  const el=Array.isArray(res.elim)?res.elim.map(String):[];
  for(const r of G.rivals){if(!r.alive)continue;if(el.includes(r.human?'p:'+r.peer:'b:'+r.name)){r.alive=false;r.elimDay=G.day}}
- if(el.includes('p:'+MP.me)){lose(state==='play'?'Les autres ont tous fini avant toi : tu es éliminé ce soir.':'Tu es le plus lent ce soir. Le gaz envahit ton aile.',true);return}
+ if(el.includes('p:'+MP.me)){lose(state==='play'?'Everyone else finished before you: you are eliminated tonight.':'You were the slowest tonight. Gas floods your wing.',true);return}
  if(state==='spec'){SPEC=null;$('#specbar').classList.add('hide')}
  closeModal();state='endday';$('#hud').classList.add('hide');if(G.day===1)unlock('jour1');showEndDayMP(res)}
 function showEndDayMP(res){
  showScreen('endday');const el=(res.elim||[]).map(String),order=(Array.isArray(res.order)?res.order:[]).slice(0,12);
  const deadNames=G.rivals.filter(r=>r.elimDay===G.day).map(r=>r.name);
- const rows=order.map((o,i)=>{const me=o.k==='p:'+MP.me,dead=el.includes(String(o.k));return`<tr class="${me?'me':''}${dead?' dead':''}"><td>${i+1}.</td><td>${esc(me?'Toi':cleanName(o.n)||'?')}${String(o.k).startsWith('b:')?' <small style="color:var(--dim)">bot</small>':''}</td><td class="t">${fmt(+o.t||0)}</td></tr>`}).join('');
- const outs=G.rivals.filter(r=>r.human&&r.elimDay===G.day&&!order.some(o=>o.k==='p:'+r.peer)).map(r=>`<tr class="dead"><td>—</td><td>${esc(r.name)}</td><td class="t">hors jeu</td></tr>`).join('');
- $('#enddayIn').innerHTML=`<div class="dayno">Fin du jour ${G.day}</div><p class="tag">Tu es sorti en ${fmt(MP.t)}. Éliminé${deadNames.length>1?'s':''} ce soir : ${esc(deadNames.join(', ')||'personne')}.</p><table class="rank">${rows}${outs}</table>
- <div class="actions"><button class="btn main" id="bReady">Prêt pour le jour ${G.day+1}</button></div><p class="hint" id="rInfo" style="margin-top:8px">Le jour suivant commence quand tout le monde est prêt, ou dans 25 s.</p>`;
- $('#bReady').onclick=()=>{MP.rdy=G.day+1;MP.st='ready';$('#bReady').disabled=true;$('#rInfo').textContent='En attente des autres joueurs…';SFX.click()}}
+ const rows=order.map((o,i)=>{const me=o.k==='p:'+MP.me,dead=el.includes(String(o.k));return`<tr class="${me?'me':''}${dead?' dead':''}"><td>${i+1}.</td><td>${esc(me?'You':cleanName(o.n)||'?')}${String(o.k).startsWith('b:')?' <small style="color:var(--dim)">bot</small>':''}</td><td class="t">${fmt(+o.t||0)}</td></tr>`}).join('');
+ const outs=G.rivals.filter(r=>r.human&&r.elimDay===G.day&&!order.some(o=>o.k==='p:'+r.peer)).map(r=>`<tr class="dead"><td>—</td><td>${esc(r.name)}</td><td class="t">out</td></tr>`).join('');
+ $('#enddayIn').innerHTML=`<div class="dayno">End of day ${G.day}</div><p class="tag">You got out in ${fmt(MP.t)}. Eliminated ce soir : ${esc(deadNames.join(', ')||'personne')}.</p><table class="rank">${rows}${outs}</table>
+ <div class="actions"><button class="btn main" id="bReady">Ready for day ${G.day+1}</button></div><p class="hint" id="rInfo" style="margin-top:8px">The next day starts when everyone is ready, or in 25 s.</p>`;
+ $('#bReady').onclick=()=>{MP.rdy=G.day+1;MP.st='ready';$('#bReady').disabled=true;$('#rInfo').textContent='Waiting for the other players…';SFX.click()}}
 function goNext(){if(state!=='endday')return;G.day++;MP.rdy=0;startDay()}
 function renderWait(){
  const hs=G.rivals.filter(r=>r.human&&r.alive),pend=hs.filter(r=>!r.done&&!r.out);
- $('#wInfo').textContent=pend.length?`Tu es sorti en ${fmt(MP.t)}. En attente de ${pend.length} joueur${pend.length>1?'s':''}…`:`Tu es sorti en ${fmt(MP.t)}. Calcul des résultats…`;
- $('#wList').innerHTML=G.rivals.filter(r=>r.alive).map(r=>{const bd=!r.human&&D&&D.t>=r.finish;return`<li><i class="dot" style="background:${r.color}"></i><b>${esc(r.name)}</b> <small>${r.human?'joueur':'bot'}</small> <span class="st">${r.done?'sorti'+(r.human?' en '+fmt(r.t):''):bd?'sorti':r.out?'hors jeu':Math.round(prog(r)*100)+' %'}</span></li>`}).join('')}
+ $('#wInfo').textContent=pend.length?`You got out in ${fmt(MP.t)}. Waiting for ${pend.length} player${pend.length>1?'s':''}…`:`You got out in ${fmt(MP.t)}. Calculating results…`;
+ $('#wList').innerHTML=G.rivals.filter(r=>r.alive).map(r=>{const bd=!r.human&&D&&D.t>=r.finish;return`<li><i class="dot" style="background:${r.color}"></i><b>${esc(r.name)}</b> <small>${r.human?'player':'bot'}</small> <span class="st">${r.done?'out'+(r.human?' en '+fmt(r.t):''):bd?'out':r.out?'out':Math.round(prog(r)*100)+' %'}</span></li>`}).join('')}
 function leaveMP(){if(!MP)return;try{MP.unsub&&MP.unsub()}catch(_){}const r=MP.room;MP=null;try{r.leave().catch(()=>{})}catch(_){}}
 
 // ---------- buttons
@@ -1936,7 +1945,7 @@ $('#bFriends').onclick=()=>{if(!PSEUDO){askPseudo('friends');return}$('#fErr').t
 $('#bOnline').onclick=()=>openLobby('online',null,false);
 $('#bBoard').onclick=openBoard;$('#bName').onclick=()=>askPseudo('title');
 $('#bCreate').onclick=()=>openLobby('friend',newCode(5),true);
-$('#jForm').addEventListener('submit',e=>{e.preventDefault();const c=$('#jIn').value.toLowerCase().replace(/[^a-z0-9]/g,'');if(c.length!==5){$('#fErr').textContent='Le code fait 5 caractères.';return}openLobby('friend',c,false)});
+$('#jForm').addEventListener('submit',e=>{e.preventDefault();const c=$('#jIn').value.toLowerCase().replace(/[^a-z0-9]/g,'');if(c.length!==5){$('#fErr').textContent='The code is 5 characters long.';return}openLobby('friend',c,false)});
 $('#bFBack').onclick=()=>{buildTitle();showScreen('title')};
 $('#bLStart').onclick=()=>{if(LOBBY)hostStart(lobbyPeers())};
 $('#bLQuit').onclick=()=>{leaveLobby();buildTitle();showScreen('title')};
@@ -1949,7 +1958,9 @@ function applyProfile(p){
  for(const k in(p.ach||{}))if(!ACHS[k])ACHS[k]=p.ach[k];CNT.missions=Math.max(CNT.missions||0,(p.cnt||{}).missions||0);CNT.crates=Math.max(CNT.crates||0,(p.cnt||{}).crates||0);
  saveShop();try{localStorage.setItem(ACHK,JSON.stringify(ACHS));localStorage.setItem(CNTK,JSON.stringify(CNT))}catch(_){}
  if(state==='title')buildTitle();if(!$('#shop').classList.contains('hide'))renderShop()}
-const accErr=e=>(e&&(e.code||e.message))==='upstream_error'?'Le serveur ne répond pas. Réessaie dans un instant (il peut mettre une minute à se réveiller).':(e&&e.code)==='session'?'Session expirée : reconnecte-toi.':String((e&&(e.code||e.message))||'Erreur');
+const SRVMSG={'~Article inconnu.':'Unknown item.','~Ce pseudo est déjà pris.':'This nickname is already taken.','~Mot de passe : 6 caractères minimum.':'Password: at least 6 characters.','~Pas assez de pièces.':'Not enough coins.','~Pseudo ou mot de passe incorrect.':'Wrong nickname or password.','~Pseudo trop court (3 caractères minimum).':'Nickname too short (3 characters minimum).',"~Trop d'essais, recharge la page.":"Too many attempts, reload the page."};
+const srvMsg=m=>SRVMSG['~'+m]||String(m);
+const accErr=e=>(e&&(e.code||e.message))==='upstream_error'?'The server is not responding. Try again in a moment (it may take a minute to wake up).':(e&&e.code)==='session'?'Session expired: log in again.':srvMsg((e&&(e.code||e.message))||'Error');
 function setToken(t){TOKEN=t||'';try{t?localStorage.setItem(TOKK,t):localStorage.removeItem(TOKK)}catch(_){}}
 async function accCall(m){if(!NET||!TOKEN)throw{code:'session'};try{return await NET.call({...m,token:TOKEN})}catch(e){if(e&&e.code==='session'){setToken('');ACC=null;if(state==='title')buildTitle()}throw e}}
 function accBuy(id){accCall({t:'buy',item:id}).then(p=>{applyProfile(p);SFX.frag();renderShop()}).catch(e=>{SFX.bad();$('#shopCoins').innerHTML=`<span style="color:#ff8a80">${esc(accErr(e))}</span>`})}
@@ -1958,16 +1969,16 @@ let metaT=null;function accMeta(){if(!ACC)return;clearTimeout(metaT);metaT=setTi
 let accMode='login',accBack='title';
 function openAccount(back){accBack=back||'title';showScreen('account');$('#aErr').textContent='';
  $('#aOut').classList.toggle('hide',!!ACC);$('#aIn').classList.toggle('hide',!ACC);$('#aSkip').classList.toggle('hide',accBack!=='first');
- if(ACC)$('#aInfo').innerHTML=`Connecté en tant que <b>${esc(ACC.name)}</b>. Tu as <b class="coin">${COINS.toLocaleString('fr-FR')}</b> pièces, ${OWNED.length} personnage${OWNED.length>1?'s':''} acheté${OWNED.length>1?'s':''}, meilleur score ${(+ACC.best||0).toLocaleString('fr-FR')}. Tout est gardé sur le serveur.`;
+ if(ACC)$('#aInfo').innerHTML=`Logged in as <b>${esc(ACC.name)}</b>. You have <b class="coin">${COINS.toLocaleString('en-US')}</b> coins, ${OWNED.length} character${OWNED.length>1?'s':''} bought, meilleur score ${(+ACC.best||0).toLocaleString('en-US')}. Everything is saved on the server.`;
  else setAccMode(accMode)}
 function setAccMode(m){accMode=m;$('#aTabL').classList.toggle('sel',m==='login');$('#aTabR').classList.toggle('sel',m==='register');$('#aPass2').classList.toggle('hide',m!=='register');
- $('#aSubmit').textContent=m==='login'?'Se connecter':'Créer mon compte';$('#aPass').autocomplete=m==='login'?'current-password':'new-password';$('#aErr').textContent=''}
+ $('#aSubmit').textContent=m==='login'?'Log in':'Create my account';$('#aPass').autocomplete=m==='login'?'current-password':'new-password';$('#aErr').textContent=''}
 $('#aTabL').onclick=()=>setAccMode('login');$('#aTabR').onclick=()=>setAccMode('register');
 $('#aForm').addEventListener('submit',async e=>{e.preventDefault();const name=cleanName($('#aName').value),pass=$('#aPass').value;
- if(name.length<3){$('#aErr').textContent='Pseudo : 3 caractères minimum (lettres, chiffres, espace, _ . -).';return}
- if(pass.length<6){$('#aErr').textContent='Mot de passe : 6 caractères minimum.';return}
- if(accMode==='register'&&pass!==$('#aPass2').value){$('#aErr').textContent='Les deux mots de passe ne sont pas identiques.';return}
- $('#aErr').textContent='Connexion…';$('#aSubmit').disabled=true;
+ if(name.length<3){$('#aErr').textContent='Nickname: at least 3 characters (letters, digits, space, _ . -).';return}
+ if(pass.length<6){$('#aErr').textContent='Password: at least 6 characters.';return}
+ if(accMode==='register'&&pass!==$('#aPass2').value){$('#aErr').textContent='The two passwords do not match.';return}
+ $('#aErr').textContent='Connecting…';$('#aSubmit').disabled=true;
  try{const r=await NET.call(accMode==='login'?{t:'login',name,pass}:{t:'register',name,pass,local:{coins:COINS,owned:OWNED,stock:STOCK,ach:ACHS,cnt:CNT}},15000);
   setToken(r.token);applyProfile(r.profile);$('#aPass').value='';$('#aPass2').value='';SFX.ok();
   if(accBack==='first'){buildTitle();if(!maybeAskTuto())showScreen('title')}else openAccount(accBack)}
@@ -1977,6 +1988,30 @@ $('#aBack').onclick=()=>{buildTitle();showScreen('title')};
 $('#aLogout').onclick=()=>{const t=TOKEN;if(NET&&t)NET.call({t:'logout',token:t}).catch(()=>{});setToken('');ACC=null;COINS=0;OWNED=[];Object.assign(STOCK,{leurre:0,petard:0,fumigene:0});saveShop();openAccount('title')};
 $('#bAcc').onclick=()=>openAccount('title');
 if(NET){document.body.classList.add('hosted');if(TOKEN)NET.call({t:'auth',token:TOKEN},12000).then(applyProfile).catch(e=>{if(e&&e.code==='session')setToken('')})}
+
+
+// ---------- Poki SDK
+const POKI=window.PokiSDK||null;let pokiOn=false,pokiAd=false,pokiInitP=null;
+function pokiInit(){if(!pokiInitP)pokiInitP=POKI?POKI.init().catch(()=>{}):Promise.resolve();return pokiInitP}
+pokiInit();
+let pokiLoadedDone=false;function pokiLoaded(){if(pokiLoadedDone)return;pokiLoadedDone=true;pokiInit().then(()=>{try{POKI&&POKI.gameLoadingFinished()}catch(_){}})}
+function pokiStart(){if(!POKI||pokiOn||pokiAd)return;pokiOn=true;try{POKI.gameplayStart()}catch(_){}}
+function pokiStop(){if(!POKI||!pokiOn)return;pokiOn=false;try{POKI.gameplayStop()}catch(_){}}
+let pokiBreakP=null;
+function pokiBreak(){
+ if(!POKI||MP)return Promise.resolve();if(pokiBreakP)return pokiBreakP;pokiStop();pokiAd=true;for(const k in K)K[k]=false;
+ const mute=()=>{try{if(master)master.gain.value=0}catch(_){}};mute();
+ pokiBreakP=pokiInit().then(()=>POKI.commercialBreak(mute)).catch(()=>{}).then(()=>{pokiAd=false;pokiBreakP=null;try{if(master)master.gain.value=.55*SET.vol}catch(_){}});return pokiBreakP}
+addEventListener('keydown',e=>{if(pokiAd){e.preventDefault();e.stopImmediatePropagation()}},true);
+
+// ---------- filtre de pseudos (à compléter avec la liste fournie par Poki)
+const BADW=['fuck','shit','bitch','cunt','nigger','nigga','faggot','fag','whore','slut','dick','cock','pussy','asshole','bastard','retard','rape','nazi','hitler','porn','sex','penis','vagina','merde','putain','pute','salope','connard','connasse','encule','enculé','batard','bâtard','nique','niquer','pd','pédé','tapette','bite','couille','chatte','negre','nègre','mierda','puta','puto','cabron','cabrón','pendejo','coño','joder','maricon','maricón','polla','zorra','gilipollas','verga','culero'];
+function pokiFilter(v){const n=String(v||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[0@]/g,'o').replace(/[1!|]/g,'i').replace(/3/g,'e').replace(/4/g,'a').replace(/5|\$/g,'s').replace(/7/g,'t');const flat=n.replace(/[^a-z]/g,'');
+ for(const w of BADW){const b=w.normalize('NFD').replace(/[̀-ͯ]/g,'');if(b.length<=3?new RegExp('(^|[^a-z])'+b+'([^a-z]|$)').test(n):flat.includes(b))return''}return v}
+
+// ---------- langue
+const LANG=document.documentElement.lang||'fr',LFILE={en:'index.html',fr:'fr.html',es:'es.html'};
+document.querySelectorAll('[data-lang]').forEach(b=>{b.classList.toggle('sel',b.dataset.lang===LANG);b.onclick=()=>{try{localStorage.setItem('valmont_lang',b.dataset.lang)}catch(_){}if(b.dataset.lang!==LANG)location.replace(LFILE[b.dataset.lang])}});
 
 }
 

@@ -1959,7 +1959,9 @@ function applyProfile(p){
  for(const k in(p.ach||{}))if(!ACHS[k])ACHS[k]=p.ach[k];CNT.missions=Math.max(CNT.missions||0,(p.cnt||{}).missions||0);CNT.crates=Math.max(CNT.crates||0,(p.cnt||{}).crates||0);
  saveShop();try{localStorage.setItem(ACHK,JSON.stringify(ACHS));localStorage.setItem(CNTK,JSON.stringify(CNT))}catch(_){}
  if(state==='title')buildTitle();if(!$('#shop').classList.contains('hide'))renderShop()}
-const accErr=e=>(e&&(e.code||e.message))==='upstream_error'?'El servidor no responde. Vuelve a intentarlo en un momento (puede tardar un minuto en despertar).':(e&&e.code)==='session'?'Sesión caducada: vuelve a iniciar sesión.':String((e&&(e.code||e.message))||'Error');
+const SRVMSG={'~Article inconnu.':'Artículo desconocido.','~Ce pseudo est déjà pris.':'Este apodo ya está en uso.','~Mot de passe : 6 caractères minimum.':'Contraseña: mínimo 6 caracteres.','~Pas assez de pièces.':'No tienes suficientes monedas.','~Pseudo ou mot de passe incorrect.':'Apodo o contraseña incorrectos.','~Pseudo trop court (3 caractères minimum).':'Apodo demasiado corto (mínimo 3 caracteres).',"~Trop d'essais, recharge la page.":"Demasiados intentos, recarga la página."};
+const srvMsg=m=>SRVMSG['~'+m]||String(m);
+const accErr=e=>(e&&(e.code||e.message))==='upstream_error'?'El servidor no responde. Vuelve a intentarlo en un momento (puede tardar un minuto en despertar).':(e&&e.code)==='session'?'Sesión caducada: vuelve a iniciar sesión.':srvMsg((e&&(e.code||e.message))||'Error');
 function setToken(t){TOKEN=t||'';try{t?localStorage.setItem(TOKK,t):localStorage.removeItem(TOKK)}catch(_){}}
 async function accCall(m){if(!NET||!TOKEN)throw{code:'session'};try{return await NET.call({...m,token:TOKEN})}catch(e){if(e&&e.code==='session'){setToken('');ACC=null;if(state==='title')buildTitle()}throw e}}
 function accBuy(id){accCall({t:'buy',item:id}).then(p=>{applyProfile(p);SFX.frag();renderShop()}).catch(e=>{SFX.bad();$('#shopCoins').innerHTML=`<span style="color:#ff8a80">${esc(accErr(e))}</span>`})}

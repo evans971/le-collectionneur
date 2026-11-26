@@ -1959,7 +1959,9 @@ function applyProfile(p){
  for(const k in(p.ach||{}))if(!ACHS[k])ACHS[k]=p.ach[k];CNT.missions=Math.max(CNT.missions||0,(p.cnt||{}).missions||0);CNT.crates=Math.max(CNT.crates||0,(p.cnt||{}).crates||0);
  saveShop();try{localStorage.setItem(ACHK,JSON.stringify(ACHS));localStorage.setItem(CNTK,JSON.stringify(CNT))}catch(_){}
  if(state==='title')buildTitle();if(!$('#shop').classList.contains('hide'))renderShop()}
-const accErr=e=>(e&&(e.code||e.message))==='upstream_error'?'Le serveur ne répond pas. Réessaie dans un instant (il peut mettre une minute à se réveiller).':(e&&e.code)==='session'?'Session expirée : reconnecte-toi.':String((e&&(e.code||e.message))||'Erreur');
+const SRVMSG={'~Article inconnu.':'Article inconnu.','~Ce pseudo est déjà pris.':'Ce pseudo est déjà pris.','~Mot de passe : 6 caractères minimum.':'Mot de passe : 6 caractères minimum.','~Pas assez de pièces.':'Pas assez de pièces.','~Pseudo ou mot de passe incorrect.':'Pseudo ou mot de passe incorrect.','~Pseudo trop court (3 caractères minimum).':'Pseudo trop court (3 caractères minimum).',"~Trop d'essais, recharge la page.":"Trop d'essais, recharge la page."};
+const srvMsg=m=>SRVMSG['~'+m]||String(m);
+const accErr=e=>(e&&(e.code||e.message))==='upstream_error'?'Le serveur ne répond pas. Réessaie dans un instant (il peut mettre une minute à se réveiller).':(e&&e.code)==='session'?'Session expirée : reconnecte-toi.':srvMsg((e&&(e.code||e.message))||'Erreur');
 function setToken(t){TOKEN=t||'';try{t?localStorage.setItem(TOKK,t):localStorage.removeItem(TOKK)}catch(_){}}
 async function accCall(m){if(!NET||!TOKEN)throw{code:'session'};try{return await NET.call({...m,token:TOKEN})}catch(e){if(e&&e.code==='session'){setToken('');ACC=null;if(state==='title')buildTitle()}throw e}}
 function accBuy(id){accCall({t:'buy',item:id}).then(p=>{applyProfile(p);SFX.frag();renderShop()}).catch(e=>{SFX.bad();$('#shopCoins').innerHTML=`<span style="color:#ff8a80">${esc(accErr(e))}</span>`})}
