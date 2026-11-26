@@ -478,7 +478,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
       <div>
         <h3>Se cacher, se faufiler</h3>
         <p>Les traqueurs voient dans un cône devant eux et entendent tes pas. Marcher fait du bruit, courir beaucoup, s'accroupir presque pas.</p>
-        <p>Cache-toi dans les casiers et sous les lits <kbd>E</kbd>, mais pas sous leurs yeux. Les conduits d'aération relient deux salles.</p>
+        <p>Accroupi derrière un meuble (table, caisse, lit, piano…), tu deviens invisible pour un traqueur qui est de l'autre côté, même s'il te poursuit.</p><p>Cache-toi dans les casiers et sous les lits <kbd>E</kbd>, mais pas sous leurs yeux. Les conduits d'aération relient deux salles.</p>
         <p>La nuit, coupe ta lampe <kbd>F</kbd> pour être moins visible. Les caméras déclenchent l'alarme.</p>
         <p>En chasse, un traqueur va plus vite que toi quand tu marches : cours, coupe-lui la vue, cache-toi ou prends un conduit. Attrapé ? Retour en cellule, puis 5 s de protection à la sortie. Trois captures dans la journée et tu es éliminé.</p>
       </div>
@@ -877,7 +877,9 @@ function hunterSees(h){
  let range=h.range*(isDark()?(P.flash?1:.55):1)*(P.crouch?.72:1);if(D&&D.night)range*=.9;
  if(d<34)return los(h.x,h.y,P.x,P.y);
  if(d>range)return false;if(Math.abs(angDiff(h.a,Math.atan2(dy,dx)))>h.fov)return false;
- return los(h.x,h.y,P.x,P.y)}
+ return P.crouch?losCover(h.x,h.y,P.x,P.y):los(h.x,h.y,P.x,P.y)}
+function losCover(x1,y1,x2,y2){const d=dst(x1,y1,x2,y2);if(d<2)return true;return ray(x1,y1,Math.atan2(y2-y1,x2-x1),d,(x,y)=>sightBlock(x,y)||tileAt(x,y)===T.LOW)>=d-1}
+const inCover=()=>P&&P.crouch&&DIR8.some(([dx,dy])=>tileAt(Math.floor(P.x/TS)+dx,Math.floor(P.y/TS)+dy)===T.LOW);
 function inSmoke(x,y){for(const s of SM)if(s.t>0&&dst(x,y,s.x,s.y)<s.r*Math.min(1,s.t/2+.3))return true;return false}
 function randomWP(){const[x,y]=pick(M.wp);return{x:(x+.5)*TS,y:(y+.5)*TS}}
 function makeNoise(x,y,r,src){
@@ -1016,7 +1018,7 @@ function capture(msg){
  if(G.tuto){closeModal();P.act=null;P.hidden=null;say('Attrapé ! En vraie partie, cela compte comme une capture.','bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=3;for(const h of H){h.state='patrol';h.path=[];h.sus=0;h.sawHide=false;const w=randomWP();if(dst(w.x,w.y,P.x,P.y)>TS*9){h.x=w.x;h.y=w.y}}return}
  G.strikes++;G.stats.caught++;closeModal();P.act=null;P.hidden=null;
  const it=['leurre','fumigene','brouilleur'].filter(k=>G.items[k]>0);let lost='';if(it.length){const k=pick(it);G.items[k]--;lost={leurre:' Tu perds un leurre.',fumigene:' Tu perds un fumigène.',brouilleur:' Tu perds un brouilleur.'}[k]}
- if(G.strikes>=maxStrikes()){lose('Capturé '+G.strikes+' fois aujourd\'hui. Le Collectionneur te retire du jeu.');return}
+ if(G.strikes>=maxStrikes()){lose('Capturé '+G.strikes+' fois aujourd\'hui. Valmont te retire du jeu.');return}
  say(msg+lost,'bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=G.char.id==='okafor'?4:8;
  for(const h of H){h.state='patrol';h.path=[];h.sus=0;h.sawHide=false;if(dst(h.x,h.y,P.x,P.y)<TS*8){const w=randomWP();if(dst(w.x,w.y,P.x,P.y)>TS*9){h.x=w.x;h.y=w.y}}}}
 const maxStrikes=()=>G.char.id==='okafor'?4:3;
@@ -1203,7 +1205,7 @@ function completeDay(){
 // ---------- messages
 const feed=$('#feed'),bigEl=$('#big');let bigT=0;
 function say(t,cls=''){const el=document.createElement('div');el.className='msg '+cls;el.textContent=t;feed.prepend(el);while(feed.children.length>4)feed.lastChild.remove();setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),650)},7000)}
-function announce(t){say('Le Collectionneur : '+t,'col');SFX.voice()}
+function announce(t){say('Valmont : '+t,'col');SFX.voice()}
 function big(t,cls=''){if(!t){if(bigEl.dataset.cell){bigEl.classList.remove('on');bigEl.dataset.cell=''}return}bigEl.textContent=t;bigEl.className='on '+cls;bigT=t.startsWith('CELLULE')?.3:3;bigEl.dataset.cell=t.startsWith('CELLULE')?'1':''}
 
 // ---------- HUD
@@ -1222,6 +1224,7 @@ function hud(dt){
  document.querySelectorAll('#tbtn [data-a="crouch"]').forEach(b=>b.classList.toggle('on',P.crouch));document.querySelectorAll('#tbtn [data-a="flash"]').forEach(b=>b.classList.toggle('on',P.flash));
  const ab=document.querySelector('#tbtn [data-a="ab"]');if(ab)ab.textContent=P.ab>0?Math.ceil(P.ab)+' s':G.char.ab;
  const fxs=[];const lab={blackout:'Coupure',gas:'Gaz',invert:'Sens brouillés',hack:'Piratage',plan:'Plans',sprint:'Sprint'};
+ if(inCover())fxs.push('<span class="g">À couvert</span>');
  if(P.grace>0)fxs.push(`<span class="g">Protection ${Math.ceil(P.grace)} s</span>`);
  for(const k in lab)if(on(k))fxs.push(`<span class="${['hack','plan','sprint'].includes(k)?'g':''}">${lab[k]} ${Math.ceil(FX[k])} s</span>`);
  if(locked.size)fxs.push(`<span>Portes verrouillées ${Math.ceil(Math.max(...locked.values()))} s</span>`);if(DR.length)fxs.push('<span>Drone espion</span>');if(P.hidden)fxs.push('<span class="g">Caché</span>');
@@ -1518,7 +1521,7 @@ const ACH=[
  {id:'fouilleur',n:'Fouilleur',d:'Fouiller 25 caisses au total.'},
  {id:'technicien',n:'Technicien',d:'Réussir 40 missions au total.'},
  {id:'social',n:'En bonne compagnie',d:"Jouer une partie avec d'autres joueurs."},
- {id:'spectateur',n:'Œil du Collectionneur',d:'Regarder un autre joueur en mode spectateur.'},
+ {id:'spectateur',n:'Œil de Valmont',d:'Regarder un autre joueur en mode spectateur.'},
 ];
 const ACHK='collectionneur_ach',CNTK='collectionneur_cnt';let ACHS={},CNT={missions:0,crates:0};
 try{ACHS=JSON.parse(localStorage.getItem(ACHK)||'{}')||{}}catch(_){}try{Object.assign(CNT,JSON.parse(localStorage.getItem(CNTK)||'{}'))}catch(_){}
@@ -1536,7 +1539,7 @@ $('#bAchs').onclick=openAchs;$('#bAchBack').onclick=()=>{buildTitle();showScreen
 const TSTEPS=[
  {id:'move',t:'Déplace-toi',pc:'ZQSD, WASD ou les flèches.',mob:"Pose le pouce sur la moitié gauche de l'écran."},
  {id:'run',t:'Cours un instant',pc:'Maintiens Maj. La jauge de bruit monte : les traqueurs entendent.',mob:'Maintiens « Courir ». La jauge de bruit monte.'},
- {id:'crouch',t:'Accroupis-toi',pc:'Touche C : tu fais presque aucun bruit.',mob:'Bouton « Accroupi » : presque aucun bruit.'},
+ {id:'crouch',t:'Accroupis-toi',pc:'Touche C : presque aucun bruit, et derrière un meuble les traqueurs ne te voient plus.',mob:'Bouton « Accroupi » : presque aucun bruit, et derrière un meuble les traqueurs ne te voient plus.'},
  {id:'hide',t:'Cache-toi',pc:"Va près d'un casier bleu ou d'un lit, puis E. E encore pour sortir.",mob:"Va près d'un casier bleu ou d'un lit, puis « Action »."},
  {id:'note',t:'Lis une note',pc:'Les feuilles jaunes au sol cachent des codes. E pour lire.',mob:'Les feuilles jaunes au sol cachent des codes.'},
  {id:'mission',t:'Réussis 2 missions',pc:'Les terminaux verts (ronds verts sur la carte) donnent des fragments.',mob:'Les terminaux verts (ronds verts sur la carte) donnent des fragments.'},
