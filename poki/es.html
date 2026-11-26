@@ -58,6 +58,9 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 .help h3{margin:10px 0 4px;font-size:21px;color:var(--mint)}
 .help p{margin:0 0 6px;color:#cfd6cf}
 .help kbd{font-size:14px}
+.keyl{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin:14px 0 18px}.kr{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px}.kr .kb{min-width:92px;font-family:inherit}.kr .kb.wait{border-color:var(--mint);color:var(--mint)}
+#bKeys{margin:0 0 14px}.kbtns{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:620px){.keyl{grid-template-columns:1fr}}
 table.rank{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:18px}
 .rank td{padding:6px 8px;border-bottom:1px solid #1c2925}
 .rank td.t{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -343,14 +346,14 @@ body.mobile #tbtn button{height:62px;font-size:14px}
 
 <div id="hud" class="hide">
   <div id="tl">
-    <div class="row"><span id="hDay">Día 1</span><span class="rgt"><span id="hPhase">Día</span><button class="pe tgl" id="bTgl" aria-label="Reducir el panel" title="Reducir / ampliar (H)">–</button></span></div>
+    <div class="row"><span id="hDay">Día 1</span><span class="rgt"><span id="hPhase">Día</span><button class="pe tgl" id="bTgl" aria-label="Reducir panel" title="Reducir / ampliar (H)">–</button></span></div>
     <div class="row"><span id="hClock">0:00</span><span id="hNext">Noche en 2:30</span></div>
     <div class="row"><span>Fragmentos</span><b id="hFrag">0/3</b></div>
     <div class="row xr"><span>Fichas</span><b id="hTok">2</b></div>
     <div class="row xr"><span>Capturas</span><b id="hStr">○○○</b></div>
     <div class="meter"><span>Resistencia</span><div class="bar"><i id="hSta"></i></div></div>
     <div class="meter"><span>Ruido</span><div class="bar"><i id="hNoise"></i></div></div>
-    <div class="tlb"><button class="pe red" id="bSab">Sabotear <kbd>R</kbd></button><button class="pe" id="bJour">Cuaderno <kbd>J</kbd></button><button class="pe" id="bPause" aria-label="Pausa">II</button></div>
+    <div class="tlb"><button class="pe red" id="bSab">Sabotear <kbd data-k="sab">R</kbd></button><button class="pe" id="bJour">Cuaderno <kbd data-k="journal">J</kbd></button><button class="pe" id="bPause" aria-label="Pausa">II</button></div>
   </div>
   <div id="tr"><canvas id="mini" width="424" height="292"></canvas><div id="mleg"><span><i class="lt"></i>Terminal</span><span><i class="ls"></i>Salida</span><span><i class="lc"></i>Caja</span><span><i class="ln"></i>Nota</span></div><div id="rivals" class="pe"></div><div id="tuto" class="hide pe"></div></div>
   <div id="feed"></div>
@@ -358,13 +361,13 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   <div id="fx"></div>
   <div id="prompt" class="hide"></div>
   <div id="bot">
-    <div class="slot pe" id="sl1"><kbd>1</kbd><b id="n1">1</b>Señuelo</div>
-    <div class="slot pe" id="sl2"><kbd>2</kbd><b id="n2">1</b>Bomba de humo</div>
-    <div class="slot pe solo-only" id="sl4"><kbd>3</kbd><b id="n4">0</b>Petardo</div>
+    <div class="slot pe" id="sl1"><kbd data-k="item1">1</kbd><b id="n1">1</b>Señuelo</div>
+    <div class="slot pe" id="sl2"><kbd data-k="item2">2</kbd><b id="n2">1</b>Bomba de humo</div>
+    <div class="slot pe solo-only" id="sl4"><kbd data-k="item3">3</kbd><b id="n4">0</b>Petardo</div>
     <div class="slot" id="sl3"><b id="n3">0</b>Inhibidor</div>
-    <div class="slot pe" id="slF"><kbd>F</kbd><b id="nF">ON</b>Linterna</div>
-    <div class="slot pe" id="slC"><kbd>C</kbd><b id="nC">—</b>Agachado</div>
-    <div class="slot ab pe" id="slQ"><kbd>Espacio</kbd><b id="nQ">★</b><span id="abName">Habilidad</span><div class="cd hide" id="cdQ"></div></div>
+    <div class="slot pe" id="slF"><kbd data-k="flash">F</kbd><b id="nF">ON</b>Linterna</div>
+    <div class="slot pe" id="slC"><kbd data-k="crouch">C</kbd><b id="nC">—</b>Agachado</div>
+    <div class="slot ab pe" id="slQ"><kbd data-k="ability">Espacio</kbd><b id="nQ">★</b><span id="abName">Habilidad</span><div class="cd hide" id="cdQ"></div></div>
   </div>
   <div id="ally" class="hide pe"></div>
   <div id="touch" class="hide">
@@ -425,7 +428,13 @@ body.mobile #tbtn button{height:62px;font-size:14px}
     <label class="sc"><input type="checkbox" id="sFade"><span>Paneles que se difuminan cuando pasas por debajo</span></label>
     <label class="sc"><input type="checkbox" id="sCb"><span>Modo daltónico: nombres de los colores escritos en las misiones</span></label>
   </div>
+  <button class="btn only-pc" id="bKeys">Controles del teclado</button>
   <button class="btn main" id="bSetBack">Volver</button></div></section>
+<section id="keys" class="screen hide"><div class="panel narrow">
+  <h2>Controles del teclado</h2>
+  <p class="hint">Haz clic en una acción y pulsa la nueva tecla. Esc para cancelar. Las flechas, Intro y Esc siempre funcionan también.</p>
+  <div id="keyList" class="keyl"></div>
+  <div class="kbtns"><button class="btn main" id="bKeysBack">Volver</button><button class="btn" id="bKeysReset">Teclas por defecto</button></div></div></section>
 <section id="achs" class="screen hide"><div class="panel narrow">
   <h2>Logros</h2><p class="tag" id="achInfo"></p><ul id="achList" class="achl"></ul>
   <button class="btn main" id="bAchBack">Volver</button></div></section>
@@ -497,7 +506,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
         <p>Los demás te hacen lo mismo. Un inhibidor bloquea automáticamente la siguiente penalización. Un dron espía se rompe si te quedas 5 s justo debajo: retrocede, hay que seguirlo.</p>
         <p>Una vez vistos, los terminales y la puerta de salida quedan marcados en el mapa de arriba a la derecha.</p><p>Los rivales pueden proponer una alianza por walkie-talkie. Puede ser sincera.</p>
         <h3 class="only-pc">Teclas (PC)</h3>
-        <p class="only-pc"><kbd>ZQSD</kbd>/<kbd>WASD</kbd>/flechas moverse · <kbd>Mayús</kbd> correr · <kbd>C</kbd> agacharse · <kbd>E</kbd> acción · <kbd>Espacio</kbd> habilidad · <kbd>1</kbd> señuelo · <kbd>2</kbd> bomba de humo · <kbd>F</kbd> linterna · <kbd>R</kbd> sabotear · <kbd>J</kbd> cuaderno · <kbd>H</kbd> reducir panel · <kbd>Esc</kbd> pausa. El ratón orienta la linterna.</p>
+        <p class="only-pc"><kbd data-k="move">ZQSD</kbd>/flechas moverse · <kbd data-k="run">Mayús</kbd> correr · <kbd data-k="crouch">C</kbd> agacharse · <kbd data-k="act">E</kbd> acción · <kbd data-k="ability">Espacio</kbd> habilidad · <kbd data-k="item1">1</kbd> señuelo · <kbd data-k="item2">2</kbd> bomba de humo · <kbd data-k="flash">F</kbd> linterna · <kbd data-k="sab">R</kbd> sabotear · <kbd data-k="journal">J</kbd> cuaderno · <kbd data-k="hud">H</kbd> reducir panel · <kbd>Esc</kbd> pausa. El ratón orienta la linterna. Puedes cambiar las teclas en Ajustes.</p>
         <h3 class="only-mob">Controles (móvil)</h3>
         <p class="only-mob">Pon el pulgar en cualquier parte de la mitad izquierda de la pantalla: aparece un joystick. Tu linterna sigue tu dirección. A la derecha: <b>Acción</b> (registrar, esconderse, enigmas, puerta), <b>Correr</b> (mantener), <b>Agachado</b>, <b>Linterna</b>, <b>Habilidad</b>, <b>Señuelo</b>, <b>Bomba de humo</b>, <b>Sabotear</b>. Con el móvil en horizontal ves más.</p>
       </div>
@@ -957,11 +966,11 @@ function updatePlayer(dt){
  if(P.ab>0)P.ab-=dt;
  const blocked=!!UI.modal||!!P.hidden;
  let mx=0,my=0;
- if(!blocked){if(K.KeyW||K.ArrowUp)my-=1;if(K.KeyS||K.ArrowDown)my+=1;if(K.KeyA||K.ArrowLeft)mx-=1;if(K.KeyD||K.ArrowRight)mx+=1;if(joy.on){mx+=joy.x;my+=joy.y}}
+ if(!blocked){if(kDown('up'))my-=1;if(kDown('down'))my+=1;if(kDown('left'))mx-=1;if(kDown('right'))mx+=1;if(joy.on){mx+=joy.x;my+=joy.y}}
  if(on('invert')){mx=-mx;my=-my}
  let len=Math.hypot(mx,my);if(len>1){mx/=len;my/=len;len=1}
  P.moving=len>.15;if(P.moving)tutoStep('move');
- const wantRun=(K.ShiftLeft||K.ShiftRight||touchRun)&&P.moving&&!P.crouch;const marcus=G.char.id==='marcus';
+ const wantRun=(kDown('run')||touchRun)&&P.moving&&!P.crouch;const marcus=G.char.id==='marcus';
  P.running=wantRun&&P.stam>.02;if(P.running)tutoStep('run');
  if(P.running)P.stam=Math.max(0,P.stam-dt*(marcus?.16:.32));else P.stam=Math.min(1,P.stam+dt*(P.moving?.12:.22));
  let spd=P.crouch?74:P.running?196:124;if(on('sprint')){spd=280}if(on('gas'))spd*=.85;
@@ -1250,7 +1259,7 @@ function hud(dt){
  // prompt
  target=findTarget();const pr=hEl('prompt');
  if(P.act){pr.classList.remove('hide');pr.innerHTML=`${P.act.label}<span class="pb"><i style="width:${P.act.t/P.act.need*100}%"></i></span>`}
- else if(target&&!UI.modal){pr.classList.remove('hide');pr.innerHTML=`<kbd>E</kbd> ${esc(target.label)}`}else pr.classList.add('hide');
+ else if(target&&!UI.modal){pr.classList.remove('hide');pr.innerHTML=`<kbd>${esc(kn('act'))}</kbd> ${esc(target.label)}`}else pr.classList.add('hide');
  miniT-=.1;if(miniT<=0){miniT=.2;drawMini()}
  const sx=(P.x-CAM.vx)*ZOOM,sy=(P.y-CAM.vy)*ZOOM;for(const id of['tl','tr']){const el=hEl(id),r=el.getBoundingClientRect();el.classList.toggle('fade',SET.fade&&sx>r.left-50&&sx<r.right+50&&sy>r.top-50&&sy<r.bottom+50)}
  rivT-=.1;if(rivT<=0){rivT=.5;if(!G.tuto)drawRivals()}
@@ -1368,7 +1377,7 @@ function openSab(){
   draw();const iv=setInterval(()=>{if(!alive()){clearInterval(iv);return}b.querySelectorAll('.trow .bar i').forEach((el,i)=>{const al=G.rivals.filter(r=>r.alive).sort((a,b)=>prog(b)-prog(a));if(al[i])el.style.width=prog(al[i])*100+'%'})},800)})}
 
 // ---------- screens
-const screens=['account','shop','settings','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
+const screens=['account','shop','settings','keys','achs','tutoask','platform','pseudo','friends','lobby','wait','board','title','help','intro','endday','over','win','pause'];
 function hideScreens(){screens.forEach(s=>$('#'+s).classList.add('hide'))}
 function showScreen(s){hideScreens();$('#'+s).classList.remove('hide')}
 let selChar=CHARS[0],helpBack='title';
@@ -1379,7 +1388,7 @@ function buildTitle(){
   const g=x.createRadialGradient(150,80,10,150,80,120);g.addColorStop(0,'rgba(255,240,200,.18)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,300,160);
   drawPerson(x,150,84,-Math.PI/2,c,0,3.1);el.onclick=()=>{if(!owns(c)){SFX.click();openShop(c.id);return}selChar=c;SFX.click();buildTitle()}});
  if(!owns(selChar))selChar=CHARS[0];$('#tCoins').textContent=COINS.toLocaleString('es-ES');
- $('#cdesc').innerHTML=`<b>${selChar.name}, ${selChar.title.toLowerCase()}.</b> ${selChar.passive}<br><b>${selChar.ab}</b> (<kbd>Espacio</kbd>, recarga ${selChar.cd} s) : ${selChar.abd}`;
+ $('#cdesc').innerHTML=`<b>${selChar.name}, ${selChar.title.toLowerCase()}.</b> ${selChar.passive}<br><b>${selChar.ab}</b> (<kbd>${esc(kn('ability'))}</kbd>, recarga ${selChar.cd} s) : ${selChar.abd}`;
  $('#tName').textContent=PSEUDO||'—';$('#bAcc').textContent=ACC?'Cuenta':'Iniciar sesión';$('#bName').classList.toggle('hide',!!ACC);$('#tErr').textContent='';const s=load();$('#bCont').disabled=!s;$('#bCont').textContent=s?`Continuar · Día ${s.day} (${(CHARS.find(c=>c.id===s.char)||CHARS[0]).name})`:'Continuar'}
 function newGame(){
  audioInit();G={char:selChar,day:1,tokens:2,items:{leurre:1,fumigene:1,brouilleur:0},strikes:0,story:[],desig:false,
@@ -1441,24 +1450,23 @@ function resumeGame(){if(state!=='pause')return;hideScreens();pokiBreak().then((
 
 // ---------- input
 let hudMini=false;try{hudMini=localStorage.getItem('collectionneur_hudmini')==='1'}catch(_){}
-function applyHudMini(){$('#tl').classList.toggle('compact',hudMini);$('#bTgl').textContent=hudMini?'+':'–';$('#bTgl').setAttribute('aria-label',hudMini?'Ampliar el panel':'Reducir el panel')}
+function applyHudMini(){$('#tl').classList.toggle('compact',hudMini);$('#bTgl').textContent=hudMini?'+':'–';$('#bTgl').setAttribute('aria-label',hudMini?'Ampliar el panel':'Reducir panel')}
 function toggleHud(){hudMini=!hudMini;try{localStorage.setItem('collectionneur_hudmini',hudMini?'1':'0')}catch(_){}applyHudMini()}
 $('#bTgl').onclick=toggleHud;applyHudMini();
 const toggleFlash=()=>{if(!P||state!=='play')return;P.flash=!P.flash;SFX.click()},toggleCrouch=()=>{if(!P||state!=='play')return;P.crouch=!P.crouch;if(P.crouch)tutoStep('crouch');SFX.click()};
 addEventListener('keydown',e=>{
  if(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;
- const c=e.code;if(['Tab','Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c))e.preventDefault();
+ const c=e.code,a=kAct(c);if((a||['Tab','Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c)))e.preventDefault();
  audioInit();
- if(UI.modal){if(c==='Escape'){closeModal();return}if(UI.keyHook){e.preventDefault();UI.keyHook(e.key);return}if(c==='KeyR'||c==='Tab'||c==='KeyJ'){closeModal();return}}
+ if(UI.modal){if(c==='Escape'){closeModal();return}if(UI.keyHook){e.preventDefault();UI.keyHook(e.key);return}if(a==='sab'||a==='journal'){closeModal();return}}
  if(e.repeat&&!c.startsWith('Key')&&!c.startsWith('Arrow'))return;
  K[c]=true;
  if(state==='intro'&&(c==='Enter'||c==='Space')){e.preventDefault();if(MP)beginDay();else pokiBreak().then(beginDay);return}
- if(state==='pause'&&(c==='Escape'||c==='KeyP')){resumeGame();return}
+ if(state==='pause'&&(c==='Escape'||a==='pause')){resumeGame();return}
  if(state!=='play'||e.repeat)return;
  if(D.allyOffer&&(c==='KeyO'||c==='KeyY')){allyAnswer(true);return}if(D.allyOffer&&c==='KeyN'){allyAnswer(false);return}
- if(c==='KeyE'||c==='Enter')act();else if(c==='Space')ability();else if(c==='KeyF')toggleFlash();else if(c==='KeyC'||c==='ControlLeft')toggleCrouch();
- else if(c==='Digit1'||c==='Numpad1')useItem(1);else if(c==='Digit2'||c==='Numpad2')useItem(2);else if(c==='Digit3'||c==='Numpad3')useItem(3);else if(c==='KeyR'||c==='Tab')openSab();else if(c==='KeyJ')openJournal();else if(c==='KeyH')toggleHud();else if(c==='Escape'||c==='KeyP')pauseGame();
- else if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c)&&P&&P.hidden){/* stay hidden until E */}});
+ if(a==='act')act();else if(a==='ability')ability();else if(a==='flash')toggleFlash();else if(a==='crouch')toggleCrouch();
+ else if(a==='item1')useItem(1);else if(a==='item2')useItem(2);else if(a==='item3')useItem(3);else if(a==='sab')openSab();else if(a==='journal')openJournal();else if(a==='hud')toggleHud();else if(a==='pause'||c==='Escape')pauseGame()});
 addEventListener('keyup',e=>{K[e.code]=false});
 addEventListener('blur',()=>{for(const k in K)K[k]=false;touchRun=false;joy.on=false});
 cv.addEventListener('mousemove',e=>{if(PLAT==='mobile')return;mouse.x=e.clientX;mouse.y=e.clientY;mouse.act=true});
@@ -1502,6 +1510,42 @@ function boot(){resize();toTitle();applyPlat(PLAT==='pc'||PLAT==='mobile'?PLAT:(
 const fontWait=document.fonts&&document.fonts.load?Promise.race([Promise.all([document.fonts.load('900 30px "Big Shoulders Stencil Display"'),document.fonts.load('600 16px "Barlow Condensed"')]),new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
 fontWait.then(boot,boot);
 
+
+
+// ---------- touches du clavier (modifiables)
+const KBK='valmont_keys';
+const KACT=[['up','Arriba'],['down','Abajo'],['left','Izquierda'],['right','Derecha'],['run','Correr'],['crouch',"Agacharse"],['act','Acción'],['ability','Habilidad'],['flash','Linterna'],['item1','Señuelo'],['item2','Bomba de humo'],['item3','Petardo'],['sab','Sabotear'],['journal','Cuaderno'],['hud','Reducir panel'],['pause','Pausa']];
+const KDEF={up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD',run:'ShiftLeft',crouch:'KeyC',act:'KeyE',ability:'Space',flash:'KeyF',item1:'Digit1',item2:'Digit2',item3:'Digit3',sab:'KeyR',journal:'KeyJ',hud:'KeyH',pause:'KeyP'};
+const KALT={up:['ArrowUp'],down:['ArrowDown'],left:['ArrowLeft'],right:['ArrowRight'],run:['ShiftRight'],crouch:['ControlLeft'],act:['Enter'],item1:['Numpad1'],item2:['Numpad2'],item3:['Numpad3'],sab:['Tab'],pause:['Escape']};
+const KB={...KDEF},KBL={};
+try{const o=JSON.parse(localStorage.getItem(KBK)||'{}');if(o&&o.k){for(const a in o.k)if(a in KDEF&&typeof o.k[a]==='string')KB[a]=o.k[a];Object.assign(KBL,o.l||{})}}catch(_){}
+const KLAY={};
+const KNAMES={Space:'Espacio',ShiftLeft:'Mayús',ShiftRight:'Mayús dcha.',ControlLeft:'Ctrl',ControlRight:'Ctrl dcha.',AltLeft:'Alt',AltRight:'Alt Gr',Enter:'Intro',Tab:'Tab',Backspace:'Retroceso',CapsLock:'Bloq Mayús',ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→',MetaLeft:'Win',MetaRight:'Win'};
+function codeName(c,lab){if(!c)return '?';if(KNAMES[c])return KNAMES[c];if(KLAY[c])return KLAY[c].toUpperCase();if(lab)return lab;if(c.startsWith('Key'))return c.slice(3);if(c.startsWith('Digit'))return c.slice(5);if(c.startsWith('Numpad'))return 'Pavé '+c.slice(6);return c}
+function kn(a){return codeName(KB[a],KBL[a])}
+function kMove(){const d=['up','left','down','right'].every(a=>KB[a]===KDEF[a]);if(d&&!KLAY.KeyW)return 'ZQSD/WASD';return ['up','left','down','right'].map(kn).join('')}
+function kFill(t){return String(t).replace(/\{(\w+)\}/g,(_,a)=>a==='move'?kMove():kn(a))}
+function kMain(c){for(const a in KB)if(KB[a]===c)return a;return null}
+function kAct(c){const m=kMain(c);if(m)return m;for(const a in KALT)if(KALT[a].includes(c))return a;return null}
+function kDown(a){if(K[KB[a]])return true;const l=KALT[a];if(l)for(const c of l)if(K[c]&&!kMain(c))return true;return false}
+function saveKeys(){try{localStorage.setItem(KBK,JSON.stringify({k:KB,l:KBL}))}catch(_){}}
+function refreshKeys(){document.querySelectorAll('[data-k]').forEach(el=>{const a=el.dataset.k;el.textContent=a==='move'?kMove():kn(a)});if(typeof G!=='undefined'&&G&&G.tuto)drawTuto();if(!$('#keys').classList.contains('hide'))drawKeys()}
+try{navigator.keyboard&&navigator.keyboard.getLayoutMap&&navigator.keyboard.getLayoutMap().then(m=>{m.forEach((v,k)=>{KLAY[k]=v});refreshKeys()}).catch(()=>{})}catch(_){}
+let KCAP=null;
+function drawKeys(){
+ $('#keyList').innerHTML=KACT.map(([a,n])=>`<div class="kr"><span>${esc(n)}</span><button class="btn sm kb${KCAP===a?' wait':''}" data-bind="${a}">${KCAP===a?esc('Pulsa una tecla…'):esc(kn(a))}</button></div>`).join('');
+ $('#keyList').querySelectorAll('[data-bind]').forEach(b=>b.onclick=()=>{KCAP=KCAP===b.dataset.bind?null:b.dataset.bind;SFX.click();drawKeys()})}
+function openKeys(){KCAP=null;showScreen('keys');drawKeys()}
+addEventListener('keydown',e=>{if(!KCAP)return;e.preventDefault();e.stopImmediatePropagation();
+ const c=e.code,a=KCAP;KCAP=null;
+ if(c==='Escape'||!c){drawKeys();return}
+ const o=kMain(c);if(o&&o!==a){KB[o]=KB[a];if(KBL[a])KBL[o]=KBL[a];else delete KBL[o]}
+ KB[a]=c;const l=e.key&&e.key.length===1?e.key.toUpperCase():'';if(l&&l!==' ')KBL[a]=l;else delete KBL[a];
+ saveKeys();SFX.ok();refreshKeys();drawKeys()},true);
+$('#bKeys').onclick=openKeys;
+$('#bKeysBack').onclick=()=>{KCAP=null;showScreen('settings')};
+$('#bKeysReset').onclick=()=>{KCAP=null;Object.assign(KB,KDEF);for(const k in KBL)delete KBL[k];saveKeys();SFX.ok();refreshKeys();drawKeys()};
+refreshKeys();
 
 // ---------- réglages
 const SETK='collectionneur_set';const SET={vol:.8,shake:true,cb:false,sens:1,fade:true};
@@ -1555,19 +1599,19 @@ $('#bAchs').onclick=openAchs;$('#bAchBack').onclick=()=>{buildTitle();showScreen
 
 // ---------- tutoriel
 const TSTEPS=[
- {id:'move',t:'Muévete',pc:'WASD, ZQSD o las flechas.',mob:"Pon el pulgar en la mitad izquierda de la pantalla."},
- {id:'run',t:'Corre un momento',pc:'Mantén Mayús. El medidor de ruido sube: los rastreadores oyen.',mob:'Mantén «Correr». El medidor de ruido sube.'},
- {id:'crouch',t:'Agáchate',pc:'Tecla C: casi ningún ruido, y detrás de un mueble los rastreadores ya no te ven.',mob:'Botón «Agachado»: casi ningún ruido, y detrás de un mueble los rastreadores ya no te ven.'},
- {id:'hide',t:'Escóndete',pc:"Ve junto a una taquilla azul o una cama y pulsa E. E otra vez para salir.",mob:"Ve junto a una taquilla azul o una cama y pulsa «Acción»."},
- {id:'note',t:'Lee una nota',pc:'Las hojas amarillas del suelo esconden códigos. E para leer.',mob:'Las hojas amarillas del suelo esconden códigos.'},
+ {id:'move',t:'Muévete',pc:'{move} o las flechas.',mob:"Pon el pulgar en la mitad izquierda de la pantalla."},
+ {id:'run',t:'Corre un momento',pc:'Mantén {run}. El medidor de ruido sube: los rastreadores oyen.',mob:'Mantén «Correr». El medidor de ruido sube.'},
+ {id:'crouch',t:'Agáchate',pc:'Tecla {crouch}: casi ningún ruido, y detrás de un mueble los rastreadores ya no te ven.',mob:'Botón «Agachado»: casi ningún ruido, y detrás de un mueble los rastreadores ya no te ven.'},
+ {id:'hide',t:'Escóndete',pc:"Ve junto a una taquilla azul o una cama y pulsa {act}. {act} otra vez para salir.",mob:"Ve junto a una taquilla azul o una cama y pulsa «Acción»."},
+ {id:'note',t:'Lee una nota',pc:'Las hojas amarillas del suelo esconden códigos. {act} para leer.',mob:'Las hojas amarillas del suelo esconden códigos.'},
  {id:'mission',t:'Completa 2 misiones',pc:'Los terminales verdes (círculos verdes en el mapa) dan fragmentos.',mob:'Los terminales verdes (círculos verdes en el mapa) dan fragmentos.'},
- {id:'sab',t:'Abre el menú Sabotear',pc:'Tecla R. En una partida real, ahí gastas tus fichas.',mob:'Botón «Sabotear». En una partida real, ahí gastas tus fichas.'},
- {id:'exit',t:'Sal por la puerta de la esclusa',pc:'Con los fragmentos, la puerta se vuelve verde. E para salir.',mob:'Con los fragmentos, la puerta se vuelve verde.'},
+ {id:'sab',t:'Abre el menú Sabotear',pc:'Tecla {sab}. En una partida real, ahí gastas tus fichas.',mob:'Botón «Sabotear». En una partida real, ahí gastas tus fichas.'},
+ {id:'exit',t:'Sal por la puerta de la esclusa',pc:'Con los fragmentos, la puerta se vuelve verde. {act} para salir.',mob:'Con los fragmentos, la puerta se vuelve verde.'},
 ];
 const TUK='collectionneur_tuto_seen';
 function tutoStep(id){if(!G||!G.tuto||G.tutoDone[id])return;if(id==='mission'&&(P?P.frag:0)<2)return;G.tutoDone[id]=true;SFX.ok();drawTuto()}
 function drawTuto(){if(!G||!G.tuto)return;const mob=document.body.classList.contains('mobile');const cur=TSTEPS.find(s=>!G.tutoDone[s.id]);
- $('#tuto').innerHTML=`<div class="rh"><span>Tutorial</span><span>${TSTEPS.filter(s=>G.tutoDone[s.id]).length}/${TSTEPS.length}</span></div>`+TSTEPS.map(s=>`<div class="ts${G.tutoDone[s.id]?' ok':''}${s===cur?' cur':''}"><b>${esc(s.t)}</b>${s===cur?`<span>${esc(mob?s.mob:s.pc)}</span>`:''}</div>`).join('')+`<button class="btn sm pe" id="bTutoQuit">Salir del tutorial</button>`;
+ $('#tuto').innerHTML=`<div class="rh"><span>Tutorial</span><span>${TSTEPS.filter(s=>G.tutoDone[s.id]).length}/${TSTEPS.length}</span></div>`+TSTEPS.map(s=>`<div class="ts${G.tutoDone[s.id]?' ok':''}${s===cur?' cur':''}"><b>${esc(s.t)}</b>${s===cur?`<span>${esc(mob?s.mob:kFill(s.pc))}</span>`:''}</div>`).join('')+`<button class="btn sm pe" id="bTutoQuit">Salir del tutorial</button>`;
  $('#bTutoQuit').onclick=()=>{toTitle()}}
 function startTutorial(){
  audioInit();try{localStorage.setItem(TUK,'1')}catch(_){}
