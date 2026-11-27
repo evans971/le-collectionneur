@@ -136,8 +136,8 @@ async function award(token, d) {
   return accounts.op(token, async a => {
     const e = cleanScore({ ...d, name: a.name }); if (!e) throw new Error('score invalide');
     const gain = Math.floor(e.score / 10);
-    a.coins += gain; a.games = (a.games || 0) + 1; if (e.score > (a.best || 0)) a.best = e.score;
-    await submit('a_' + a.id, e);
+    a.coins += gain; a.games = (a.games || 0) + 1;
+    if (!(d && d.easy)) { if (e.score > (a.best || 0)) a.best = e.score; await submit('a_' + a.id, e); }
     return { ...profile(a), gain };
   });
 }

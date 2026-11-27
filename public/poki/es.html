@@ -58,6 +58,7 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 .help h3{margin:10px 0 4px;font-size:21px;color:var(--mint)}
 .help p{margin:0 0 6px;color:#cfd6cf}
 .help kbd{font-size:14px}
+.easyT{display:flex;gap:10px;align-items:flex-start;justify-content:center;margin:10px auto 0;max-width:560px;font-size:14px;color:var(--dim);cursor:pointer;text-align:left}.easyT input{margin-top:3px;accent-color:#7fd6b0;width:16px;height:16px;flex:none}.easyT b{color:#7fd6b0}
 body:not(.canrate) .rate-only{display:none!important}
 .stars{display:flex;gap:6px;margin:14px 0 4px}.stars button{font-size:40px;line-height:1;background:none;border:0;color:#3a4c45;cursor:pointer;padding:0 2px;transition:transform .1s,color .1s}.stars button.on{color:#f2c14e}.stars button:hover{transform:scale(1.12)}
 .rlab{margin:0 0 12px;color:var(--dim);min-height:1.4em}
@@ -488,6 +489,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
       <button class="mode" id="bBoard"><b>Clasificación</b><small>Mejores puntuaciones</small></button>
       <button class="mode" id="bShop"><b>Tienda</b><small>Personajes y señuelos</small></button>
     </div>
+    <label class="easyT"><input type="checkbox" id="sEasy"><span><b>Modo fácil</b> (solo): nunca te eliminan por las capturas, pero la puntuación no cuenta en la clasificación.</span></label>
     <p class="err" id="tErr"></p>
     <div class="actions"><button class="btn" id="bCont">Continuar</button><button class="btn" id="bTuto">Tutorial</button><button class="btn" id="bAchs">Logros</button><button class="btn" id="bSettings">Ajustes</button><button class="btn rate-only" id="bRate">★ Valora el juego</button><button class="btn" id="bHelp">Cómo jugar</button><button class="btn" id="bPlat">Plataforma: PC</button></div>
   </div>
@@ -510,7 +512,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
         <p>Los rastreadores ven en un cono delante de ellos y oyen tus pasos. Andar hace ruido, correr mucho, agacharse casi nada.</p>
         <p>Agachado detrás de un mueble (mesa, caja, cama, piano…), te vuelves invisible para un rastreador que está al otro lado, aunque te persiga.</p><p>Escóndete en las taquillas y debajo de las camas <kbd>E</kbd>, pero no delante de ellos. Los conductos de ventilación conectan dos salas.</p>
         <p>De noche, apaga tu linterna <kbd>F</kbd> para ser menos visible. Las cámaras activan la alarma.</p>
-        <p>En persecución, un rastreador va más rápido que tú andando: corre, córtale la vista, escóndete o usa un conducto. ¿Atrapado? Vuelves a la celda y luego tienes 5 s de protección al salir. Tres capturas en un día y quedas eliminado.</p>
+        <p>En persecución, un rastreador va más rápido que tú andando: corre, córtale la vista, escóndete o usa un conducto. ¿Atrapado? Vuelves a la celda y luego tienes 5 s de protección al salir. Tres capturas en un día y quedas eliminado (salvo en modo fácil y en multijugador, donde simplemente vuelves a tu celda).</p>
       </div>
       <div>
         <h3>Sabotear</h3>
@@ -1056,10 +1058,11 @@ function capture(msg){
  if(G.tuto){closeModal();P.act=null;P.hidden=null;say('¡Atrapado! En una partida real, esto cuenta como captura.','bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=3;for(const h of H){h.state='patrol';h.path=[];h.sus=0;h.sawHide=false;const w=randomWP();if(dst(w.x,w.y,P.x,P.y)>TS*9){h.x=w.x;h.y=w.y}}return}
  G.strikes++;G.stats.caught++;closeModal();P.act=null;P.hidden=null;
  const it=['leurre','fumigene','brouilleur'].filter(k=>G.items[k]>0);let lost='';if(it.length){const k=pick(it);G.items[k]--;lost={leurre:' Pierdes un señuelo.',fumigene:' Pierdes una bomba de humo.',brouilleur:' Pierdes un inhibidor.'}[k]}
- if(G.strikes>=maxStrikes()){lose('Capturado '+G.strikes+' veces hoy. Valmont te saca del juego.');return}
+ if(!noElim()&&G.strikes>=maxStrikes()){lose('Capturado '+G.strikes+' veces hoy. Valmont te saca del juego.');return}
  say(msg+lost,'bad');P.x=M.start.cx;P.y=M.start.cy;P.cell=G.char.id==='okafor'?4:8;
  for(const h of H){h.state='patrol';h.path=[];h.sus=0;h.sawHide=false;if(dst(h.x,h.y,P.x,P.y)<TS*8){const w=randomWP();if(dst(w.x,w.y,P.x,P.y)>TS*9){h.x=w.x;h.y=w.y}}}}
 const maxStrikes=()=>G.char.id==='okafor'?4:3;
+const noElim=()=>!!(G&&(G.easy||MP));
 
 // ---------- render
 function render(){
@@ -1253,7 +1256,7 @@ function hud(dt){
  hEl('hDay').textContent='Día '+G.day;const ph=hEl('hPhase');ph.textContent=D.night?'Noche':'Día';ph.className=D.night?'night':'';
  hEl('hClock').textContent=fmt(D.t);const nx=hEl('hNext');if(!D.night){nx.textContent='Noche en '+fmt(NIGHT_AT-D.t);nx.className=''}else{nx.textContent='Gas en '+fmt(D.limit-D.t);nx.className=D.limit-D.t<90?'warn':''}
  const fr=hEl('hFrag');fr.textContent=P.frag+'/'+M.need;fr.className=P.frag>=M.need?'done':'';
- hEl('hTok').textContent=G.tokens;const ms=maxStrikes();hEl('hStr').textContent='●'.repeat(G.strikes)+'○'.repeat(Math.max(0,ms-G.strikes));
+ hEl('hTok').textContent=G.tokens;const ms=maxStrikes();hEl('hStr').textContent=noElim()?(G.strikes?'●'.repeat(Math.min(G.strikes,8)):'○'):'●'.repeat(G.strikes)+'○'.repeat(Math.max(0,ms-G.strikes));
  hEl('hSta').style.width=(P.stam*100)+'%';hEl('hNoise').style.width=Math.min(100,P.noise/270*100)+'%';hEl('hNoise').style.background=P.noise>200?'#e0483d':P.noise>60?'#e9c46a':'#79d9b1';
  const solo=!MP&&!G.tuto;document.body.classList.toggle('mpgame',!solo);hEl('n1').textContent=G.items.leurre+(solo?STOCK.leurre:0);hEl('n4').textContent=STOCK.petard;hEl('sl4').classList.toggle('empty',!STOCK.petard);hEl('n2').textContent=G.items.fumigene+(solo?STOCK.fumigene:0);hEl('n3').textContent=G.items.brouilleur;
  hEl('sl1').classList.toggle('empty',!(G.items.leurre+(solo?STOCK.leurre:0)));hEl('sl2').classList.toggle('empty',!(G.items.fumigene+(solo?STOCK.fumigene:0)));hEl('sl3').classList.toggle('empty',!G.items.brouilleur);
@@ -1400,18 +1403,18 @@ function buildTitle(){
   const g=x.createRadialGradient(150,80,10,150,80,120);g.addColorStop(0,'rgba(255,240,200,.18)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,300,160);
   drawPerson(x,150,84,-Math.PI/2,c,0,3.1);el.onclick=()=>{if(!owns(c)){SFX.click();openShop(c.id);return}selChar=c;SFX.click();buildTitle()}});
  if(!owns(selChar))selChar=CHARS[0];$('#tCoins').textContent=COINS.toLocaleString('es-ES');
- $('#cdesc').innerHTML=`<b>${selChar.name}, ${selChar.title.toLowerCase()}.</b> ${selChar.passive}<br><b>${selChar.ab}</b> (<kbd>${esc(kn('ability'))}</kbd>, recarga ${selChar.cd} s) : ${selChar.abd}`;
+ $('#cdesc').innerHTML=`<b>${selChar.name}, ${selChar.title.toLowerCase()}.</b> ${selChar.passive}<br><b>${selChar.ab}</b> (<span class="only-pc"><kbd>${esc(kn('ability'))}</kbd>, </span>recarga ${selChar.cd} s) : ${selChar.abd}`;
  $('#tName').textContent=PSEUDO||'—';$('#bAcc').textContent=ACC?'Cuenta':'Iniciar sesión';$('#bName').classList.toggle('hide',!!ACC);$('#tErr').textContent='';const s=load();$('#bCont').disabled=!s;$('#bCont').textContent=s?`Continuar · Día ${s.day} (${(CHARS.find(c=>c.id===s.char)||CHARS[0]).name})`:'Continuar'}
 function newGame(){
- audioInit();G={char:selChar,day:1,tokens:2,items:{leurre:1,fumigene:1,brouilleur:0},strikes:0,story:[],desig:false,
+ audioInit();G={char:selChar,day:1,tokens:2,items:{leurre:1,fumigene:1,brouilleur:0},strikes:0,story:[],desig:false,easy:EASY,
   stats:{time:0,caught:0,frags:0,sab:0,recv:0,spotted:0,days:[]},rivals:RIVALS.map(r=>({...r,skill:r.collector?.86:rnd(.88,1.16),alive:true,pen:0}))};
  startDay()}
 function resume(){const s=load();if(!s)return;audioInit();
- G={char:CHARS.find(c=>c.id===s.char)||CHARS[0],day:s.day,tokens:s.tokens,items:s.items,strikes:0,story:s.story||[],desig:!!s.desig,stats:s.stats,
+ G={char:CHARS.find(c=>c.id===s.char)||CHARS[0],day:s.day,tokens:s.tokens,items:s.items,strikes:0,story:s.story||[],desig:!!s.desig,easy:!!s.easy,stats:s.stats,
   rivals:RIVALS.map(r=>{const q=(s.rivals||[]).find(x=>x.name===r.name)||{};return{...r,skill:q.skill||1,alive:q.alive!==false,pen:q.pen||0}})};
  startDay()}
 const SKEY='collectionneur_v1';
-function save(){try{localStorage.setItem(SKEY,JSON.stringify({char:G.char.id,day:G.day,tokens:G.tokens,items:G.items,story:G.story,desig:G.desig,stats:G.stats,rivals:G.rivals.map(r=>({name:r.name,alive:r.alive,skill:r.skill,pen:r.pen||0}))}))}catch(e){}}
+function save(){try{localStorage.setItem(SKEY,JSON.stringify({char:G.char.id,easy:!!G.easy,day:G.day,tokens:G.tokens,items:G.items,story:G.story,desig:G.desig,stats:G.stats,rivals:G.rivals.map(r=>({name:r.name,alive:r.alive,skill:r.skill,pen:r.pen||0}))}))}catch(e){}}
 function load(){try{const s=JSON.parse(localStorage.getItem(SKEY)||'null');return s&&s.day?s:null}catch(e){return null}}
 function clearSave(){try{localStorage.removeItem(SKEY)}catch(e){}}
 let introTyping=null;
@@ -1558,6 +1561,12 @@ $('#bKeys').onclick=openKeys;
 $('#bKeysBack').onclick=()=>{KCAP=null;showScreen('settings')};
 $('#bKeysReset').onclick=()=>{KCAP=null;Object.assign(KB,KDEF);for(const k in KBL)delete KBL[k];saveKeys();SFX.ok();refreshKeys();drawKeys()};
 refreshKeys();
+
+// ---------- mode facile (solo)
+let EASY=false;try{EASY=localStorage.getItem('valmont_easy')==='1'}catch(_){}
+function drawEasy(){$('#sEasy').checked=EASY;$('#bNew small').textContent=EASY?'Tú contra 8 bots · modo fácil':'Tú contra 8 bots'}
+$('#sEasy').onchange=()=>{EASY=$('#sEasy').checked;try{localStorage.setItem('valmont_easy',EASY?'1':'0')}catch(_){}SFX.click();drawEasy()};
+drawEasy();
 
 // ---------- avis des joueurs
 const RATEK='valmont_rate';let rateBack='title',rateStars=0;
@@ -1794,6 +1803,7 @@ function calcScore(won){const s=G.stats,days=won?5:G.day-1;return Math.max(0,Mat
 async function submitScore(won){
  if(!G||G.submitted)return null;G.submitted=true;
  const e={name:PSEUDO||'Anónimo',score:calcScore(won),day:won?5:G.day,win:!!won,char:G.char.id,mode:MP?MP.kind:'solo',at:Date.now()};
+ if(G.easy&&!MP){if(ACC&&NET){try{const p=await accCall({t:'award',data:{...e,easy:true}});applyProfile(p)}catch(_){}}return{e,online:'easy'}}
  try{const L=JSON.parse(localStorage.getItem(LKEY)||'[]');L.push(e);L.sort((a,b)=>b.score-a.score);localStorage.setItem(LKEY,JSON.stringify(L.slice(0,30)))}catch(_){}
  let online='off';
  if(ACC&&NET){try{const p=await accCall({t:'award',data:e});applyProfile(p);return{e,online:'ok'}}catch(_){return{e,online:'denied'}}}
@@ -1804,7 +1814,7 @@ async function submitScore(won){
 function scoreBlock(won){
  const sc=calcScore(won);
  setTimeout(()=>{submitScore(won).then(r=>{const el=$('#scoreNet');const cl=document.querySelector('.coinL');if(cl)cl.textContent=`+${gain} monedas · total ${COINS.toLocaleString('es-ES')}`;if(!el||!r)return;
-  el.textContent=r.online==='ok'?'Puntuación enviada a la clasificación en línea. Solo se guarda tu mejor puntuación.':r.online==='denied'?'Puntuación guardada en este dispositivo: el servidor no respondió.':'Puntuación guardada en este dispositivo.'})},50);
+  el.textContent=r.online==='easy'?'Modo fácil: esta puntuación no cuenta en la clasificación.':r.online==='ok'?'Puntuación enviada a la clasificación en línea. Solo se guarda tu mejor puntuación.':r.online==='denied'?'Puntuación guardada en este dispositivo: el servidor no respondió.':'Puntuación guardada en este dispositivo.'})},50);
  const gain=payCoins(won);
  return`<p class="scoreL">Puntuación: <b>${sc.toLocaleString('es-ES')}</b> <small>${esc(PSEUDO||'Anónimo')}</small></p><p class="coinL">+${gain} monedas · total ${COINS.toLocaleString('es-ES')}</p><p class="hint" id="scoreNet">Guardando puntuación…</p>`}
 let boardTab='on';
