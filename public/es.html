@@ -898,7 +898,9 @@ function setPath(h,x,y){const p=bfs(Math.floor(h.x/TS),Math.floor(h.y/TS),Math.f
 // ---------- entities
 function newPlayer(){return{x:M.start.cx,y:M.start.cy,a:-Math.PI/2,stam:1,flash:true,crouch:false,running:false,moving:false,noise:0,hidden:null,vent:null,cell:0,act:null,ab:0,grace:0,frag:0,walk:0,stepT:0,noiseT:0}}
 function makeHunter(x,y,extra){return{x,y,a:Math.random()*6.28,state:'patrol',path:[],sus:0,stun:0,lost:0,searchT:0,repath:0,wait:rnd(0,1.5),last:null,walk:0,range:215,fov:.64,sawHide:false,rush:false,extra:!!extra,cone:null}}
+const MAXH=4;
 function spawnHunter(extra){
+ if(H.length>=MAXH)return null;
  for(let k=0;k<80;k++){const r=pick(M.rooms);if(r===M.start&&k<70)continue;const[x,y]=[ri(r.x0,r.x1),ri(r.y0,r.y1)];if(solidT(x,y))continue;
   const px=(x+.5)*TS,py=(y+.5)*TS;if(P&&dst(px,py,P.x,P.y)<TS*9&&k<70)continue;const h=makeHunter(px,py,extra);H.push(h);return h}
  return null}
@@ -1174,7 +1176,7 @@ function updateRivals(dt){
  const ahead=P.frag/M.need>(undone.reduce((s,r)=>s+prog(r),0)/Math.max(1,undone.length));
  if(D.t>=D.nextMalus){D.nextMalus=D.t+(rnd(34,56)-G.day*3)*(ahead?.75:1);
   let s=D.revenge&&D.revenge.alive&&!D.revenge.human?D.revenge:pick(alive.filter(r=>r!==D.ally&&!r.human));D.revenge=null;
-  if(s){const pool=RMAL.filter(m=>G.day>=m.min);let tw=pool.reduce((a,m)=>a+m.w,0),x=Math.random()*tw,m=pool[0];for(const q of pool){x-=q.w;if(x<=0){m=q;break}}receiveMalus(s,m)}}
+  if(s){const pool=RMAL.filter(m=>G.day>=m.min&&!(m.id==='hunter'&&H.length>=MAXH));let tw=pool.reduce((a,m)=>a+m.w,0),x=Math.random()*tw,m=pool[0];for(const q of pool){x-=q.w;if(x<=0){m=q;break}}receiveMalus(s,m)}}
  if(D.betrayAt&&D.t>=D.betrayAt&&D.ally){const r=D.ally;D.ally=null;D.betrayAt=0;big('¡TRAICIÓN!','red');say(`${r.name} rompió la alianza.`,'bad');receiveMalus(r,RMAL[0]);setTimeout(()=>{if(state==='play')receiveMalus(r,pick(RMAL.slice(1,5)))},1500)}
  // alliance
  if(!D.allyDone&&D.t>=D.allyAt){D.allyDone=true;const r=pick(ubots);if(r)offerAlliance(r)}
