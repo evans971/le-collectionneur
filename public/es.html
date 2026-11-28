@@ -1104,6 +1104,9 @@ function updateMisc(dt){
  if(D&&D.alarmT>0){const b0=Math.ceil(D.alarmT);D.alarmT-=dt;const b1=Math.ceil(D.alarmT);
   if(D.alarmT<=0){D.alarmT=0;SFX.alarm();alarmAt(P.x,P.y,9);big('¡ALARMA!','red');say('Suena la alarma: los rastreadores corren hacia donde estás.','bad')}
   else if(b1!==b0){SFX.beep();big('ALARMA EN '+b1+' S','red')}}
+ if(D&&D.scrT>0){const b0=Math.ceil(D.scrT);D.scrT-=dt;const b1=Math.ceil(D.scrT);
+  if(D.scrT<=0){D.scrT=0;FX.invert=12;SFX.scramble();big('¡SENTIDOS ALTERADOS!','red');say('Tus sentidos están alterados: los controles están invertidos.','bad')}
+  else if(b1!==b0){SFX.beep();big('INTERFERENCIA EN '+b1+' S','red')}}
  for(const s of SM)s.t-=dt;SM=SM.filter(s=>s.t>0);
  for(const c of DC){c.t-=dt;c.ping-=dt;if(c.ping<=0){const K=DCK[c.kind||'leurre'];c.ping=K.iv;K.snd();makeNoise(c.x,c.y,K.r)}}DC=DC.filter(c=>c.t>0);
  for(const f of PF)f.t-=dt;PF=PF.filter(f=>f.t>0);
@@ -1362,7 +1365,7 @@ function receiveMalus(r,m,nb){
  if(m.id==='blackout')FX.blackout=25;
  else if(m.id==='locks'){const ds=M.doors.slice().sort((a,b)=>dst(a.x*TS,a.y*TS,P.x,P.y)-dst(b.x*TS,b.y*TS,P.x,P.y));let n=0;for(const d of ds){if(n>=3)break;if(d.tiles.some(([x,y])=>dst((x+.5)*TS,(y+.5)*TS,P.x,P.y)<40))continue;d.tiles.forEach(([x,y])=>locked.set(y*MW+x,25));n++}SFX.lockDoor()}
  else if(m.id==='gas'){FX.gas=20;SFX.gasOn()}
- else if(m.id==='invert'){FX.invert=12;SFX.scramble()}
+ else if(m.id==='invert'){D.scrT=4;SFX.beep()}
  else if(m.id==='alarm'){D.alarmT=4;SFX.beep()}
  else if(m.id==='hunter'){spawnHunter(true);SFX.slam()}
  else if(m.id==='drone'){const a=rnd(0,6.28);DR.push({x:P.x+Math.cos(a)*520,y:P.y+Math.sin(a)*520,t:32,ping:2})}
@@ -1440,6 +1443,7 @@ function hud(dt){
  const ab=document.querySelector('#tbtn [data-a="ab"]');if(ab)ab.textContent=P.ab>0?Math.ceil(P.ab)+' s':G.char.ab;
  const fxs=[];const lab={blackout:'Apagón',gas:'Gas',invert:'Sentidos alterados',hack:'Pirateo',plan:'Planos',sprint:'Sprint'};
  if(D.alarmT>0)fxs.push(`<span>Alarma en ${Math.ceil(D.alarmT)} s</span>`);
+ if(D.scrT>0)fxs.push(`<span>Interferencia en ${Math.ceil(D.scrT)} s</span>`);
  if(inCover())fxs.push('<span class="g">A cubierto</span>');
  if(P.grace>0)fxs.push(`<span class="g">Protección ${Math.ceil(P.grace)} s</span>`);
  for(const k in lab)if(on(k))fxs.push(`<span class="${['hack','plan','sprint'].includes(k)?'g':''}">${lab[k]} ${Math.ceil(FX[k])} s</span>`);
