@@ -65,7 +65,7 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 .bmLeg{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px;font-size:13px;color:#cfd8d3}.bmLeg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}.bmLeg .lt{background:#79d9b1;border-radius:50%}.bmLeg .ls{background:#e0483d;outline:1px solid #fff}.bmLeg .lc{background:#b08a5a}.bmLeg .ln{background:#e9c46a}body.mobile #bigmap b{font-size:20px;margin-bottom:4px}body.mobile .bmLeg{margin-top:5px;font-size:11px;gap:9px}body.mobile #bmHint{margin-top:2px;font-size:10px}.bmLeg .lh{background:#ff3b30;border-radius:50%}.bmLeg .lp{background:#fff;border-radius:50%}
 #bmHint{display:block;margin-top:6px;color:#8a9a94;font-size:12px}
 #heart{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);display:flex;align-items:center;gap:5px;padding:3px 11px 3px 8px;border-radius:20px;background:rgba(8,12,11,.6);border:1px solid rgba(255,255,255,.06);pointer-events:none;z-index:6;--p:0;--d:0}
-#heart svg{width:22px;height:22px;transform:scale(calc(1 + var(--p) * .3));fill:rgb(calc(140 + var(--d) * 115),calc(70 - var(--d) * 40),calc(70 - var(--d) * 40));filter:drop-shadow(0 0 calc(var(--d) * 9px) rgba(255,50,40,.9))}
+#heart svg{width:22px;height:22px;transform:scale(calc(1 + var(--p) * .3));fill:#d8352c;filter:drop-shadow(0 0 calc(var(--d) * 9px) rgba(255,50,40,.9))}
 #heart b{font:700 19px "Barlow Condensed",sans-serif;color:#e8d9d4;min-width:28px;text-align:right}
 #heart small{font:600 12px "Barlow Condensed",sans-serif;color:#8a9a94}
 #heart.hot b{color:#ff5a4a}#heart{z-index:16;left:calc(50% + 300px);bottom:26px;transform:none}#heart.hot{animation-name:hshk2}@keyframes hshk2{50%{transform:translate(1px,-1px)}100%{transform:translate(-1px,1px)}}#heart.over{bottom:96px;top:auto;left:50%;right:auto;transform:translateX(-50%) scale(1.25);animation:none}@media(max-width:1180px){#heart{left:auto;right:14px;bottom:96px}}body.mobile #heart{left:50%;right:auto;transform:translateX(-50%);bottom:auto;top:10px;animation:none}body.mobile #heart.over{top:10px;bottom:auto;left:50%;right:auto;transform:translateX(-50%);background:rgba(8,12,11,.9)}
@@ -2256,7 +2256,7 @@ function updateHeart(dt){
  HEART.pulse=Math.max(0,HEART.pulse-dt*4);
  HEART.t=(HEART.t||0)-dt;if(HEART.t<=0){HEART.t=60/HEART.bpm;HEART.pulse=1;
   if(HEART.prox>.04||chase){const v=(.55+.75*HEART.prox)*(tense?1.5:1);SFX.heart(Math.min(2,v),tense||HEART.prox>.6)}}
- const el=$('#heart');if(el){el.style.setProperty('--p',HEART.pulse.toFixed(2));el.style.setProperty('--d',HEART.prox.toFixed(2));el.classList.toggle('hot',HEART.prox>.6);el.classList.toggle('over',!!UI.modal);el.style.visibility=QTE?'hidden':'';$('#bpm').textContent=Math.round(HEART.bpm)}}
+ const el=$('#heart');if(el){el.style.setProperty('--p',HEART.pulse.toFixed(2));el.style.setProperty('--d',HEART.prox.toFixed(2));const sv=el.querySelector('svg');if(sv){const d=HEART.prox;sv.style.fill=`rgb(${Math.round(215+40*d)},${Math.round(52-30*d)},${Math.round(44-24*d)})`}el.classList.toggle('hot',HEART.prox>.6);el.classList.toggle('over',!!UI.modal);el.style.visibility=QTE?'hidden':'';$('#bpm').textContent=Math.round(HEART.bpm)}}
 
 // ---------- boucle d'ambiance
 function updateAmb(dt){
