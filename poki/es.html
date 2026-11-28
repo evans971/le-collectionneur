@@ -62,7 +62,16 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 #heart svg{width:22px;height:22px;transform:scale(calc(1 + var(--p) * .3));fill:rgb(calc(140 + var(--d) * 115),calc(70 - var(--d) * 40),calc(70 - var(--d) * 40));filter:drop-shadow(0 0 calc(var(--d) * 9px) rgba(255,50,40,.9))}
 #heart b{font:700 19px "Barlow Condensed",sans-serif;color:#e8d9d4;min-width:28px;text-align:right}
 #heart small{font:600 12px "Barlow Condensed",sans-serif;color:#8a9a94}
-#heart.hot b{color:#ff5a4a}#heart.hot{animation:hshk .14s infinite;border-color:rgba(255,60,50,.35)}
+#heart.hot b{color:#ff5a4a}#heart{z-index:16;left:calc(50% + 300px);bottom:26px;transform:none}#heart.hot{animation-name:hshk2}@keyframes hshk2{50%{transform:translate(1px,-1px)}100%{transform:translate(-1px,1px)}}#heart.over{bottom:96px;top:auto;left:50%;right:auto;transform:translateX(-50%) scale(1.25);animation:none}@media(max-width:1180px){#heart{left:auto;right:14px;bottom:96px}}body.mobile #heart{left:50%;right:auto;transform:translateX(-50%);bottom:auto;top:10px;animation:none}
+#qte{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(0,0,0,.35),rgba(0,0,0,.85));pointer-events:auto;cursor:pointer;--b:0}
+#qte .qbox{text-align:center;max-width:360px;padding:16px}
+#qte .qh{position:relative;width:150px;height:150px;margin:0 auto 14px}
+#qte .qheart{position:absolute;inset:0;width:100%;height:100%;fill:#c0302a;transform:scale(calc(1 + var(--b) * .08));filter:drop-shadow(0 0 14px rgba(255,40,30,.6))}
+#qring{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:#f4efe2;stroke-width:.9;filter:drop-shadow(0 0 4px #fff)}
+#qte b{display:block;font:900 30px "Big Shoulders Stencil Display",sans-serif;letter-spacing:1px;color:#f4efe2;text-transform:uppercase}
+#qte p{margin:6px 0 12px;color:#cfd8d3;font-size:15px}
+#qdots{display:flex;gap:8px;justify-content:center}#qdots i{width:16px;height:16px;border-radius:50%;border:2px solid #6b7a74;display:block}#qdots i.ok{background:#79d9b1;border-color:#79d9b1}#qdots i.ko{background:#e0483e;border-color:#e0483e}
+#qte.flok .qh{animation:qok .35s}#qte.flko .qh{animation:qko .35s}@keyframes qok{50%{filter:drop-shadow(0 0 22px #79d9b1)}}@keyframes qko{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}#heart.hot{animation:hshk .14s infinite;border-color:rgba(255,60,50,.35)}
 @keyframes hshk{0%{transform:translate(-50%,0)}50%{transform:translate(calc(-50% + 1px),-1px)}100%{transform:translate(calc(-50% - 1px),1px)}}
 body.mobile #heart{bottom:auto;top:10px}
 .easyT{display:flex;gap:10px;align-items:flex-start;justify-content:center;margin:10px auto 0;max-width:560px;font-size:14px;color:var(--dim);cursor:pointer;text-align:left}.easyT input{margin-top:3px;accent-color:#7fd6b0;width:16px;height:16px;flex:none}.easyT b{color:#7fd6b0}
@@ -373,6 +382,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   <div id="fx"></div>
   <div id="prompt" class="hide"></div>
   <div id="heart" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg><b id="bpm">72</b><small>bpm</small></div>
+  <div id="qte" class="hide"><div class="qbox"><div class="qh"><svg viewBox="0 0 24 24" class="qheart"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg><svg viewBox="0 0 24 24" id="qring"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg></div><b>¡Contén la respiración!</b><p>Pulsa cuando el contorno se pose sobre el corazón. Acierta 3 de 5 veces.</p><div id="qdots"></div></div></div>
   <div id="bot">
     <div class="slot pe" id="sl1"><kbd data-k="item1">1</kbd><b id="n1">1</b>Señuelo</div>
     <div class="slot pe" id="sl2"><kbd data-k="item2">2</kbd><b id="n2">1</b>Bomba de humo</div>
@@ -1074,7 +1084,7 @@ function updateHunters(dt){
    else{h.mv=true;const dx=p.x-h.x,dy=p.y-h.y,d=Math.hypot(dx,dy),st=spd*dt;if(d<=st){h.x=p.x;h.y=p.y;h.path.shift()}else{h.x+=dx/d*st;h.y+=dy/d*st;h.a=turnTo(h.a,Math.atan2(dy,dx),dt*8)}h.walk+=st}}
   h.cone=poly(h.x,h.y,h.a-h.fov,h.a+h.fov,14,h.range*(isDark()?.85:1),false);
   if(play&&!P.vent&&P.cell<=0){
-   if(P.hidden){if(h.sawHide&&h.state==='chase'&&dst(h.x,h.y,P.hidden.x,P.hidden.y)<40){capture("Te vio esconderte y te sacó de ahí.");return}}
+   if(P.hidden){if(h.sawHide&&h.state==='chase'&&dst(h.x,h.y,P.hidden.x,P.hidden.y)<40){if(G.tuto){capture("Te vio esconderte y te sacó de ahí.");return}startQte(h);return}}
    else if(!(P.grace>0)&&!on('disguise')&&dst(h.x,h.y,P.x,P.y)<19){capture('Un rastreador te atrapó.');return}}
  }}
 
@@ -1638,6 +1648,7 @@ addEventListener('keydown',e=>{
  if(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;
  const c=e.code,a=kAct(c);if((a||['Tab','Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c)))e.preventDefault();
  audioInit();
+ if(QTE&&state==='play'){if(a==='act'||a==='ability'||c==='Space'||c==='Enter'){e.preventDefault();if(!e.repeat)qteHit()}return}
  if(UI.modal){if(c==='Escape'){closeModal();return}if(UI.keyHook){e.preventDefault();UI.keyHook(e.key);return}if(a==='sab'||a==='journal'){closeModal();return}}
  if(e.repeat&&!c.startsWith('Key')&&!c.startsWith('Arrow'))return;
  K[c]=true;
@@ -1682,6 +1693,7 @@ function update(dt){
  if(state!=='play')return;
  for(const k in FX)if(FX[k]>0)FX[k]-=dt;
  updateDay(dt);if(state!=='play')return;
+ if(QTE){updateQte(dt);updateHeart(dt);hud(dt);return}
  updatePlayer(dt);updateHunters(dt);if(state!=='play')return;updateCams(dt);updateMisc(dt);computeVis();
  updateLights(dt);updateGas(dt);updateHeart(dt);
  hud(dt)}
@@ -2223,14 +2235,14 @@ const HEART={bpm:72,prox:0,pulse:0};
 function updateHeart(dt){
  const A=AMB;if(!P||state!=='play'){HEART.prox=0;return}
  let d=1e9;for(const h of H)d=Math.min(d,dst(h.x,h.y,P.x,P.y));
- const chase=H.some(h=>h.state==='chase');const R5=5*TS;let prox=Math.max(0,Math.min(1,(R5-d)/(R5-22)));if(chase)prox=Math.max(prox,.6);
+ const chase=H.some(h=>h.state==='chase');const R5=5*TS;let prox=Math.max(0,Math.min(1,(R5-d)/(R5-22)));if(chase)prox=Math.max(prox,.6);if(QTE)prox=1;
  HEART.prox+=(prox-HEART.prox)*Math.min(1,dt*3);
- const tense=!!(P.hidden||(UI.modal&&UI.modal.mission));
+ const tense=!!(P.hidden||QTE||(UI.modal&&UI.modal.mission));
  const target=72+HEART.prox*95+(tense&&HEART.prox>.05?12:0);HEART.bpm+=(target-HEART.bpm)*Math.min(1,dt*1.5);
  HEART.pulse=Math.max(0,HEART.pulse-dt*4);
  HEART.t=(HEART.t||0)-dt;if(HEART.t<=0){HEART.t=60/HEART.bpm;HEART.pulse=1;
-  if(HEART.prox>.04||chase){const v=(.3+.5*HEART.prox)*(tense?1.6:1);SFX.heart(Math.min(1.1,v),tense||HEART.prox>.6)}}
- const el=$('#heart');if(el){el.style.setProperty('--p',HEART.pulse.toFixed(2));el.style.setProperty('--d',HEART.prox.toFixed(2));el.classList.toggle('hot',HEART.prox>.6);$('#bpm').textContent=Math.round(HEART.bpm)}}
+  if(HEART.prox>.04||chase){const v=(.55+.75*HEART.prox)*(tense?1.5:1);SFX.heart(Math.min(2,v),tense||HEART.prox>.6)}}
+ const el=$('#heart');if(el){el.style.setProperty('--p',HEART.pulse.toFixed(2));el.style.setProperty('--d',HEART.prox.toFixed(2));el.classList.toggle('hot',HEART.prox>.6);el.classList.toggle('over',!!UI.modal);el.style.visibility=QTE?'hidden':'';$('#bpm').textContent=Math.round(HEART.bpm)}}
 
 // ---------- boucle d'ambiance
 function updateAmb(dt){
@@ -2246,13 +2258,34 @@ function updateAmb(dt){
   const g=gasLevel();ramp(A.gg.gain,g*.07,.6);
   const ch=state==='play'&&H.some(h=>h.state==='chase');
   if(ch&&!A.chs&&SMP.chase){const s=AC.createBufferSource();s.buffer=SMP.chase;s.loop=true;s.loopStart=.026;s.loopEnd=.026+60/144*32;s.connect(A.chg);s.start(0,.026);A.chs=s}
-  ramp(A.chg.gain,ch?1.1*(SET.mus??.7):0,ch?.15:.6);
+  ramp(A.chg.gain,ch?(HEART.prox>.5?.6:.9)*(SET.mus??.7):0,ch?.15:.6);
   if(!ch&&A.chs&&A.chg.gain.value<.01){try{A.chs.stop()}catch(e){}A.chs=null}
   A.clock-=dt;if(A.clock<=0){A.clock=1;A.tk^=1;SFX.tick(A.tk,dk?.08:.06)}
   if(D){const mn=Math.floor(D.t/60);if(mn!==A.lastMin){if(A.lastMin>=0)SFX.chime();A.lastMin=mn}}
   A.ev-=dt;if(A.ev<=0){A.ev=rnd(3.5,9);const p=Math.random()*1.6-.8,k=Math.random();(k<.3?SFX.creak:k<.55?SFX.drip:k<.8?SFX.pipe:SFX.metalFar)(p)}
  }else{ramp(A.hum.gain,0,.2);ramp(A.gg.gain,0,.3);ramp(A.chg.gain,0,.3);A.lastMin=-1}
 }
+
+// ---------- mini-jeu : retenir son souffle quand un traqueur t'a vu te cacher
+let QTE=null;
+function startQte(h){if(QTE)return;h.mv=false;QTE={h,tries:0,ok:0,miss:0,t:0,dur:1.25,gap:.5,res:null};$('#qte').classList.remove('hide');drawQte();say('¡Te ha visto esconderte! Contén la respiración…','bad');SFX.spotted()}
+function qteScale(){return 2.7-(2.7-.45)*Math.min(1,QTE.t/QTE.dur)}
+function drawQte(){const q=QTE;if(!q)return;const s=q.gap>0?2.7:qteScale();$('#qring').style.transform=`scale(${s.toFixed(3)})`;
+ $('#qdots').innerHTML=Array.from({length:5},(_,i)=>`<i class="${i<q.res?.length?q.res[i]:''}"></i>`).join('');
+ $('#qte').style.setProperty('--b',(HEART.pulse||0).toFixed(2))}
+function qteJudge(ok){const q=QTE;q.tries++;(q.res=q.res||[]).push(ok?'ok':'ko');if(ok){q.ok++;SFX.heart(1,true)}else{q.miss++;SFX.bad()}
+ const el=$('#qte');el.classList.remove('flok','flko');void el.offsetWidth;el.classList.add(ok?'flok':'flko');
+ q.gap=.45;q.t=0;q.dur=Math.max(.75,1.25-q.tries*.1);
+ if(q.ok>=3)endQte(true);else if(q.miss>=3||q.tries>=5)endQte(false)}
+function qteHit(){const q=QTE;if(!q||q.gap>0||q.done)return;const s=qteScale();qteJudge(Math.abs(s-1)<=.16)}
+function updateQte(dt){const q=QTE;if(!q||q.done)return;if(q.gap>0){q.gap-=dt}else{q.t+=dt;if(q.t>=q.dur)qteJudge(false)}drawQte()}
+function endQte(win){const q=QTE;q.done=true;drawQte();
+ setTimeout(()=>{$('#qte').classList.add('hide');const h=q.h;QTE=null;if(state!=='play')return;
+  if(win){for(const o of H){o.sawHide=false;if(o.state==='chase'||o===h){o.state='patrol';o.sus=0;o.path=[];o.wait=0;const w=randomWP();if(w&&dst(w.x,w.y,P.x,P.y)>TS*5)o.path=bfs(Math.floor(o.x/TS),Math.floor(o.y/TS),Math.floor(w.x/TS),Math.floor(w.y/TS))||[]}}
+   say('No ha visto nada. Se aleja…','good');big('SE ALEJA…','')}
+  else capture("Te oyó respirar y te sacó de tu escondite.")},650)}
+
+$('#qte').addEventListener('pointerdown',e=>{e.preventDefault();qteHit()});
 
 // ---------- comptes (version hébergée)
 const NET=null,TOKK='collectionneur_token';let ACC=null,TOKEN='';try{TOKEN=localStorage.getItem(TOKK)||''}catch(_){}
