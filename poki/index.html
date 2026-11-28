@@ -62,7 +62,7 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 #heart svg{width:22px;height:22px;transform:scale(calc(1 + var(--p) * .3));fill:rgb(calc(140 + var(--d) * 115),calc(70 - var(--d) * 40),calc(70 - var(--d) * 40));filter:drop-shadow(0 0 calc(var(--d) * 9px) rgba(255,50,40,.9))}
 #heart b{font:700 19px "Barlow Condensed",sans-serif;color:#e8d9d4;min-width:28px;text-align:right}
 #heart small{font:600 12px "Barlow Condensed",sans-serif;color:#8a9a94}
-#heart.hot b{color:#ff5a4a}#heart{z-index:16;left:calc(50% + 300px);bottom:26px;transform:none}#heart.hot{animation-name:hshk2}@keyframes hshk2{50%{transform:translate(1px,-1px)}100%{transform:translate(-1px,1px)}}#heart.over{bottom:96px;top:auto;left:50%;right:auto;transform:translateX(-50%) scale(1.25);animation:none}@media(max-width:1180px){#heart{left:auto;right:14px;bottom:96px}}body.mobile #heart{left:50%;right:auto;transform:translateX(-50%);bottom:auto;top:10px;animation:none}
+#heart.hot b{color:#ff5a4a}#heart{z-index:16;left:calc(50% + 300px);bottom:26px;transform:none}#heart.hot{animation-name:hshk2}@keyframes hshk2{50%{transform:translate(1px,-1px)}100%{transform:translate(-1px,1px)}}#heart.over{bottom:96px;top:auto;left:50%;right:auto;transform:translateX(-50%) scale(1.25);animation:none}@media(max-width:1180px){#heart{left:auto;right:14px;bottom:96px}}body.mobile #heart{left:50%;right:auto;transform:translateX(-50%);bottom:auto;top:10px;animation:none}body.mobile #heart.over{top:6px;bottom:auto;left:auto;right:6px;transform:scale(1.1);transform-origin:top right;background:rgba(8,12,11,.85)}
 #qte{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(0,0,0,.35),rgba(0,0,0,.85));pointer-events:auto;cursor:pointer;--b:0}
 #qte .qbox{text-align:center;max-width:360px;padding:16px}
 #qte .qh{position:relative;width:150px;height:150px;margin:0 auto 14px}
@@ -381,8 +381,6 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   <div id="big"></div>
   <div id="fx"></div>
   <div id="prompt" class="hide"></div>
-  <div id="heart" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg><b id="bpm">72</b><small>bpm</small></div>
-  <div id="qte" class="hide"><div class="qbox"><div class="qh"><svg viewBox="0 0 24 24" class="qheart"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg><svg viewBox="0 0 24 24" id="qring"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg></div><b>Hold your breath!</b><p>Press when the outline lands on the heart. Succeed 3 times out of 5.</p><div id="qdots"></div></div></div>
   <div id="bot">
     <div class="slot pe" id="sl1"><kbd data-k="item1">1</kbd><b id="n1">1</b>Decoy</div>
     <div class="slot pe" id="sl2"><kbd data-k="item2">2</kbd><b id="n2">1</b>Smoke bomb</div>
@@ -568,6 +566,8 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   </div>
 </section>
 
+  <div id="heart" aria-hidden="true" style="display:none"><svg viewBox="0 0 24 24"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg><b id="bpm">72</b><small>bpm</small></div>
+  <div id="qte" class="hide"><div class="qbox"><div class="qh"><svg viewBox="0 0 24 24" class="qheart"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg><svg viewBox="0 0 24 24" id="qring"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg></div><b>Hold your breath!</b><p>Press when the outline lands on the heart. Succeed 3 times out of 5.</p><div id="qdots"></div></div></div>
 <script src="https://game-cdn.poki.com/scripts/v2/poki-sdk.js"></script>
 <script src="config.js"></script>
 <script src="net.js"></script>
@@ -2246,6 +2246,7 @@ function updateHeart(dt){
 
 // ---------- boucle d'ambiance
 function updateAmb(dt){
+ {const hv=state==='play'&&!$('#hud').classList.contains('hide'),he=$('#heart');if(he&&(he.style.display==='none')===hv)he.style.display=hv?'':'none'}
  if(!AC)return;const A=ambInit();if(!A)return;
  const play=state==='play'||state==='wait',menu=state==='title'||state==='intro'||state==='over'||state==='win'||state==='endday';
  setTheme(menu);
