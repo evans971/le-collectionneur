@@ -62,7 +62,7 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 #heart svg{width:22px;height:22px;transform:scale(calc(1 + var(--p) * .3));fill:rgb(calc(140 + var(--d) * 115),calc(70 - var(--d) * 40),calc(70 - var(--d) * 40));filter:drop-shadow(0 0 calc(var(--d) * 9px) rgba(255,50,40,.9))}
 #heart b{font:700 19px "Barlow Condensed",sans-serif;color:#e8d9d4;min-width:28px;text-align:right}
 #heart small{font:600 12px "Barlow Condensed",sans-serif;color:#8a9a94}
-#heart.hot b{color:#ff5a4a}#heart{z-index:16;left:calc(50% + 300px);bottom:26px;transform:none}#heart.hot{animation-name:hshk2}@keyframes hshk2{50%{transform:translate(1px,-1px)}100%{transform:translate(-1px,1px)}}#heart.over{bottom:96px;top:auto;left:50%;right:auto;transform:translateX(-50%) scale(1.25);animation:none}@media(max-width:1180px){#heart{left:auto;right:14px;bottom:96px}}body.mobile #heart{left:50%;right:auto;transform:translateX(-50%);bottom:auto;top:10px;animation:none}body.mobile #heart.over{top:6px;bottom:auto;left:auto;right:6px;transform:scale(1.1);transform-origin:top right;background:rgba(8,12,11,.85)}
+#heart.hot b{color:#ff5a4a}#heart{z-index:16;left:calc(50% + 300px);bottom:26px;transform:none}#heart.hot{animation-name:hshk2}@keyframes hshk2{50%{transform:translate(1px,-1px)}100%{transform:translate(-1px,1px)}}#heart.over{bottom:96px;top:auto;left:50%;right:auto;transform:translateX(-50%) scale(1.25);animation:none}@media(max-width:1180px){#heart{left:auto;right:14px;bottom:96px}}body.mobile #heart{left:50%;right:auto;transform:translateX(-50%);bottom:auto;top:10px;animation:none}body.mobile #heart.over{top:10px;bottom:auto;left:50%;right:auto;transform:translateX(-50%);background:rgba(8,12,11,.9)}
 #qte{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(0,0,0,.35),rgba(0,0,0,.85));pointer-events:auto;cursor:pointer;--b:0}
 #qte .qbox{text-align:center;max-width:360px;padding:16px}
 #qte .qh{position:relative;width:150px;height:150px;margin:0 auto 14px}
@@ -2235,7 +2235,7 @@ const HEART={bpm:72,prox:0,pulse:0};
 function updateHeart(dt){
  const A=AMB;if(!P||state!=='play'){HEART.prox=0;return}
  let d=1e9;for(const h of H)d=Math.min(d,dst(h.x,h.y,P.x,P.y));
- const chase=H.some(h=>h.state==='chase');const R5=5*TS;let prox=Math.max(0,Math.min(1,(R5-d)/(R5-22)));if(chase)prox=Math.max(prox,.6);if(QTE)prox=1;
+ const chase=H.some(h=>h.state==='chase');const R5=(UI.modal&&UI.modal.mission?10:5)*TS;let prox=Math.max(0,Math.min(1,(R5-d)/(R5-22)));if(chase)prox=Math.max(prox,.6);if(QTE)prox=1;
  HEART.prox+=(prox-HEART.prox)*Math.min(1,dt*3);
  const tense=!!(P.hidden||QTE||(UI.modal&&UI.modal.mission));
  const target=72+HEART.prox*95+(tense&&HEART.prox>.05?12:0);HEART.bpm+=(target-HEART.bpm)*Math.min(1,dt*1.5);
