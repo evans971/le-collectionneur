@@ -58,6 +58,12 @@ h2{font-size:clamp(32px,5vw,50px);line-height:1.02;margin:0 0 8px}
 .help h3{margin:10px 0 4px;font-size:21px;color:var(--mint)}
 .help p{margin:0 0 6px;color:#cfd6cf}
 .help kbd{font-size:14px}
+#mini{pointer-events:auto;cursor:zoom-in}
+#bigmap{position:fixed;inset:0;z-index:17;display:flex;align-items:center;justify-content:center;background:rgba(2,5,4,.72);backdrop-filter:blur(2px);cursor:zoom-out}
+#bigmap .bmIn{text-align:center}#bigmap b{display:block;font:900 30px "Big Shoulders Stencil Display",sans-serif;letter-spacing:1px;color:#f4efe2;text-transform:uppercase;margin-bottom:8px}
+#bmCanvas{display:block;margin:0 auto;border:1px solid var(--line);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.bmLeg{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px;font-size:13px;color:#cfd8d3}.bmLeg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}.bmLeg .lt{background:#79d9b1;border-radius:50%}.bmLeg .ls{background:#e0483d;outline:1px solid #fff}.bmLeg .lc{background:#b08a5a}.bmLeg .ln{background:#e9c46a}body.mobile #bigmap b{font-size:20px;margin-bottom:4px}body.mobile .bmLeg{margin-top:5px;font-size:11px;gap:9px}body.mobile #bmHint{margin-top:2px;font-size:10px}.bmLeg .lh{background:#ff3b30;border-radius:50%}.bmLeg .lp{background:#fff;border-radius:50%}
+#bmHint{display:block;margin-top:6px;color:#8a9a94;font-size:12px}
 #heart{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);display:flex;align-items:center;gap:5px;padding:3px 11px 3px 8px;border-radius:20px;background:rgba(8,12,11,.6);border:1px solid rgba(255,255,255,.06);pointer-events:none;z-index:6;--p:0;--d:0}
 #heart svg{width:22px;height:22px;transform:scale(calc(1 + var(--p) * .3));fill:rgb(calc(140 + var(--d) * 115),calc(70 - var(--d) * 40),calc(70 - var(--d) * 40));filter:drop-shadow(0 0 calc(var(--d) * 9px) rgba(255,50,40,.9))}
 #heart b{font:700 19px "Barlow Condensed",sans-serif;color:#e8d9d4;min-width:28px;text-align:right}
@@ -537,7 +543,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
         <p>The others do the same to you. A jammer automatically blocks the next penalty. A spy drone breaks if you stay right under it for 5 s: it backs away, so follow it.</p>
         <p>Once seen, terminals and the exit door stay marked on the map at the top right.</p><p>Rivals can offer an alliance over the walkie-talkie. It might be sincere.</p>
         <h3 class="only-pc">Keys (PC)</h3>
-        <p class="only-pc"><kbd data-k="move">ZQSD</kbd>/arrows move · <kbd data-k="run">Shift</kbd> run · <kbd data-k="crouch">C</kbd> crouch · <kbd data-k="act">E</kbd> action · <kbd data-k="ability">Space</kbd> ability · <kbd data-k="item1">1</kbd> decoy · <kbd data-k="item2">2</kbd> smoke bomb · <kbd data-k="flash">F</kbd> flashlight · <kbd data-k="sab">R</kbd> sabotage · <kbd data-k="journal">J</kbd> notebook · <kbd data-k="hud">H</kbd> collapse panel · <kbd>Esc</kbd> pause. The mouse aims the flashlight. You can change the keys in Settings.</p>
+        <p class="only-pc"><kbd data-k="move">ZQSD</kbd>/arrows move · <kbd data-k="run">Shift</kbd> run · <kbd data-k="crouch">C</kbd> crouch · <kbd data-k="act">E</kbd> action · <kbd data-k="ability">Space</kbd> ability · <kbd data-k="item1">1</kbd> decoy · <kbd data-k="item2">2</kbd> smoke bomb · <kbd data-k="flash">F</kbd> flashlight · <kbd data-k="sab">R</kbd> sabotage · <kbd data-k="journal">J</kbd> notebook · <kbd data-k="hud">H</kbd> collapse panel · <kbd data-k="map">M</kbd> map · <kbd>Esc</kbd> pause. The mouse aims the flashlight. You can change the keys in Settings.</p>
         <h3 class="only-mob">Controls (mobile)</h3>
         <p class="only-mob">Put your thumb anywhere on the left half of the screen: a joystick appears. Your flashlight follows your direction. On the right: <b>Action</b> (search, hide, puzzles, door), <b>Run</b> (hold), <b>Crouch</b>, <b>Light</b>, <b>Ability</b>, <b>Decoy</b>, <b>Smoke bomb</b>, <b>Sabotage</b>. Holding your phone sideways gives you a wider view.</p>
       </div>
@@ -566,6 +572,7 @@ body.mobile #tbtn button{height:62px;font-size:14px}
   </div>
 </section>
 
+  <div id="bigmap" class="hide"><div class="bmIn"><b>Wing map</b><canvas id="bmCanvas"></canvas><div class="bmLeg"><span><i class="lt"></i>Terminal</span><span><i class="ls"></i>Exit</span><span><i class="lc"></i>Crate</span><span><i class="ln"></i>Note</span><span><i class="lh"></i>Hunter seen</span><span><i class="lp"></i>You</span></div><small id="bmHint"></small></div></div>
   <div id="heart" aria-hidden="true" style="display:none"><svg viewBox="0 0 24 24"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg><b id="bpm">72</b><small>bpm</small></div>
   <div id="qte" class="hide"><div class="qbox"><div class="qh"><svg viewBox="0 0 24 24" class="qheart"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg><svg viewBox="0 0 24 24" id="qring"><path d="M12 21.3l-1.4-1.3C5.4 15.4 2 12.3 2 8.5 2 5.4 4.4 3 7.5 3c1.7 0 3.4.8 4.5 2.1C13.1 3.8 14.8 3 16.5 3 19.6 3 22 5.4 22 8.5c0 3.8-3.4 6.9-8.6 11.5L12 21.3z"/></svg></div><b>Hold your breath!</b><p>Press when the outline lands on the heart. Succeed 3 times out of 5.</p><div id="qdots"></div></div></div>
 <script src="config.js"></script>
@@ -1310,8 +1317,9 @@ function drawGlows(t,dk){
 
 // ---------- minimap
 const mini=$('#mini'),mctx=mini.getContext('2d');
-function drawMini(){
- if(!M||!P)return;const W=mini.width,Hh=mini.height,s=Math.min(W/(MW*TS),Hh/(MH*TS)),ox=(W-MW*TS*s)/2,oy=(Hh-MH*TS*s)/2;
+function drawMini(){drawMapOn(mctx,mini.width,mini.height,false)}
+function drawMapOn(mctx,W,Hh,big){
+ if(!M||!P)return;const s=Math.min(W/(MW*TS),Hh/(MH*TS)),ox=(W-MW*TS*s)/2,oy=(Hh-MH*TS*s)/2;
  mctx.setTransform(1,0,0,1,0,0);mctx.fillStyle='#050908';mctx.fillRect(0,0,W,Hh);mctx.setTransform(s,0,0,s,ox,oy);
  const all=on('plan');
  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!all&&!M.explored[y*MW+x])continue;const v=M.g[y][x];
@@ -1329,6 +1337,7 @@ function drawMini(){
  if(G.char.id==='nadia'||on('hack'))for(const c of M.cams){mctx.fillStyle=on('hack')?'#666':'#e9c46a';mctx.beginPath();mctx.arc(c.x,c.y,40,0,7);mctx.fill()}
  for(const h of H)if(on('hack')||h.vis){mctx.fillStyle='#ff3b30';mctx.beginPath();mctx.arc(h.x,h.y,46,0,7);mctx.fill()}
  for(const d of DR){mctx.fillStyle=Math.sin(TIME*10)>0?'#ff3b30':'#802020';mctx.fillRect(d.x-34,d.y-34,68,68)}
+ if(big){mctx.textAlign='center';mctx.textBaseline='middle';mctx.font=`700 ${Math.round(15/s)}px "Barlow Condensed",sans-serif`;for(const r of M.rooms){let seen=all;for(let y=r.y0;y<=r.y1&&!seen;y++)for(let x=r.x0;x<=r.x1;x++)if(M.explored[y*MW+x]){seen=true;break}if(!seen)continue;mctx.fillStyle='rgba(232,226,212,.55)';mctx.fillText(roomName(r).toUpperCase(),r.cx,r.cy)}}
  mctx.fillStyle='#fff';mctx.beginPath();mctx.arc(P.x,P.y,52,0,7);mctx.fill();mctx.strokeStyle='#fff';mctx.lineWidth=28;mctx.beginPath();mctx.moveTo(P.x,P.y);mctx.lineTo(P.x+Math.cos(P.a)*140,P.y+Math.sin(P.a)*140);mctx.stroke()}
 
 // ---------- rivals & day flow
@@ -1453,7 +1462,7 @@ function hud(dt){
  target=findTarget();const pr=hEl('prompt');
  if(P.act){pr.classList.remove('hide');pr.innerHTML=`${P.act.label}<span class="pb"><i style="width:${P.act.t/P.act.need*100}%"></i></span>`}
  else if(target&&!UI.modal){pr.classList.remove('hide');pr.innerHTML=`<kbd>${esc(kn('act'))}</kbd> ${esc(target.label)}`}else pr.classList.add('hide');
- miniT-=.1;if(miniT<=0){miniT=.2;drawMini()}
+ miniT-=.1;if(miniT<=0){miniT=.2;drawMini()}if(MAPON)drawBigMap();
  const sx=(P.x-CAM.vx)*ZOOM,sy=(P.y-CAM.vy)*ZOOM;for(const id of['tl','tr']){const el=hEl(id),r=el.getBoundingClientRect();el.classList.toggle('fade',SET.fade&&sx>r.left-50&&sx<r.right+50&&sy>r.top-50&&sy<r.bottom+50)}
  rivT-=.1;if(rivT<=0){rivT=.5;if(!G.tuto)drawRivals()}
  if(bigT>0){bigT-=.1;if(bigT<=0)bigEl.classList.remove('on')}}
@@ -1651,6 +1660,7 @@ addEventListener('keydown',e=>{
  if(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;
  const c=e.code,a=kAct(c);if((a||['Tab','Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(c))&&state!=='title')e.preventDefault();
  audioInit();
+ if(MAPON&&state==='play'&&(a==='map'||c==='Escape')){e.preventDefault();toggleMap(false);return}
  if(QTE&&state==='play'){if(a==='act'||a==='ability'||c==='Space'||c==='Enter'){e.preventDefault();if(!e.repeat)qteHit()}return}
  if(UI.modal){if(c==='Escape'){closeModal();return}if(UI.keyHook){e.preventDefault();UI.keyHook(e.key);return}if(a==='sab'||a==='journal'){closeModal();return}}
  if(e.repeat&&!c.startsWith('Key')&&!c.startsWith('Arrow'))return;
@@ -1660,7 +1670,7 @@ addEventListener('keydown',e=>{
  if(state!=='play'||e.repeat)return;
  if(D.allyOffer&&(c==='KeyO'||c==='KeyY')){allyAnswer(true);return}if(D.allyOffer&&c==='KeyN'){allyAnswer(false);return}
  if(a==='act')act();else if(a==='ability')ability();else if(a==='flash')toggleFlash();else if(a==='crouch')toggleCrouch();
- else if(a==='item1')useItem(1);else if(a==='item2')useItem(2);else if(a==='item3')useItem(3);else if(a==='sab')openSab();else if(a==='journal')openJournal();else if(a==='hud')toggleHud();else if(a==='pause'||c==='Escape')pauseGame()});
+ else if(a==='item1')useItem(1);else if(a==='item2')useItem(2);else if(a==='item3')useItem(3);else if(a==='sab')openSab();else if(a==='journal')openJournal();else if(a==='hud')toggleHud();else if(a==='map')toggleMap();else if(a==='pause'||c==='Escape')pauseGame()});
 addEventListener('keyup',e=>{K[e.code]=false});
 addEventListener('blur',()=>{for(const k in K)K[k]=false;touchRun=false;joy.on=false});
 cv.addEventListener('mousemove',e=>{if(PLAT==='mobile')return;mouse.x=e.clientX;mouse.y=e.clientY;mouse.act=true});
@@ -1709,8 +1719,8 @@ fontWait.then(boot,boot);
 
 // ---------- touches du clavier (modifiables)
 const KBK='valmont_keys';
-const KACT=[['up','Move up'],['down','Move down'],['left','Move left'],['right','Move right'],['run','Run'],['crouch',"Crouch"],['act','Action'],['ability','Ability'],['flash','Light'],['item1','Decoy'],['item2','Smoke bomb'],['item3','Firecracker'],['sab','Sabotage'],['journal','Notebook'],['hud','Collapse panel'],['pause','Pause']];
-const KDEF={up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD',run:'ShiftLeft',crouch:'KeyC',act:'KeyE',ability:'Space',flash:'KeyF',item1:'Digit1',item2:'Digit2',item3:'Digit3',sab:'KeyR',journal:'KeyJ',hud:'KeyH',pause:'KeyP'};
+const KACT=[['up','Move up'],['down','Move down'],['left','Move left'],['right','Move right'],['run','Run'],['crouch',"Crouch"],['act','Action'],['ability','Ability'],['flash','Light'],['item1','Decoy'],['item2','Smoke bomb'],['item3','Firecracker'],['sab','Sabotage'],['journal','Notebook'],['hud','Collapse panel'],['map','Map'],['pause','Pause']];
+const KDEF={up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD',run:'ShiftLeft',crouch:'KeyC',act:'KeyE',ability:'Space',flash:'KeyF',item1:'Digit1',item2:'Digit2',item3:'Digit3',sab:'KeyR',journal:'KeyJ',hud:'KeyH',map:'KeyM',pause:'KeyP'};
 const KALT={up:['ArrowUp'],down:['ArrowDown'],left:['ArrowLeft'],right:['ArrowRight'],run:['ShiftRight'],crouch:['ControlLeft'],act:['Enter'],item1:['Numpad1'],item2:['Numpad2'],item3:['Numpad3'],sab:['Tab'],pause:['Escape']};
 const KB={...KDEF},KBL={};
 try{const o=JSON.parse(localStorage.getItem(KBK)||'{}');if(o&&o.k){for(const a in o.k)if(a in KDEF&&typeof o.k[a]==='string')KB[a]=o.k[a];Object.assign(KBL,o.l||{})}}catch(_){}
@@ -2290,6 +2300,16 @@ function endQte(win){const q=QTE;q.done=true;drawQte();
   else capture("It heard you breathing and dragged you out of your hiding spot.")},650)}
 
 $('#qte').addEventListener('pointerdown',e=>{e.preventDefault();qteHit()});
+
+// ---------- grande carte
+let MAPON=false;const bigmap=$('#bigmap'),bmc=$('#bmCanvas'),bmx=bmc.getContext('2d');
+function toggleMap(v){if(v===undefined)v=!MAPON;if(v&&(state!=='play'||!M))return;MAPON=v;bigmap.classList.toggle('hide',!v);if(v){mapHint();sizeMap();drawBigMap();SFX.click()}}
+function sizeMap(){const d=Math.min(2,devicePixelRatio||1),mob=document.body.classList.contains('mobile');const maxW=innerWidth*(mob?.92:.8),maxH=innerHeight*(mob?.66:.74),r=(MW*TS)/(MH*TS);let w=maxW,h=w/r;if(h>maxH){h=maxH;w=h*r}bmc.style.width=w+'px';bmc.style.height=h+'px';bmc.width=Math.round(w*d);bmc.height=Math.round(h*d)}
+function drawBigMap(){if(!MAPON)return;if(state!=='play'){toggleMap(false);return}drawMapOn(bmx,bmc.width,bmc.height,true)}
+bigmap.addEventListener('pointerdown',e=>{e.preventDefault();toggleMap(false)});
+$('#mini').addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();toggleMap(true)});
+addEventListener('resize',()=>{if(MAPON)sizeMap()});
+function mapHint(){$('#bmHint').textContent=document.body.classList.contains('mobile')?'Tap the screen to close':kFill('Press {map} or Esc to close')}
 
 // ---------- comptes (version hébergée)
 const NET=window.GAMENET||null,TOKK='collectionneur_token';let ACC=null,TOKEN='';try{TOKEN=localStorage.getItem(TOKK)||''}catch(_){}
